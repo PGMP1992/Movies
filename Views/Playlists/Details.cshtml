@@ -1,0 +1,81 @@
+﻿@model MoviesApp.Models.Playlist
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h3>Playlist</h3>
+
+<div>
+    <h5>Details</h5>
+    <div class="card mb-3" style="max-width: 100%">
+        <div class=" row g-0">
+            @*<div class="col-md-4">
+                <img src="" class="img-fluid rounded-start" width="100%" height="auto" alt="@Model.Name">
+            </div> *@
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h6>Name</h6>
+                    <p class="card-text">@Model.Name<p>
+
+                    <h6>Description</h6>
+                    <p class="card-text">@Model.Description</p>
+                    @*<h6>Genre: </h6>
+                    <p class="card-text">@Model.Genre</p>*@
+
+                    @* ------------- Buttons ------------------------*@
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a asp-action="Error" asp-route-id="@Model.Id" type="button"
+                                                class="btn btn-sm btn-outline-primary">Add Movie</a>
+                                <a asp-action="Error" asp-route-id="@Model.Id" type="button"
+                                                class="btn btn-sm btn-outline-success">Delete Movie</a>
+                            </div>
+                            <small class="text-body-secondary">Something extra here </small>
+                        </div>
+                    </div>
+    
+                    @* ------------- Movies ------------------------*@
+                    
+                    @* @if (Model.Movies.Any())
+                    { 
+                        <h6> Movies</h6>
+                        <div class=container>
+                            <table class="table table-responsive">
+                                <tr>
+                                    <th>Title </th>
+                                    <th>Genre</th>
+                                    <th>Age</th>
+                                </tr>
+                                <td>
+                                    @foreach( var item in Model.MoviesList)
+                                    {
+                                        <tr>
+                                            <td>@item.Title</td>
+                                            <td>@item.Genre</td>
+                                            <td>@item.Age</td>
+                                        </tr>
+                                    }
+                                </td>
+                            </table>
+                        </div>
+                    } *@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </main>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="btn-group">
+            @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-primary">Edit</a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+            }
+            <a asp-action="Index" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark">Back</a>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,59 @@
+﻿@model MoviesApp.Models.Movie
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h3>Details</h3>
+
+<h5>Film:
+    <small class="text-body-secondary">@Model.Title</small>
+</h5>
+
+@* ------------------------ Playlist actions -----------------------*@
+<a asp-controller= "Playlist" asp-action="Playlist.AddMovie" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-primary">Add To Playlist</a>
+
+
+@* ------------------------Main Card with Movie -----------------------*@
+<div class="card mb-3" style="max-width: 100%">
+    <div class=" row g-0">
+        <div class="col-md-4">
+            <img src="@Model.PictUrl" class="img-fluid rounded-start" width="100%" height="auto" alt="@Model.Title">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h6>Description</h6>
+                <p class="card-text">@Model.Description</p>
+                <h6>Genre: </h6>
+                <p class="card-text">@Model.Genre</p>
+                        
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a asp-action="Error" asp-route-id="@Model.Id" type="button" 
+                                     class="btn btn-sm btn-outline-primary">Buy: SEK @Model.BuyPrice</a>
+                            <a asp-action="Error" asp-route-id="@Model.Id" type="button" 
+                                     class="btn btn-sm btn-outline-success">Rent: SEK @Model.RentPrice</a>
+                        </div>
+                        <small class="text-body-secondary">Minimum Age: @Model.Age</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+
+@* ----------------- CRUD Buttoms  -----------------------*@
+
+<div class="d-flex justify-content-between align-items-center">
+    <div class="btn-group">
+        @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-primary">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+        }
+        <a asp-action="Index" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark">Back</a>
+        
+    </div>
+    
+</div>
