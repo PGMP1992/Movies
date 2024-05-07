@@ -1,5 +1,5 @@
 ﻿@using MoviesApp.Data.Enum
-@model MoviesApp.Models.Movie
+@model MoviesApp.ViewModels.CreateMovieViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -13,6 +13,7 @@
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" id="AppUserId" name="AppUserId" asp-for="AppUserId" />
             @*<form method="post" asp-action="Create" enctype ="multipart/form-data"/> *@
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>

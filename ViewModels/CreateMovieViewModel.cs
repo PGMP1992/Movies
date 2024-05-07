@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using MoviesApp.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace MoviesApp.ViewModels
@@ -38,6 +39,9 @@ namespace MoviesApp.ViewModels
         [Display(Name = "Rent")]
         [DataType(DataType.Currency)]
         public double RentPrice { get; set; }
+
+        public string? AppUserId { get; set; }
+        public AppUser? AppUser { get; set; }
     }
 }
 

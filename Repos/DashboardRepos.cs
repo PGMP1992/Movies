@@ -18,15 +18,15 @@ namespace MoviesApp.Repos
 
         public async Task<List<Movie>> GetAllUserMovies()
         {
-            var curUser = _httpContextAccessor.HttpContext?.User;
-            var userMovies = _context.Movies.Where(r => r.AppUser.Id == curUser.ToString());
+            var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
+            var userMovies = _context.Movies.Where(r => r.AppUser.Id == curUser);
             return  userMovies.ToList();
         }
 
         public async Task<List<Playlist>> GetAllUserPlaylists()
         {
-            var curUser = _httpContextAccessor.HttpContext?.User;
-            var userPlaylists = _context.Playlists.Where(r => r.AppUser.Id == curUser.ToString());
+            var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
+            var userPlaylists = _context.Playlists.Where(r => r.AppUser.Id == curUser);
             return userPlaylists.ToList();
         }
 

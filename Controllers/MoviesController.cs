@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MoviesApp.Data;
 using MoviesApp.Interfaces;
 using MoviesApp.Models;
 using MoviesApp.Repos;
@@ -14,12 +15,15 @@ namespace MoviesApp.Controllers
         private readonly IMovieRepos _movieRepos;
         private readonly IPlaylistRepos _playlistRepos; 
         private readonly IPhotoService _photoService; //Cloudnary 
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MoviesController(IMovieRepos movieRepos, IPlaylistRepos playlistRepos, IPhotoService photoService)
+        public MoviesController(IMovieRepos movieRepos, IPlaylistRepos playlistRepos, 
+                IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             _movieRepos = movieRepos;
             _playlistRepos = playlistRepos;
             _photoService = photoService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: Movies
@@ -58,11 +62,13 @@ namespace MoviesApp.Controllers
         }
 
         // GET: Movies/Create
-        [Authorize]
+        //[Authorize]
         //[Authorize(Roles ="admin")]
         public IActionResult Create()
         {
-            return View();
+            var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
+            var movieVM = new CreateMovieViewModel { AppUserId = curUserId }; 
+            return View(movieVM);
         }
 
         // POST: Movies/Create
@@ -78,6 +84,7 @@ namespace MoviesApp.Controllers
                 var result = await _photoService.AddPhotoAsync(movieVM.PictUrl);
                 var movie = new Movie
                 {
+                    AppUserId = movieVM.AppUserId,
                     Title = movieVM.Title,
                     Description = movieVM.Description,
                     Genre = movieVM.Genre,
@@ -97,7 +104,7 @@ namespace MoviesApp.Controllers
             return View(movieVM);
         }
 
-        [Authorize]
+        //[Authorize]
         // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -150,7 +157,7 @@ namespace MoviesApp.Controllers
         }
 
         // GET: Movies/Delete/5
-        [Authorize]
+        //[Authorize]
         //[Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {

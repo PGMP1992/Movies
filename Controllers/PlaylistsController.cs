@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MoviesApp.Data;
 using MoviesApp.Interfaces;
 using MoviesApp.Models;
 using MoviesApp.ViewModels;
@@ -10,11 +11,13 @@ namespace MoviesApp.Controllers
     {
         private readonly IPlaylistRepos _playlistRepos;
         private readonly IMovieRepos _movieRepos;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PlaylistsController(IPlaylistRepos playlistRepos, IMovieRepos movieRepos)
+        public PlaylistsController(IPlaylistRepos playlistRepos, IMovieRepos movieRepos, IHttpContextAccessor httpContextAccessor)
         {
             _playlistRepos = playlistRepos;
             _movieRepos = movieRepos;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: Playlists
@@ -53,7 +56,9 @@ namespace MoviesApp.Controllers
         // GET: Playlists/Create
         public IActionResult Create()
         {
-            return View();
+            var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+            var createPlaylistMoviesVM = new PlaylistMoviesVM { AppUserId = curUserId };
+            return View(createPlaylistMoviesVM);
         }
 
         // POST: Playlists/Create
@@ -65,7 +70,7 @@ namespace MoviesApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                //playlist.UserName = AppUser.
+                //_playlistRepos.AppUserId =  
                 _playlistRepos.Add(playlist);
                 return RedirectToAction(nameof(Index));
             }

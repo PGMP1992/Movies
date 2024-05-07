@@ -6,5 +6,7 @@ namespace MoviesApp.ViewModels
     {
         public Playlist Playlist { get; set; }
         public List<Movie> Movies { get; set;}
+        public string AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
     }
 }

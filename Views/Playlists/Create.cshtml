@@ -14,6 +14,7 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 @* <input type="hidden" id="AppUserId" name="UserName" asp-for="AppUserId" /> *@
+                <input type="hidden" id="AppUserId" name="AppUserId" asp-for="AppUserId" />
                 <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" />
