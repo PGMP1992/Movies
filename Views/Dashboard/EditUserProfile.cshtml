@@ -1,0 +1,19 @@
+﻿﻿@using MoviesApp.ViewModels
+@model EditUserDashboardVM
+
+
+<form method="post" asp-action="EditUserProfile" enctype="multipart/form-data">
+    <input type="hidden" id="Id" name="Id" asp-for="Id" />
+    @* <div class="form-group">
+        <label asp-for="UserName">User Name</label>
+        <input asp-for="Image" type="file" class="form-control" placeholder="Image">
+        <span asp-validation-for="Image" class="text-danger"></span>
+    </div> *@
+
+    <div class="form-group">
+        <label asp-for="ProfileImageUrl">Profile Image</label>
+        <input asp-for="ProfileImageUrl" type="file" class="form-control" placeholder="Image">
+        <span asp-validation-for="ProfileImageUrl" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
+</form>

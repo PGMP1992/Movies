@@ -23,7 +23,8 @@ namespace MoviesApp.Controllers
                 var usersVM = new UsersVM()
                 {
                     Id = user.Id,
-                    UserName = user.UserName
+                    UserName = user.UserName,
+                    ProfileImageUrl = user.ProfileImageryUrl
                 };
                 result.Add(usersVM);
             }

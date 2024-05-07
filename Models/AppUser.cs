@@ -6,5 +6,6 @@ namespace MoviesApp.Models
     {
         public List<Movie> Movies { get; set; }
         public List<Playlist> Playlists { get; set; }
+        public string? ProfileImageryUrl { get; set; }
     }
 }
