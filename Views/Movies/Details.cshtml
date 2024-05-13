@@ -13,8 +13,10 @@
 @* ------------------------ Playlist actions -----------------------*@
 @if(User.Identity.IsAuthenticated)
 {
-    <a asp-controller= "Playlist" asp-action="Playlist.AddMovie" asp-route-id="@Model.Id" 
-        type="button" class="btn btn-sm btn-outline-primary">Add To Playlist</a>
+    @* <a asp-controller= "Playlist" asp-action="Playlist.AddMovie" asp-route-id="@Model.Id" 
+        type="button"` class="btn btn-sm btn-outline-primary">Add To Playlist</a> *@
+    @* <label asp-for="Playlist" class="control-label"></label>
+    <select asp-for="Playlist" class="form-control" asp-items="ViewBag.playlistName"></select> *@
 }
 
 @* ------------------------Main Card with Movie -----------------------*@
@@ -39,6 +41,7 @@
                                      class="btn btn-sm btn-outline-success">Rent: SEK @Model.RentPrice</a>
                         </div> *@
                          <small class="text-body-secondary">Minimum Age: @Model.Age</small>
+                                      
                     </div>
                 </div>
             </div>

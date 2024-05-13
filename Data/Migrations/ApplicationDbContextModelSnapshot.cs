@@ -184,7 +184,7 @@ namespace Movies.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
@@ -304,7 +304,7 @@ namespace Movies.Data.Migrations
 
                     b.HasIndex("PlaylistId");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Movies", (string)null);
                 });
 
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
@@ -337,7 +337,7 @@ namespace Movies.Data.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Playlists");
+                    b.ToTable("Playlists", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

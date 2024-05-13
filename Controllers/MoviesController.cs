@@ -54,7 +54,7 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAll().ConfigureAwait(false), "Id", "Name");
+            //ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAll().ConfigureAwait(false), "Id", "Name");
             return View(movie);
         }
 
