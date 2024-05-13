@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoviesApp.Data;
 
@@ -11,9 +12,11 @@ using MoviesApp.Data;
 namespace Movies.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240508123313_changeModels1")]
+    partial class changeModels1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,17 +295,12 @@ namespace Movies.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int?>("PlaylistId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PlaylistId");
 
                     b.ToTable("Movies");
                 });
@@ -400,15 +398,6 @@ namespace Movies.Data.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("MoviesApp.Models.Movie", b =>
-                {
-                    b.HasOne("MoviesApp.Models.Playlist", "Playlist")
-                        .WithMany("MoviesList")
-                        .HasForeignKey("PlaylistId");
-
-                    b.Navigation("Playlist");
-                });
-
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
                 {
                     b.HasOne("MoviesApp.Models.Address", "Address")
@@ -427,11 +416,6 @@ namespace Movies.Data.Migrations
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
                 {
                     b.Navigation("Playlists");
-                });
-
-            modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
-                {
-                    b.Navigation("MoviesList");
                 });
 #pragma warning restore 612, 618
         }

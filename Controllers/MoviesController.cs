@@ -1,23 +1,20 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using MoviesApp.Data;
 using MoviesApp.Interfaces;
 using MoviesApp.Models;
-using MoviesApp.Repos;
 using MoviesApp.ViewModels;
+using MoviesApp.Repos;
 
 namespace MoviesApp.Controllers
 {
     public class MoviesController : Controller
     {
         private readonly IMovieRepos _movieRepos;
-        private readonly IPlaylistRepos _playlistRepos; 
+        private readonly IPlaylistRepos _playlistRepos;
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MoviesController(IMovieRepos movieRepos, IPlaylistRepos playlistRepos, 
+        public MoviesController(IMovieRepos movieRepos, IPlaylistRepos playlistRepos,
                 IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             _movieRepos = movieRepos;
@@ -29,7 +26,7 @@ namespace MoviesApp.Controllers
         // GET: Movies
         public async Task<IActionResult> Index(string search)
         {
-            var movies = await _movieRepos.GetAll();    
+            var movies = await _movieRepos.GetAll();
             ViewBag.Message = "";
 
             if (!String.IsNullOrEmpty(search))
@@ -57,7 +54,7 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAll().ConfigureAwait(false), "Id", "Name");
             return View(movie);
         }
 
@@ -66,8 +63,8 @@ namespace MoviesApp.Controllers
         //[Authorize(Roles ="admin")]
         public IActionResult Create()
         {
-            var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
-            var movieVM = new CreateMovieViewModel { AppUserId = curUserId }; 
+            //var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
+            var movieVM = new CreateMovieVM();// { AppUserId = curUserId }; 
             return View(movieVM);
         }
 
@@ -77,21 +74,21 @@ namespace MoviesApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //public async Task<IActionResult> Create([Bind("Id,Title,Description,Genre,Age,PictUrl,BuyPrice,RentPrice")] Movie movie)
-        public async Task<IActionResult> Create(CreateMovieViewModel movieVM)
+        public async Task<IActionResult> Create(CreateMovieVM movieVM)
         {
             if (ModelState.IsValid)
             {
                 var result = await _photoService.AddPhotoAsync(movieVM.PictUrl);
                 var movie = new Movie
                 {
-                    AppUserId = movieVM.AppUserId,
+                    //AppUserId = movieVM.AppUserId,
                     Title = movieVM.Title,
                     Description = movieVM.Description,
                     Genre = movieVM.Genre,
                     Age = movieVM.Age,
                     PictUrl = result.Url.ToString(),
-                    BuyPrice = movieVM.BuyPrice,
-                    RentPrice = movieVM.RentPrice
+                    //BuyPrice = movieVM.BuyPrice,
+                    //RentPrice = movieVM.RentPrice
                 };
 
                 _movieRepos.Add(movie);
@@ -118,7 +115,16 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-            return View(movie);
+
+            var movieVM = new EditMovieVM()
+            {
+                Title = movie.Title,
+                Description = movie.Description,
+                Genre = movie.Genre,
+                Age = movie.Age,
+                PictUrl = movie.PictUrl
+            };
+            return View(movieVM);
         }
 
         // POST: Movies/Edit/5
@@ -126,34 +132,40 @@ namespace MoviesApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Genre,Age,PictUrl,BuyPrice,RentPrice")] Movie movie)
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Genre,Age,PictUrl,BuyPrice,RentPrice")] Movie movie)
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Genre,Age,PictUrl")] Movie movie)
+        public async Task<IActionResult> Edit(int id, EditMovieVM movieVM)
         {
-            if (id != movie.Id)
+            if (id != movieVM.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _movieRepos.Update(movie);
-                    //await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_movieRepos.MovieExists(movie.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("", "Failed to Edit Movie");
+                return View("Edit", movieVM);
             }
-            return View(movie);
+
+            var photoResult = await _photoService.AddPhotoAsync(movieVM.Image);
+            if (photoResult.Error != null)
+            {
+                ModelState.AddModelError("PictUrl", "Photo upload failed");
+                return View(movieVM);
+            }
+
+            var movie = new Movie
+            {
+                Id = movieVM.Id,
+                Title = movieVM.Title,
+                Description = movieVM.Description,
+                Genre = movieVM.Genre,
+                Age = movieVM.Age,
+                PictUrl = photoResult.Url.ToString()
+            };
+
+            _movieRepos.Update(movie);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Movies/Delete/5

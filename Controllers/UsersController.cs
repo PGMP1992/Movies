@@ -37,7 +37,9 @@ namespace MoviesApp.Controllers
             var usersDetailsVM = new UsersDetailsVM()
             {
                 Id = user.Id,
-                UserName = user.UserName
+                UserName = user.UserName,
+
+
             };
             return View(usersDetailsVM);
         }

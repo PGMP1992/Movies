@@ -21,12 +21,15 @@ namespace MoviesApp.Models
         public string? AppUserId { get; set; } = "";
         public AppUser? AppUser { get; set; }
 
-        [ValidateNever]
-        //[Required]
-        bool IsRental { get; set; } = false;
+        [ForeignKey("Address")]
+        public int? AddressId { get; set; }
+        public Address? Address { get; set; }
 
         //[ValidateNever]
-        //public List<Movie> MoviesList { get; set; }
+        ////[Required]
+        //bool IsRental { get; set; } = false;
 
+        [ValidateNever]
+        public List<Movie> MoviesList { get; set; }
     }
 }

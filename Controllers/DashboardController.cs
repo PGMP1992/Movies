@@ -32,10 +32,10 @@ namespace MoviesApp.Controllers
         public async Task<IActionResult> Index()
         {
             var userPlaylists = await _dashboardRepos.GetAllUserPlaylists();
-            var userMovies = await _dashboardRepos.GetAllUserMovies();
+            //var userMovies = await _dashboardRepos.GetAllUserMovies();
             var dashboardVM = new DashboardVM()
             {
-                Movies = userMovies,
+                //Movies = userMovies,
                 Playlists = userPlaylists
             };
             

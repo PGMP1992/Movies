@@ -22,7 +22,7 @@ namespace MoviesApp.Controllers
             _playlistRepos = playlistRepos;
         }
 
-        public Task<IActionResult> Index() // Using IPInfo to get locations IP 
+        public async Task<IActionResult> Index() // Using IPInfo to get locations IP 
         {
             var ipInfo = new IPInfo();
             var homeVM = new HomeVM();
@@ -39,7 +39,7 @@ namespace MoviesApp.Controllers
                 if( homeVM.City != null)
                 {
                     //homeVM.Playlists = await _playlistRepos.GetPlaylistByCity(homeVM.City);
-
+                    homeVM.Playlists = await _playlistRepos.GetAll();
                 }
                 else
                 {
