@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using MoviesApp.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace MoviesApp.ViewModels
@@ -24,25 +25,10 @@ namespace MoviesApp.ViewModels
         [Display(Name = "Minimun Age")]
         public int Age { get; set; }
 
-        [ValidateNever]
-        [MaxLength(300)]
-        [Display(Name = "Picture URL")]
-        public IFormFile Image { get; set; }
-
         public string? PictUrl { get; set; }
 
-        //[Required]
-        //[Display(Name = "Buy")]
-        //[DataType(DataType.Currency)]
-        //public double BuyPrice { get; set; }
-
-        //[Required]
-        //[Display(Name = "Rent")]
-        //[DataType(DataType.Currency)]
-        //public double RentPrice { get; set; }
-
-        //public string? AppUserId { get; set; }
-        //public AppUser? AppUser { get; set; }
+        public int? PlaylistId { get; set; }
+        public List<Playlist>? Playlists { get; set; }
     }
 }
 

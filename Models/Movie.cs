@@ -29,7 +29,6 @@ namespace MoviesApp.Models
         [Display(Name = "Picture URL")]
         public string? PictUrl { get; set; } = "";
 
-        [ValidateNever]
-        public Playlist? Playlist { get; set; }
+        public int? PlaylistId {  get; set; } 
     }
 }

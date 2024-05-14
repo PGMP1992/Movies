@@ -73,5 +73,10 @@ namespace MoviesApp.Repos
         {
             return _context.Movies.Any(e => e.Id == id);
         }
+
+        public async Task<List<Movie>> GetByPlaylistId(int? id)
+        {
+            return await _context.Movies.Where(p => p.PlaylistId == id).ToListAsync();
+        }
     }
 }

@@ -4,6 +4,7 @@ using MoviesApp.Interfaces;
 using MoviesApp.Models;
 using MoviesApp.ViewModels;
 using MoviesApp.Repos;
+using Microsoft.EntityFrameworkCore;
 
 namespace MoviesApp.Controllers
 {
@@ -36,7 +37,7 @@ namespace MoviesApp.Controllers
                 {
                     return View(movies1);
                 }
-                ViewBag.Message = "There are not movies with that search.";
+                ViewBag.Message = "There are not movies with that Name.";
             }
             return View(movies);
         }
@@ -54,13 +55,11 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-            //ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAll().ConfigureAwait(false), "Id", "Name");
+            
             return View(movie);
         }
 
         // GET: Movies/Create
-        //[Authorize]
-        //[Authorize(Roles ="admin")]
         public IActionResult Create()
         {
             //var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
@@ -69,10 +68,8 @@ namespace MoviesApp.Controllers
         }
 
         // POST: Movies/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> Create([Bind("Id,Title,Description,Genre,Age,PictUrl,BuyPrice,RentPrice")] Movie movie)
         public async Task<IActionResult> Create(CreateMovieVM movieVM)
         {
@@ -81,14 +78,11 @@ namespace MoviesApp.Controllers
                 var result = await _photoService.AddPhotoAsync(movieVM.PictUrl);
                 var movie = new Movie
                 {
-                    //AppUserId = movieVM.AppUserId,
                     Title = movieVM.Title,
                     Description = movieVM.Description,
                     Genre = movieVM.Genre,
                     Age = movieVM.Age,
-                    PictUrl = result.Url.ToString(),
-                    //BuyPrice = movieVM.BuyPrice,
-                    //RentPrice = movieVM.RentPrice
+                    PictUrl = result.Url.ToString()
                 };
 
                 _movieRepos.Add(movie);
@@ -101,7 +95,6 @@ namespace MoviesApp.Controllers
             return View(movieVM);
         }
 
-        //[Authorize]
         // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -124,15 +117,13 @@ namespace MoviesApp.Controllers
                 Age = movie.Age,
                 PictUrl = movie.PictUrl
             };
+            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAll().ConfigureAwait(false), "Id", "Name");
             return View(movieVM);
         }
 
         // POST: Movies/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Genre,Age,PictUrl,BuyPrice,RentPrice")] Movie movie)
+        //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Genre,Age,PictUrl")] Movie movie)
         public async Task<IActionResult> Edit(int id, EditMovieVM movieVM)
         {
@@ -147,13 +138,6 @@ namespace MoviesApp.Controllers
                 return View("Edit", movieVM);
             }
 
-            var photoResult = await _photoService.AddPhotoAsync(movieVM.Image);
-            if (photoResult.Error != null)
-            {
-                ModelState.AddModelError("PictUrl", "Photo upload failed");
-                return View(movieVM);
-            }
-
             var movie = new Movie
             {
                 Id = movieVM.Id,
@@ -161,7 +145,8 @@ namespace MoviesApp.Controllers
                 Description = movieVM.Description,
                 Genre = movieVM.Genre,
                 Age = movieVM.Age,
-                PictUrl = photoResult.Url.ToString()
+                PictUrl = movieVM.PictUrl,
+                PlaylistId = movieVM.PlaylistId
             };
 
             _movieRepos.Update(movie);
@@ -169,8 +154,6 @@ namespace MoviesApp.Controllers
         }
 
         // GET: Movies/Delete/5
-        //[Authorize]
-        //[Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -183,7 +166,6 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-
             return View(movie);
         }
 
@@ -197,10 +179,7 @@ namespace MoviesApp.Controllers
             {
                 _movieRepos.Delete(movie);
             }
-
-            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

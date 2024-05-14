@@ -10,16 +10,6 @@
     <small class="text-body-secondary">@Model.Title</small>
 </h5>
 
-@* ------------------------ Playlist actions -----------------------*@
-@if(User.Identity.IsAuthenticated)
-{
-    @* <a asp-controller= "Playlist" asp-action="Playlist.AddMovie" asp-route-id="@Model.Id" 
-        type="button"` class="btn btn-sm btn-outline-primary">Add To Playlist</a> *@
-    @* <label asp-for="Playlist" class="control-label"></label>
-    <select asp-for="Playlist" class="form-control" asp-items="ViewBag.playlistName"></select> *@
-}
-
-@* ------------------------Main Card with Movie -----------------------*@
 <div class="card mb-3" style="max-width: 100%">
     <div class=" row g-0">
         <div class="col-md-4">
@@ -34,14 +24,7 @@
                         
                 <div class="card-footer">
                     <div class="d-flex justify-content-between align-items-center">
-                        @* <div class="btn-group">
-                            <a asp-action="Error" asp-route-id="@Model.Id" type="button" 
-                                     class="btn btn-sm btn-outline-primary">Buy: SEK @Model.BuyPrice</a>
-                            <a asp-action="Error" asp-route-id="@Model.Id" type="button" 
-                                     class="btn btn-sm btn-outline-success">Rent: SEK @Model.RentPrice</a>
-                        </div> *@
-                         <small class="text-body-secondary">Minimum Age: @Model.Age</small>
-                                      
+                        <small class="text-body-secondary">Minimum Age: @Model.Age</small>
                     </div>
                 </div>
             </div>
@@ -49,14 +32,15 @@
     </div> 
 </div>
 
-@* ----------------- CRUD Buttoms  -----------------------*@
-
 <div class="d-flex justify-content-between align-items-center">
     <div class="btn-group">
-        <a asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-primary">Edit</a>
-        @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+        @if (User.Identity.IsAuthenticated)
         {
-            <a asp-action="Delete" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-primary">Edit</a>
+            @if (User.IsInRole("admin"))
+            {
+                <a asp-action="Delete" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+            }
         }
         <a asp-action="Index" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark">Back</a>
     </div>

@@ -36,21 +36,13 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            // Using PlaylistMoviesVM ------------------------- 
             PlaylistMoviesVM playlistMoviesVM = new PlaylistMoviesVM
             {
-               Playlist = await _playlistRepos.GetByIdAsync(id),
-               Movies = await _movieRepos.GetAll()
+                Playlist = await _playlistRepos.GetByIdAsync(id),
+                Movies = await _movieRepos.GetByPlaylistId(id)
             };
 
-            //var playlist = await _playlistRepos.GetByIdAsync(id);
-
-            //if (playlist == null)
-            //{
-            //    return NotFound();
-            //}
             return View(playlistMoviesVM);
-            //return View();
         }
 
         // GET: Playlists/Create

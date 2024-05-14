@@ -9,7 +9,8 @@
 <h5>Edit</h5>
 <hr />
 
-<form method="post" asp-action="Edit" enctype="multipart/form-data">
+@* <form method="post" asp-action="Edit" enctype="multipart/form-data"> *@
+<form method="post" asp-action="Edit">
     <input type="hidden" value="MovieId" id="MovieId" />
     <div class="row">
         <div class="col-md-4">
@@ -37,28 +38,22 @@
                     <input asp-for="Age" class="form-control" />
                     <span asp-validation-for="Age" class="text-danger"></span>
                 </div>
-                @*
-                <div class="form-group">
-                    <label asp-for="PictUrl" class="control-label"></label>
-                    <input asp-for="PictUrl" class="form-control" />
-                    <span asp-validation-for="PictUrl" class="text-danger"></span>
-                </div>
-                 <div class="form-group">
-                    <label asp-for="BuyPrice" class="control-label"></label>
-                    <input asp-for="BuyPrice" class="form-control" />
-                    <span asp-validation-for="BuyPrice" class="text-danger"></span>
-                </div>
-                *@
+                
                 <div class="form-group">
                     <label asp-for="PictUrl" class="control-label"></label>
                     <input asp-for="PictUrl" class="form-control" />
                     <span asp-validation-for="PictUrl" class="text-danger"></span>
                 </div> 
                 
-                <div class="form-group">
+@*              <div class="form-group">
                     <label asp-for="Image">Picture</label>
                     <input asp-for="Image" type="file" class="form-control" placeholder="Image" />
-                    <span asp-validation-for="Image" class="text-danger"></span>
+                    <span asp-validation-for="Image" class="text-danger"></span> 
+                </div>
+ *@
+                <div class="form-group">
+                    <label asp-for="PlaylistId" class="control-label"></label>
+                    <select asp-for="PlaylistId" class="form-control" asp-items="ViewBag.PlaylistName"></select>
                 </div>
                 
                 <div class="form-group">
