@@ -1,0 +1,54 @@
+﻿@model MoviesApp.ViewModels.UsersDetailsVM
+
+<h4>User Details</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <h6> User Name: 
+                <small>@Model.UserName</small>
+            </h6>
+
+            <div class="form-group">
+                <label asp-for="PictUrl" class="control-label"></label>
+                <input asp-for="PictUrl" class="form-control" />
+                <span asp-validation-for="PictUrl" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <h6>Address: </h6>
+    <ul>
+        <li><h6>Street : <small>@Model.City</small></h6></li>
+        <li><h6>City   : <small>@Model.State</small></h6></li>
+    </ul>
+
+    < br/>
+    <h6>Playlists: </h6>
+     @*<table>
+        <thead>
+        
+        </thead>
+            @foreach (var playlist in @Model)
+            {
+                <tr>
+                    <dl>
+                        @Model.playlists.Name;
+                    </dl>
+                </tr>
+            
+            }
+    </table> *@
+    
+    <a asp-action="Index">Back to List</a>
+
+</div>
+

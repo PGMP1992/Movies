@@ -16,18 +16,10 @@ namespace MoviesApp.Models
         [ValidateNever]
         [MaxLength(100)]
         public string Description { get; set; } = "";
-        
+
         [ForeignKey("AppUser")]
         public string? AppUserId { get; set; } = "";
         public AppUser? AppUser { get; set; }
-
-        [ForeignKey("Address")]
-        public int? AddressId { get; set; }
-        public Address? Address { get; set; }
-
-        //[ValidateNever]
-        ////[Required]
-        //bool IsRental { get; set; } = false;
 
         [ValidateNever]
         public List<Movie> MoviesList { get; set; }

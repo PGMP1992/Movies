@@ -31,19 +31,5 @@ namespace MoviesApp.Models
 
         [ValidateNever]
         public Playlist? Playlist { get; set; }
-
-        //[Required]
-        //[Display(Name = "Buy")]
-        //[DataType(DataType.Currency)]
-        //public double BuyPrice { get; set; }
-
-        //[Required]
-        //[Display(Name = "Rent")]
-        //[DataType(DataType.Currency)]
-        //public double RentPrice { get; set; }
-
-        //[ForeignKey("AppUser")]
-        //public string? AppUserId { get; set; }
-        //public AppUser? AppUser { get; set; } 
     }
 }

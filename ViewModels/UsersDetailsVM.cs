@@ -7,6 +7,9 @@ namespace MoviesApp.ViewModels
         public string Id { get; set; }  
         public string UserName { get; set; }
         public IFormFile Image { get; set; }
-        public Address Address { get; set; }
+        public string? PictUrl { get; set; } 
+        public string City {  get; set; }
+        public string State { get; set; }
+        public List<Playlist> playlists { get; set; }
     }
 }
