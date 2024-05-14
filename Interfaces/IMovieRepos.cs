@@ -9,6 +9,7 @@ namespace MoviesApp.Interfaces
         Task<List<Movie>> GetByName( string name);
         Task<List<Movie>> GetByGenre( string genre);
         Task<List<Movie>> GetByAge( int age);
+        Task<List<Movie>> GetByPlaylistId(int? id);
 
         bool Add( Movie movie );
         bool Update( Movie movie );

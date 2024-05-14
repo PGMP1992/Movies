@@ -1,23 +1,21 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using MoviesApp.Data;
 using MoviesApp.Interfaces;
 using MoviesApp.Models;
-using MoviesApp.Repos;
 using MoviesApp.ViewModels;
+using MoviesApp.Repos;
+using Microsoft.EntityFrameworkCore;
 
 namespace MoviesApp.Controllers
 {
     public class MoviesController : Controller
     {
         private readonly IMovieRepos _movieRepos;
-        private readonly IPlaylistRepos _playlistRepos; 
+        private readonly IPlaylistRepos _playlistRepos;
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MoviesController(IMovieRepos movieRepos, IPlaylistRepos playlistRepos, 
+        public MoviesController(IMovieRepos movieRepos, IPlaylistRepos playlistRepos,
                 IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             _movieRepos = movieRepos;
@@ -29,7 +27,7 @@ namespace MoviesApp.Controllers
         // GET: Movies
         public async Task<IActionResult> Index(string search)
         {
-            var movies = await _movieRepos.GetAll();    
+            var movies = await _movieRepos.GetAll();
             ViewBag.Message = "";
 
             if (!String.IsNullOrEmpty(search))
@@ -39,7 +37,7 @@ namespace MoviesApp.Controllers
                 {
                     return View(movies1);
                 }
-                ViewBag.Message = "There are not movies with that search.";
+                ViewBag.Message = "There are not movies with that Name.";
             }
             return View(movies);
         }
@@ -57,41 +55,34 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-
+            
             return View(movie);
         }
 
         // GET: Movies/Create
-        //[Authorize]
-        //[Authorize(Roles ="admin")]
         public IActionResult Create()
         {
-            var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
-            var movieVM = new CreateMovieViewModel { AppUserId = curUserId }; 
+            //var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
+            var movieVM = new CreateMovieVM();// { AppUserId = curUserId }; 
             return View(movieVM);
         }
 
         // POST: Movies/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> Create([Bind("Id,Title,Description,Genre,Age,PictUrl,BuyPrice,RentPrice")] Movie movie)
-        public async Task<IActionResult> Create(CreateMovieViewModel movieVM)
+        public async Task<IActionResult> Create(CreateMovieVM movieVM)
         {
             if (ModelState.IsValid)
             {
                 var result = await _photoService.AddPhotoAsync(movieVM.PictUrl);
                 var movie = new Movie
                 {
-                    AppUserId = movieVM.AppUserId,
                     Title = movieVM.Title,
                     Description = movieVM.Description,
                     Genre = movieVM.Genre,
                     Age = movieVM.Age,
-                    PictUrl = result.Url.ToString(),
-                    BuyPrice = movieVM.BuyPrice,
-                    RentPrice = movieVM.RentPrice
+                    PictUrl = result.Url.ToString()
                 };
 
                 _movieRepos.Add(movie);
@@ -104,7 +95,6 @@ namespace MoviesApp.Controllers
             return View(movieVM);
         }
 
-        //[Authorize]
         // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -118,47 +108,52 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-            return View(movie);
+
+            var movieVM = new EditMovieVM()
+            {
+                Title = movie.Title,
+                Description = movie.Description,
+                Genre = movie.Genre,
+                Age = movie.Age,
+                PictUrl = movie.PictUrl
+            };
+            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAll().ConfigureAwait(false), "Id", "Name");
+            return View(movieVM);
         }
 
         // POST: Movies/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Genre,Age,PictUrl,BuyPrice,RentPrice")] Movie movie)
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Genre,Age,PictUrl")] Movie movie)
+        public async Task<IActionResult> Edit(int id, EditMovieVM movieVM)
         {
-            if (id != movie.Id)
+            if (id != movieVM.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _movieRepos.Update(movie);
-                    //await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_movieRepos.MovieExists(movie.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("", "Failed to Edit Movie");
+                return View("Edit", movieVM);
             }
-            return View(movie);
+
+            var movie = new Movie
+            {
+                Id = movieVM.Id,
+                Title = movieVM.Title,
+                Description = movieVM.Description,
+                Genre = movieVM.Genre,
+                Age = movieVM.Age,
+                PictUrl = movieVM.PictUrl,
+                PlaylistId = movieVM.PlaylistId
+            };
+
+            _movieRepos.Update(movie);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Movies/Delete/5
-        //[Authorize]
-        //[Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -171,7 +166,6 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-
             return View(movie);
         }
 
@@ -185,10 +179,7 @@ namespace MoviesApp.Controllers
             {
                 _movieRepos.Delete(movie);
             }
-
-            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

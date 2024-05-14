@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoviesApp.Data;
 
@@ -11,9 +12,11 @@ using MoviesApp.Data;
 namespace Movies.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240507074229_addUserProfileImage")]
+    partial class addUserProfileImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,21 +162,6 @@ namespace Movies.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MoviePlaylist", b =>
-                {
-                    b.Property<int>("MoviesListId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlaylistId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MoviesListId", "PlaylistId");
-
-                    b.HasIndex("PlaylistId");
-
-                    b.ToTable("MoviePlaylist");
-                });
-
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -181,9 +169,6 @@ namespace Movies.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -225,9 +210,6 @@ namespace Movies.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -259,6 +241,12 @@ namespace Movies.Data.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("BuyPrice")
+                        .HasColumnType("float");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -274,8 +262,8 @@ namespace Movies.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int?>("PlaylistId")
-                        .HasColumnType("int");
+                    b.Property<double>("RentPrice")
+                        .HasColumnType("float");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -283,6 +271,8 @@ namespace Movies.Data.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("Movies");
                 });
@@ -366,19 +356,13 @@ namespace Movies.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MoviePlaylist", b =>
+            modelBuilder.Entity("MoviesApp.Models.Movie", b =>
                 {
-                    b.HasOne("MoviesApp.Models.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MoviesListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("MoviesApp.Models.AppUser", "AppUser")
+                        .WithMany("Movies")
+                        .HasForeignKey("AppUserId");
 
-                    b.HasOne("MoviesApp.Models.Playlist", null)
-                        .WithMany()
-                        .HasForeignKey("PlaylistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
@@ -392,6 +376,8 @@ namespace Movies.Data.Migrations
 
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
                 {
+                    b.Navigation("Movies");
+
                     b.Navigation("Playlists");
                 });
 #pragma warning restore 612, 618

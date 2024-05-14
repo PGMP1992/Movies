@@ -62,10 +62,7 @@ namespace MoviesApp.Repos
             return await _context.Playlists.Where(n => n.Name == name).ToListAsync();
         }
 
-        //public async Task<List<Playlist>> GetAllByUserName(string appUser)
-        //{
-        //    return await _context.Playlists.Where(a => a.AppUser == appUser).ToListAsync();
-        //}
+        
 
         public bool PlaylistExists(int id)
         {
@@ -75,16 +72,21 @@ namespace MoviesApp.Repos
         //public bool AddMovieToPlaylist(Playlist playlist, Movie movie)
         //{
         //    playlist.MoviesList.Add(movie);
-        //    return Save();        
+        //    return Save();
         //}
-        
-        // Get All movies in the List 
+
+        //Get All movies in the List
         //public async Task<List<Playlist>> GetMovies(int? id)
         //{
         //    return await _context.Playlists
-        //            //.Include(m => m.MoviesList)
-        //            //.FirstOrDefaultAsync(m => m.Id == id)
-        //            .ToListAsync();
+        //            .Include(m => m.MoviesList)
+        //            .FirstOrDefaultAsync(m => m.Id == id)
+        //            .ToList();
+        //}
+
+        //public async Task<List<Playlist>> GetAllByUserName(string appUser)
+        //{
+        //    return await _context.Playlists.Where(a => a.AppUser == appUser).ToListAsync();
         //}
     }
 }

@@ -1,6 +1,6 @@
 ﻿@model MoviesApp.ViewModels.DashboardVM
 
-<h3 class="display-4 fw-normal">User Dashboard</h3> 
+<h6 class="display-4 fw-normal">User Dashboard</h6> 
 <a type="button" class="btn btn-sm btn-outline-primary" asp-area="" asp-controller="Playlists" asp-action="Create">Create Playlist</a>
 <a type="button" class="btn btn-sm btn-outline-primary" asp-area="" asp-controller="Movies" asp-action="Create">Create Movie</a>
 <a type="button" class="btn btn-sm btn-outline-primary" asp-area="" asp-controller="Dashboard" asp-action="EditUserProfile">Edit User Profile</a>
@@ -8,7 +8,7 @@
 <div class="album py-5 bg-light">
     <div class="container">
         
-        <h5 class="display-4 fw-normal">Your Playlists</h5>
+        <h6 class="display-4 fw-normal">Your Playlists</h6>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             @foreach (var item in Model.Playlists)
             {
@@ -20,11 +20,11 @@
                             <p class="card-text">@item.Description</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <a type="btn btn-sm btn-outline-primary" asp-controller="Playlist" asp-action="Detail" asp-route-id="@item.Id"
-                                        class="btn btn-sm btn-outline-primary">View</a>
+                                    <a type="btn btn-sm btn-outline-secondary" asp-controller="Playlist" asp-action="Detail" asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-outline-secondary">View</a>
                                         @if (User.Identity.IsAuthenticated)
                                         {
-                                            <a asp-controller="Playlist" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                            <a asp-controller="Playlist" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
                                             <a asp-controller="Movie" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
                                         }
                                 </div>
@@ -38,31 +38,33 @@
 
         <h5 class="display-4 fw-normal">Your Movies</h5>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            @* 
             @foreach (var item in Model.Movies)
             {
                 <div class="col-md-4">
                     <div class="card mb-4 box-shadow">
                         <img src="@item.PictUrl" class="img-fluid rounded-start" width="100%" height="245" alt="@item.Title">
                         @* <img class="card-img-top" src="@item.PictUrl" width="100%" height="225" alt="Card image cap">  *@
-                        <div class="card-body">
+                        @*<div class="card-body">
                             <p class="card-text">@item.Title</p>
                             <p class="card-text">@item.Description</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <a type="btn btn-sm btn-outline-primary" asp-controller="Movie" asp-action="Detail" asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-outline-primary">View</a>
+                                    <a type="btn btn-sm btn-outline-secondary" asp-controller="Movie" asp-action="Detail" asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-outline-secondary">View</a>
                                         @if (User.Identity.IsAuthenticated)
                                         {
-                                            <a asp-controller="Movie" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <a asp-controller="Movie" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
                                             <a asp-controller="Movie" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
                                         }
                                 </div>
                                 <small class="text-muted">@item.Genre</small>
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
             }
+ *@
         </div>
     </div>
 </div>

@@ -1,5 +1,5 @@
 ﻿@using MoviesApp.Data.Enum
-@model MoviesApp.ViewModels.CreateMovieViewModel
+@model MoviesApp.ViewModels.CreateMovieVM
 
 @{
     ViewData["Title"] = "Create";
@@ -13,8 +13,8 @@
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" id="AppUserId" name="AppUserId" asp-for="AppUserId" />
-            @*<form method="post" asp-action="Create" enctype ="multipart/form-data"/> *@
+            @*<input type="hidden" id="AppUserId" name="AppUserId" asp-for="AppUserId" /> *@
+            <form method="post" asp-action="Create" enctype ="multipart/form-data"/> 
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" placeholder="Title"/>
@@ -42,7 +42,7 @@
                 <span asp-validation-for="Age" class="text-danger"></span>
             </div>
             
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="BuyPrice" class="control-label"></label>
                 <input asp-for="BuyPrice" class="form-control" placeholder="Buy Price" />
                 <span asp-validation-for="BuyPrice" class="text-danger"></span>
@@ -51,8 +51,8 @@
                 <label asp-for="RentPrice" class="control-label"></label>
                 <input asp-for="RentPrice" class="form-control" placeholder="Rent Price" />
                 <span asp-validation-for="RentPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            </div> *@
+             <div class="form-group">
                 <label asp-for="PictUrl">Picture</label>
                 <input asp-for="PictUrl" type="file" class="form-control" placeholder="Image" />
                 <span asp-validation-for="PictUrl" class="text-danger"></span>

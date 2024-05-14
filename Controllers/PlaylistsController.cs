@@ -36,21 +36,13 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            /* Using PlaylistMoviesVM ------------------------- 
             PlaylistMoviesVM playlistMoviesVM = new PlaylistMoviesVM
             {
-               Playlist = await _playlistRepos.GetByIdAsync(id),
-               Movies = await _movieRepos.GetAll()
+                Playlist = await _playlistRepos.GetByIdAsync(id),
+                Movies = await _movieRepos.GetByPlaylistId(id)
             };
-            */
 
-            var playlist = await _playlistRepos.GetByIdAsync(id);
-
-            if (playlist == null)
-            {
-                return NotFound();
-            }
-            return View(playlist);
+            return View(playlistMoviesVM);
         }
 
         // GET: Playlists/Create
@@ -59,18 +51,18 @@ namespace MoviesApp.Controllers
             var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
             var createPlaylistMoviesVM = new PlaylistMoviesVM { AppUserId = curUserId };
             return View(createPlaylistMoviesVM);
+            //return View();
         }
 
         // POST: Playlists/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description")] Playlist playlist)
         {
             if (ModelState.IsValid)
             {
-                //_playlistRepos.AppUserId =  
+                //_playlistRepos.AppUserId =
+                playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
                 _playlistRepos.Add(playlist);
                 return RedirectToAction(nameof(Index));
             }
@@ -109,6 +101,7 @@ namespace MoviesApp.Controllers
             {
                 try
                 {
+                    playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
                     _playlistRepos.Update(playlist);
                 }
                 catch (DbUpdateConcurrencyException)

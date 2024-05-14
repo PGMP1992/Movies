@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using MoviesApp.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace MoviesApp.Models
+namespace MoviesApp.ViewModels
 {
-    public class Movie
+    public class EditMovieVM
     {
         public int Id { get; set; }
 
@@ -24,11 +25,10 @@ namespace MoviesApp.Models
         [Display(Name = "Minimun Age")]
         public int Age { get; set; }
 
-        [Required]
-        [MaxLength(500)]
-        [Display(Name = "Picture URL")]
-        public string? PictUrl { get; set; } = "";
+        public string? PictUrl { get; set; }
 
-        public int? PlaylistId {  get; set; } 
+        public int? PlaylistId { get; set; }
+        public List<Playlist>? Playlists { get; set; }
     }
 }
+

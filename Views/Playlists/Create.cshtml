@@ -1,4 +1,5 @@
-﻿@model MoviesApp.Models.Playlist
+﻿@*@model MoviesApp.Models.Playlist *@ 
+@model MoviesApp.ViewModels.PlaylistMoviesVM
 
 @{
     ViewData["Title"] = "Create";
@@ -13,17 +14,17 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                @* <input type="hidden" id="AppUserId" name="UserName" asp-for="AppUserId" /> *@
-                <input type="hidden" id="AppUserId" name="AppUserId" asp-for="AppUserId" />
+            @*<input type="hidden" id="AppUserId" name="UserName" asp-for="AppUserId" /> *@
+                 <input type="hidden" id="AppUserId" name="AppUserId" asp-for="AppUserId" />
                 <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <label asp-for="Playlist.Name" class="control-label"></label>
+                <input asp-for="Playlist.Name" class="form-control" />
+                <span asp-validation-for="Playlist.Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="Playlist.Description" class="control-label"></label>
+                <input asp-for="Playlist.Description" class="form-control" />
+                <span asp-validation-for="Playlist.Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-sm btn-outline-primary" />
