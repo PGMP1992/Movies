@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MoviesApp.Models;
+﻿using MoviesApp.Models;
 
 namespace MoviesApp.Interfaces
 {
@@ -9,14 +8,13 @@ namespace MoviesApp.Interfaces
         Task<Playlist> GetByIdAsync(int? id);
         Playlist GetPlaylistById(int id);
         Task<List<Playlist>> GetByName(string name);
-        //Task<List<Playlist>> GetAllByUserName(string userName);
-        //Task<List<Movie>> GetMovies(int? id);
+        Task<List<Playlist>> GetAllByUserName(string userName);
 
         bool Add(Playlist playlist);
         bool Update(Playlist playlist);
         bool Delete(Playlist playlist);
         bool Save();
         bool PlaylistExists(int id);
-        //bool AddMovieToPlaylist(Playlist playlist, Movie movie);
+
     }
 }

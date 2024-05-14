@@ -23,8 +23,25 @@ namespace MoviesApp.Controllers
         // GET: Playlists
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Playlist> playlists = await _playlistRepos.GetAll();
-            return View(playlists);
+            IEnumerable<Playlist> list;
+            
+            if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+            {
+                IEnumerable<Playlist> playlists = await _playlistRepos.GetAll();
+                list = playlists;
+                ViewBag.Message = "";
+            }
+            else 
+            {
+                var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+                IEnumerable<Playlist> playlists = await _playlistRepos.GetAllByUserName(curUserId);
+                list = playlists;
+                if( list.Count() == 0)
+                {
+                    ViewBag.Message = "There are no Playlists in your account.";
+                }
+            }
+            return View(list);
         }
 
         // GET: Playlists/Details/5
