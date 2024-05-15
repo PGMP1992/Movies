@@ -1,17 +1,15 @@
-﻿@model MoviesApp.ViewModels.EditProfileVM
+﻿@model MoviesApp.ViewModels.EditUserVM
 
 <h4>User Profile</h4>
+</<br />
+<h6>User Name: <small class="text-body-secondary">@Model.UserName</small></h6>
 <br/>
 <div class="row">
     <div class="col-md-4">
-        @* <form asp-action="Edit"> *@
-        <form method="post" asp-action="EditProfile" enctype="multipart/form-data">
+        <form method="post" asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @* <input type="hidden" asp-for="Id" />
-            <h6> User Name:
-                <small class="text-body-secondary">@Model.UserName</small>
-            </h6>
-            *@            
+            <input type="hidden" asp-for="Id" />
+            
             <div class="form-group">
                 <label asp-for="City" class="control-label"></label>
                 <input asp-for="City" class="form-control" />
@@ -39,7 +37,6 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-sm btn-outline-primary" />
-                    @* <a asp-action="Index" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark">Cancel</a> *@
                     <a asp-action="Index" type="button" class="btn btn-sm btn-outline-dark">Cancel</a>
                 </div>
             </div>
@@ -47,29 +44,8 @@
     </div>
 </div>
 
-<div>
-    </br>
-    <h6>Playlists: </h6>
-     @*<table>
-        <thead>
-        
-        </thead>
-            @foreach (var playlist in @Model)
-            {
-                <tr>
-                    <dl>
-                        @Model.playlists.Name;
-                    </dl>
-                </tr>
-            
-            }
-    </table> *@
-</div>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-
