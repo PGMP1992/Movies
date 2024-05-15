@@ -1,21 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Data;
 using MoviesApp.Interfaces;
-using MoviesApp.ViewModels;
 using MoviesApp.Models;
-using MoviesApp.Repos;
-using CloudinaryDotNet.Actions;
+using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers
 {
-    public class XDashboardController : Controller
+    public class DashboardController : Controller
     {
-        private readonly XIDashboardRepos _dashboardRepos;
+        private readonly IDashboardRepos _dashboardRepos;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPhotoService _photoService;
 
-        public XDashboardController(XIDashboardRepos dashboardRepos, 
-                                    IHttpContextAccessor httpContextAccessor, 
+        public DashboardController(IDashboardRepos dashboardRepos,
+                                    IHttpContextAccessor httpContextAccessor,
                                     IPhotoService photoService)
         {
             _dashboardRepos = dashboardRepos;
@@ -36,20 +35,24 @@ namespace MoviesApp.Controllers
             {
                 Playlists = userPlaylists
             };
-            
+
             return View(dashboardVM);
+            return View();
         }
 
         public async Task<IActionResult> EditUserProfile()
         {
             var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
             var user = await _dashboardRepos.GetUserById(curUserId);
-            
+
             if (user == null) return View("Error");
-            
+
             var editUserVM = new EditUserDashboardVM()
             {
                 Id = curUserId,
+                UserName = user.UserName,
+                City = user.City,
+                State = user.State,
                 ProfileImageUrl = user.ProfileImageryUrl
             };
 
@@ -89,12 +92,11 @@ namespace MoviesApp.Controllers
 
                 var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
                 MapUserEdit(user, editVM, photoResult);
+                
                 // Optmistic Concurrency - 
                 _dashboardRepos.Update(user);
                 return RedirectToAction("Index");
             }
         }
-
-
     }
 }

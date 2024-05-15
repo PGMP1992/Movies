@@ -11,53 +11,37 @@ namespace MoviesApp.Controllers
         private readonly IUsersRepos _userRepos;
         private readonly IPhotoService _photoService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IHttpContextAccessor _httpContextAcessor;
 
-        public UsersController(IUsersRepos usersRepos, IPhotoService photoService, UserManager<AppUser> userManager)
+        public UsersController(IUsersRepos usersRepos, IPhotoService photoService,
+            UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _userRepos = usersRepos;
             _photoService = photoService;
             _userManager = userManager;
+            _httpContextAcessor = httpContextAccessor;
         }
 
         [HttpGet("Users")]
         public async Task<IActionResult> Index()
         {
-            //if ("admin")
-            //{
-                var users = await _userRepos.GetAllUsers();
-                List<UsersVM> result = new List<UsersVM>();
+            var users = await _userRepos.GetAllUsers();
+            List<UsersVM> result = new List<UsersVM>();
 
-                foreach (var user in users)
+            foreach (var user in users)
+            {
+                var usersVM = new UsersVM()
                 {
-                    var usersVM = new UsersVM()
-                    {
-                        Id = user.Id,
-                        UserName = user.UserName,
-                        City = user.City,
-                        State = user.State,
-                        ProfileImageUrl = user.ProfileImageryUrl,
-                    };
-                    result.Add(usersVM);
-                }
-                return View(result);
-            //}
-            //else
-            //{
-            //    var user = await _userRepos.GetUserById(id);
-
-            //    var usersVM = new UsersVM()
-            //    {
-            //        Id = user.Id,
-            //        UserName = user.UserName,
-            //        City = user.City,
-            //        State = user.State,
-            //        ProfileImageUrl = user.ProfileImageryUrl,
-            //    };
-            //    //result.Add(usersVM);
-            //}
-            //return View(result);
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    City = user.City,
+                    State = user.State,
+                    ProfileImageUrl = user.ProfileImageryUrl,
+                };
+                result.Add(usersVM);
+            }
+            return View(result);
         }
-
 
         public async Task<ActionResult> Detail(string id)
         {
@@ -78,7 +62,7 @@ namespace MoviesApp.Controllers
             return View(usersDetailsVM);
         }
 
-        // GET: Movies/Edit/5
+        // GET: Movies/EditProfile/5 -----------------------------------------------------------------
         [HttpGet]
         public async Task<IActionResult> EditProfile()
         {
@@ -144,69 +128,69 @@ namespace MoviesApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Movies/Edit/5
-        //[HttpGet]
-        //public async Task<IActionResult> Edit(string id)
-        //{
-        //    var user = await _userRepos.GetUserById(id);
+        // GET: Movies/Edit/5 -----------------------------------------------------------------
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var user = await _userRepos.GetUserById(id);
 
-        //    if (user == null)
-        //    {
-        //        return View("Error");
-        //    }
+            if (user == null)
+            {
+                return View("Error");
+            }
 
-        //    var editVM = new EditUserVM()
-        //    {
-        //        City = user.City,
-        //        State = user.State,
-        //        ProfileImageUrl = user.ProfileImageryUrl,
-        //    };
-        //    return View(editVM);
-        //}
+            var editVM = new EditUserVM()
+            {
+                City = user.City,
+                State = user.State,
+                ProfileImageUrl = user.ProfileImageryUrl,
+            };
+            return View(editVM);
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Edit(string id, EditUserVM editVM)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        ModelState.AddModelError("", "Failed to edit profile");
-        //        return View("Edit", editVM);
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, EditUserVM editVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Failed to edit profile");
+                return View("Edit", editVM);
+            }
 
-        //    var user = await _userRepos.GetUserById(id);
+            var user = await _userRepos.GetUserById(id);
 
-        //    if (user == null)
-        //    {
-        //        return View("Error");
-        //    }
+            if (user == null)
+            {
+                return View("Error");
+            }
 
-        //    if (editVM.Image != null) // only update profile image
-        //    {
-        //        var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
+            if (editVM.Image != null) // only update profile image
+            {
+                var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
 
-        //        if (photoResult.Error != null)
-        //        {
-        //            ModelState.AddModelError("Image", "Failed to upload image");
-        //            return View("Edit", editVM);
-        //        }
+                if (photoResult.Error != null)
+                {
+                    ModelState.AddModelError("Image", "Failed to upload image");
+                    return View("Edit", editVM);
+                }
 
-        //        if (!string.IsNullOrEmpty(user.ProfileImageryUrl))
-        //        {
-        //            _ = _photoService.DeletePhotoAsync(user.ProfileImageryUrl);
-        //        }
+                if (!string.IsNullOrEmpty(user.ProfileImageryUrl))
+                {
+                    _ = _photoService.DeletePhotoAsync(user.ProfileImageryUrl);
+                }
 
-        //        user.ProfileImageryUrl = photoResult.Url.ToString();
-        //        editVM.ProfileImageUrl = user.ProfileImageryUrl;
+                user.ProfileImageryUrl = photoResult.Url.ToString();
+                editVM.ProfileImageUrl = user.ProfileImageryUrl;
 
-        //        await _userRepos.UpdateAsync(user);
-        //    }
+                //_userRepos.Update(user);
+            }
 
-        //    user.City = editVM.City;
-        //    user.State = editVM.State;
+            user.City = editVM.City;
+            user.State = editVM.State;
 
-        //    await _userRepos.UpdateAsync(user);
+            _userRepos.Update(user);
 
-        //    return RedirectToAction(nameof(Index));
-        //}
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

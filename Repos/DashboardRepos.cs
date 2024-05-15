@@ -5,12 +5,12 @@ using MoviesApp.Models;
 
 namespace MoviesApp.Repos
 {
-    public class XDashboardRepos : XIDashboardRepos
+    public class DashboardRepos : IDashboardRepos
     {
         private readonly ApplicationDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public XDashboardRepos( ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+        public DashboardRepos( ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
