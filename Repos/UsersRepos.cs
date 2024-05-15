@@ -13,6 +13,7 @@ namespace MoviesApp.Repos
         {
             _context = context;
         }
+
         public bool Add(AppUser user)
         {
             throw new NotImplementedException();

@@ -8,13 +8,13 @@ using CloudinaryDotNet.Actions;
 
 namespace MoviesApp.Controllers
 {
-    public class DashboardController : Controller
+    public class XDashboardController : Controller
     {
-        private readonly IDashboardRepos _dashboardRepos;
+        private readonly XIDashboardRepos _dashboardRepos;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPhotoService _photoService;
 
-        public DashboardController(IDashboardRepos dashboardRepos, 
+        public XDashboardController(XIDashboardRepos dashboardRepos, 
                                     IHttpContextAccessor httpContextAccessor, 
                                     IPhotoService photoService)
         {
@@ -91,7 +91,7 @@ namespace MoviesApp.Controllers
                 MapUserEdit(user, editVM, photoResult);
                 // Optmistic Concurrency - 
                 _dashboardRepos.Update(user);
-                return RedirectToAction("index");
+                return RedirectToAction("Index");
             }
         }
 

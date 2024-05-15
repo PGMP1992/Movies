@@ -2,7 +2,7 @@
 
 namespace MoviesApp.Interfaces
 {
-    public interface IDashboardRepos
+    public interface XIDashboardRepos
     {
         Task<List<Playlist>> GetAllUserPlaylists();
         Task<AppUser> GetUserById(string id);
