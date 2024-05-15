@@ -36,7 +36,7 @@ namespace MoviesApp.Controllers
                 homeVM.City = ipInfo.City;
                 homeVM.State = ipInfo.Region;
                 
-                if( homeVM.City != null)
+                if( homeVM.State != null)
                 {
                     //homeVM.Playlists = await _playlistRepos.GetPlaylistByCity(homeVM.City);
                     homeVM.Playlists = await _playlistRepos.GetAll();

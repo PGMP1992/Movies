@@ -66,7 +66,7 @@
 
 <section>
     <div class="container">
-        @if (Model.Playlists == null)
+        @if (@Model.Playlists == null)
         {
             <h1 class="fw-light">
                 There are no running clubs in your area! <a asp-area="" asp-controller="Account"
@@ -77,27 +77,27 @@
         {
             <div class="row justify-content-between mb-5">
                 <div class="col-auto">
-                    <h3>Running clubs near @Model.City, @Model.State</h3>
+                    <h3>Film fiends near @Model.City, @Model.State</h3>
                 </div>
                 <!--end of col-->
                 @* <div class="col-auto">
                     <a href="#" class="btn btn-outline-primary">View all</a>
                 </div>
- *@                <!--end of col-->
+                <!--end of col--> *@
             </div>
             
             <ul class="row feature-list feature-list-sm">
                 
                 @foreach (var item in Model.Playlists)
                 {
-                    @*<li class="col-12 col-md-6 col-lg-4">
+                    <li class="col-12 col-md-6 col-lg-4">
                         <div class="card">
                             <a href="#">
                                  <img class="card-img-top" src="@item.Name" alt="Card image cap">
                             </a>
                             <div class="card-body">
                                 <a href="#">
-                                    <h4 class="card-title">@item.Title</h4> 
+                                    <h4 class="card-title">@item.</h4> 
                                     <p class="card-text text-body">@item.Description</p> 
                                 </a>
                             </div>
@@ -123,7 +123,7 @@
                             </div>
                     
                         </div>
-                    </li> *@
+                    </li> 
                 }
             </ul>
         }
