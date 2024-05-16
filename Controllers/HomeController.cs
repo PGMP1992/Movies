@@ -14,12 +14,12 @@ namespace MoviesApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IPlaylistRepos _playlistRepos;
+        private readonly IUsersRepos _usersRepos;
 
-        public HomeController(ILogger<HomeController> logger, IPlaylistRepos playlistRepos)
+        public HomeController(ILogger<HomeController> logger, IUsersRepos usersRepos)
         {
             _logger = logger;
-            _playlistRepos = playlistRepos;
+            _usersRepos = usersRepos;
         }
 
         public async Task<IActionResult> Index() // Using IPInfo to get locations IP 
@@ -35,21 +35,21 @@ namespace MoviesApp.Controllers
                 ipInfo.Country = myRI1.EnglishName;
                 homeVM.City = ipInfo.City;
                 homeVM.State = ipInfo.Region;
-                
+                                
                 if( homeVM.State != null)
                 {
-                    //homeVM.Playlists = await _playlistRepos.GetPlaylistByCity(homeVM.City);
-                    homeVM.Playlists = await _playlistRepos.GetAll();
+                    //homeVM.UserName = await _usersRepos.;
+                    homeVM.Users = await _usersRepos.GetAllUsers();
                 }
                 else
                 {
-                    homeVM.Playlists = null;
+                    homeVM.Users = null;
                 }
                 return View(homeVM);
             }
             catch
             {
-                homeVM.Playlists = null;
+                homeVM.Users = null;
             }
             return View(homeVM);
         }

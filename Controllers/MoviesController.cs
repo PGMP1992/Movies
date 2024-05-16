@@ -5,6 +5,8 @@ using MoviesApp.Models;
 using MoviesApp.ViewModels;
 using MoviesApp.Repos;
 using Microsoft.EntityFrameworkCore;
+using MoviesApp.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace MoviesApp.Controllers
 {
@@ -103,6 +105,7 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
+            var user = _httpContextAccessor.HttpContext.User.GetUserId();
             var movie = await _movieRepos.GetByIdAsync(id);
             if (movie == null)
             {
@@ -117,7 +120,7 @@ namespace MoviesApp.Controllers
                 Age = movie.Age,
                 PictUrl = movie.PictUrl
             };
-            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAll().ConfigureAwait(false), "Id", "Name");
+            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user).ConfigureAwait(false), "Id", "Name");
             return View(movieVM);
         }
 
