@@ -12,10 +12,11 @@
                     <div class="card mb-4 box-shadow">
                          <img class="card-img-top" src="@item.ProfileImageUrl" alt="Photo">
                         <div class="card-body">
-                            <p class="card-text">User Name: <small>@item.UserName</small></p>
-                            <p class="card-text">City : @item.City</p>
-                            <p class="card-text">State: @item.State</p> 
-                            
+                            <h5 style="color:cornflowerblue;">@item.UserName</h5>
+                            <hr/>
+                            <h5 class="card-text"><small class="text-body-secondary">@item.City</small>
+                                <p class="card-text"><small class="text-body-secondary">@item.State</small></p>
+                            </h5>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     @* <a type="btn btn-success" asp-controller="Users" asp-action="Detail" asp-route-id="@item.Id"
