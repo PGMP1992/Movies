@@ -30,10 +30,19 @@ namespace MoviesApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+            var user = await _dashboardRepos.GetUserById(curUserId);
+
             var userPlaylists = await _dashboardRepos.GetAllUserPlaylists();
+            
             var dashboardVM = new DashboardVM()
             {
-                Playlists = userPlaylists
+                Playlists = userPlaylists,
+                Id = curUserId,
+                UserName = user.UserName,
+                City = user.City,
+                State = user.State,
+                ProfileImageUrl = user.ProfileImageryUrl
             };
 
             return View(dashboardVM);

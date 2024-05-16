@@ -1,7 +1,7 @@
 ﻿@using MoviesApp.ViewModels
 @model List<UsersVM>
 
-<h3>Users</h3>
+<h3>Active Users</h3>
 
 <div class="album py-5 bg-light">
     <div class="container">
@@ -20,8 +20,11 @@
                                 <div class="btn-group">
                                     @* <a type="btn btn-success" asp-controller="Users" asp-action="Detail" asp-route-id="@item.Id"
                                        class="btn btn-sm btn-outline-primary">View</a> *@
-                                       <a asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
-                                       <a asp-controller="Users" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                                    @if (User.IsInRole("admin"))
+                                    {
+                                        <a asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <a asp-controller="Users" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                                    }
                                 </div>
                                 @*<small class="text-muted">@item.ClubCategory</small>*@
                             </div>

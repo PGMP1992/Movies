@@ -7,7 +7,7 @@
 <h3>Movies</h3>
 
 @* <a asp-action="Create">Create New</a> *@
-@if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+@if (User.Identity.IsAuthenticated) @*&& User.IsInRole("admin")) *@
 {
     <p>
         <a asp-action="Create" class="btn btn-sm btn-outline-primary">Create</a>
