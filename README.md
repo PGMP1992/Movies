@@ -2,25 +2,28 @@
 
 <h2>Introduction </h2>
   <p>Movie listing application that supports creating, editing, searching, and listing movies from a database.</p>
-  <p>The application lets you add, edit, and delete movies and playlists, as well as see details about individual ones.</p>  
+  <p>The application lets you add, edit, and delete movies, playlists and Users , as well as see details about individual ones.</p>  
   <ul>
-    <li>Creating an MVC Project and Adding an MVC Controllers</li>
-    <li>Adding a View Create Database</li>
+    <li>Creating an MVC Project and Adding MVC Controllers</li>
+    <li>Adding Views Create Database</li>
     <li>Creating a Connection String and Working with SQL Server Local DB</li>
   </ul>
+  
   <p>A search bar functionality is also used to Find a particular Title of the movie.</p> 
-  <p>Individual cards for View, Edit and Delete a movie</p>  
-
-<h2>Movies</h2> 
+    
+<h2>Movies</h2>
   <p>Create, Read, Update and Delete</p> 
 
-<h2>Playlists</h2>
-  <p>Create, Read and Update playlists</p>
+<h2>Users Playlists</h2>
+  <p>Create, Read, Update and Delete their playlists</p>
 
 <h2>User Profile</h2>
   <p>Change information for location using IP Address for the user</p>
   <p>Change profile picture</p>
-  <p>Create, Read and Update Playlists</p>
+  <p>Create, Read, Update and Delete Playlists</p>
+
+<h2>Users</h2>
+  <p>Create, Read, Update and delete Users</p>
 
 <h2>Users Authorization</h2>
   <p>For Authentication, user must register first and then Log-in to get the full access of the website.</p> 
@@ -45,9 +48,9 @@
     <li>Backend: C#, ADO.NET</li>
     <li>DataBase: Microsoft SQL Server Entity framework</li>
     <li>Front-end: ASP.Net, Razor Pages, CSS, Bootstrap.</li> 
-    <li>Extras
-      <p>Photo Service - <a href="https://cloudinary.com/">Cloudinary</a> </p>
+    <li>Extras:
+      <p>Photo Service - <a href="https://cloudinary.com/">Cloudinary.com</a> </p>
       <p>IP Location service - <a href="https://ipinfo.io">IPInfo.io<a> </p>
-      <p>Anonimous photos - <a href="http://unsplash.com">Unsplash</a></p> 
+      <p>Anonimous photos - <a href="http://unsplash.com">Unsplash.com</a></p> 
    </li>
   </ul>
