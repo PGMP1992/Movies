@@ -1,0 +1,51 @@
+﻿@using MoviesApp.ViewModels
+@model EditUserVM
+@{
+    ViewData["Title"] = "Delete";
+}
+
+h3>Movie</h3>
+
+<h5>Are you sure you want to delete this User?</h5>
+<br />
+
+<h5>
+    User:
+    <small class="text-body-secondary">@Model.UserName</small>
+</h5>
+
+<main>
+    <div class="card mb-3" style="max-width: 100%">
+        <div class=" row g-0">
+            <div class="col-md-4">
+                <img src="@Model.ProfileImageUrl" class="img-fluid rounded-start" width="100%" height="auto" alt="@Model.Image">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h6>City</h6>
+                    <p class="card-text">@Model.City</p>
+                    <h6>State: </h6>
+                    <p class="card-text">@Model.State</p>
+
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between align-items-center">
+                            @* <div class="btn-group">
+                            <a asp-action="Error" asp-route-id="@Model.Id" type="button"
+                            class="btn btn-sm btn-outline-primary">Buy: SEK @Model.BuyPrice</a>
+                            <a asp-action="Error" asp-route-id="@Model.Id" type="button"
+                            class="btn btn-sm btn-outline-success">Rent: SEK @Model.RentPrice</a>
+                            </div> 
+                            <small class="text-body-secondary">Minimum Age: @Model.Age</small> *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Delete" class="btn btn-sm btn-outline-danger" />
+    <a asp-action="Index" type="button" class="btn btn-sm btn-outline-dark">Cancel</a>
+</form>

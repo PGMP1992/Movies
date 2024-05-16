@@ -23,14 +23,30 @@ namespace MoviesApp.Controllers
         // GET: Playlists
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Playlist> playlists = await _playlistRepos.GetAll();
-            return View(playlists);
+            IEnumerable<Playlist> list;
+            
+            if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+            {
+                IEnumerable<Playlist> playlists = await _playlistRepos.GetAll();
+                list = playlists;
+                ViewBag.Message = "";
+            }
+            else 
+            {
+                var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+                IEnumerable<Playlist> playlists = await _playlistRepos.GetAllByUserName(curUserId);
+                list = playlists;
+                if( list.Count() == 0)
+                {
+                    ViewBag.Message = "There are no Playlists in your account.";
+                }
+            }
+            return View(list);
         }
 
         // GET: Playlists/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-
             if (id == null)
             {
                 return NotFound();
@@ -61,7 +77,6 @@ namespace MoviesApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                //_playlistRepos.AppUserId =
                 playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
                 _playlistRepos.Add(playlist);
                 return RedirectToAction(nameof(Index));
@@ -86,8 +101,6 @@ namespace MoviesApp.Controllers
         }
 
         // POST: Playlists/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Playlist playlist)
@@ -133,7 +146,6 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-
             return View(playlist);
         }
 

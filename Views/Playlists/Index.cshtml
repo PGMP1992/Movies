@@ -5,23 +5,14 @@
 }
 
 <h3>Playlists</h3>
+<p class="text-danger">@ViewBag.Message </p>
 
-@if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+@if (User.Identity.IsAuthenticated) @*&& User.IsInRole("admin") *@
 {
     <p>
         <a asp-action="Create" class="btn btn-sm btn-outline-primary">Create</a>
     </p>
 }
-
-@* Search something ???
-    <form asp-controller="Playlists" asp-action="Index">
-    <h5>
-        Name:
-        <input type="text" name="search" />
-        <input type="submit" value="Search" class=" btn btn-sm btn-outline-primary" />
-    </h5>
-</form>
-*@
 
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
@@ -32,7 +23,7 @@
                     <div class="row g-0">
                         @*<div class="col-md-4">
                             <img src="@item.PictUrl" class="img-fluid rounded-start" width="100%" height="245" alt="@item.Title">
-                    </div> *@
+                          </div> *@
                         <div class="col-md-8">
                             <div class="card-body">
                                 <h5 class="card-title">@item.Name</h5>
@@ -48,11 +39,8 @@
                                         {
                                             <a asp-action="Edit" asp-route-id="@item.Id" type="button"
                                                 class="btn btn-sm btn-outline-primary">Edit</a>
-                                            @if (User.IsInRole("admin"))
-                                            {
-                                                <a asp-action="Delete" asp-route-id="@item.Id" type="button"
+                                            <a asp-action="Delete" asp-route-id="@item.Id" type="button"
                                                 class="btn btn-sm btn-outline-danger">Delete</a>
-                                            }
                                         }
                                     </div>
                                 </div>

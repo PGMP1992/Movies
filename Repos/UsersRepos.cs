@@ -13,6 +13,7 @@ namespace MoviesApp.Repos
         {
             _context = context;
         }
+
         public bool Add(AppUser user)
         {
             throw new NotImplementedException();
@@ -20,12 +21,13 @@ namespace MoviesApp.Repos
 
         public bool Delete(AppUser user)
         {
-            throw new NotImplementedException();
+            _context.Remove(user);
+            return Save();
         }
 
         public async Task<List<AppUser>> GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.OrderBy(u=>u.UserName).ToListAsync();
         }
 
         public async Task<AppUser> GetUserById(string id)
