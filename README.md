@@ -46,8 +46,8 @@
     <li>DataBase: Microsoft SQL Server Entity framework</li>
     <li>Front-end: ASP.Net, Razor Pages, CSS, Bootstrap.</li> 
     <li>Extras
-      <p><a href="https://cloudinary.com/">Cloudinary - Photo Service</a> </p>
-      <p><a href="https://ipinfo.io">IPInfo.io - IP Location service<a> </p>
-      <p><a href="http://unsplash.com">Unsplash - anonimous photos</a></p> 
+      <p>Photo Service - <a href="https://cloudinary.com/">Cloudinary</a> </p>
+      <p>IP Location service - <a href="https://ipinfo.io">IPInfo.io<a> </p>
+      <p>Anonimous photos - <a href="http://unsplash.com">Unsplash</a></p> 
    </li>
   </ul>
