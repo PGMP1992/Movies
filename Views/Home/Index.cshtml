@@ -21,6 +21,9 @@
  *@
 <section>
     <div class="container">
+        <div class="container">
+            <img class="card-img-top" src="/images/film-strip.webp" alt="Photo">
+        </div>
         @if (@Model.Users == null)
         {
             <h1 class="fw-light">
@@ -32,12 +35,10 @@
         {
             <div class="row justify-content-between mb-5">
                 <div class="col-auto">
-                    <h3>You are in @Model.City, @Model.State</h3>
+                    <h6>You are in @Model.City, @Model.State</h6>
                 </div>
             </div>                        
-            <div class="container">
-                <img class="card-img-top" src="/images/Films.jpg" alt="Photo">
-            </div>    
+                
             @* <h5>Active Users</h5>
             <div class="album py-5 bg-light">
                 <div class="container">

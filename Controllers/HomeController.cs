@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using MoviesApp.Helpers;
 using MoviesApp.Interfaces;
 using MoviesApp.Models;
@@ -35,8 +34,8 @@ namespace MoviesApp.Controllers
                 ipInfo.Country = myRI1.EnglishName;
                 homeVM.City = ipInfo.City;
                 homeVM.State = ipInfo.Region;
-                                
-                if( homeVM.State != null)
+
+                if (homeVM.State != null)
                 {
                     //homeVM.UserName = await _usersRepos.;
                     homeVM.Users = await _usersRepos.GetAllUsers();
