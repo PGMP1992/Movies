@@ -20,10 +20,11 @@
 <h2>User Profile</h2>
   <p>Change information for location using IP Address for the user</p>
   <p>Change profile picture</p>
+  <p>Create, Read and Update Movies.</p>
   <p>Create, Read, Update and Delete Playlists</p>
 
 <h2>Users</h2>
-  <p>Create, Read, Update and delete Users</p>
+  <p>Create, Read, Update and Delete(Admin role only) Users</p>
 
 <h2>Users Authorization</h2>
   <p>For Authentication, user must register first and then Log-in to get the full access of the website.</p> 
@@ -35,13 +36,21 @@
   <ul>
     <li><h3>Admin</h3> - Have access to all CRUD Operations and Database Access</li>
     <li><h3>Authenticated Users</h3> - Can create, read and update their movies and Playlists and update their profiles information</li>
-    <li><h3>Non users</h3> - Can only see movies in the database</li> 
+    <li><h3>Non users</h3> - Can only see movies and users in the application</li> 
   </ul>
 
 <h2>Project Template Backend</h2>
   <p>Authentication and Authorization</p> 
-  <p>Database (Microsoft SQL Database) the creator should give roles to admin, and authenticated users.</p> 
+  <p>Database (Microsoft SQL Server) the creator should give role to admin.</p> 
   <p>System and Frontend</p> 
+  
+<h2> Getting started</h2>
+<p>Create and set up the database using \Data\Migrations.</p>
+<p>Add connection string to app settings.json. It will look something like this:</br><strong>
+  Data Source=DESKTOP\\SQLEXPRESS;Initial Catalog=MovieDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False</strong></p>
+<p>Register for a Cloudinary Account and add Cloudname, ApiKey, and Api secret to appsettings.json. </p>
+<p>Register for a IPInfo Account and add your personal Token in <strong>HomeController.cs</strong> at <strong>Task Index()</strong></p>
+
 
 <h2>Tech used in this project</h2> 
   <ul>
