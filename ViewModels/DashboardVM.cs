@@ -4,7 +4,8 @@ namespace MoviesApp.ViewModels
 {
     public class DashboardVM
     {
-        //public List<Movie> Movies { get; set; } 
+        public string Id { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
         public string City { get; set; }
         public string State { get; set; }
         public string? ProfileImageUrl { get; set; }

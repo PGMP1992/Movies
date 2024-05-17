@@ -1,30 +1,44 @@
 ﻿﻿@using MoviesApp.ViewModels
 @model EditUserDashboardVM
 
-<H6>User Name: <small class="text-body-secondary">@Model.UserName</small></H6>
-<form method="post" asp-action="EditUserProfile" enctype="multipart/form-data">
-    <input type="hidden" id="Id" name="Id" asp-for="Id" />
-    <input type="hidden" id="UserName" name="UserName" asp-for="UserName" />
-    <div class="form-group">
-        <label asp-for="City">City</label>
-        <input asp-for="City" class="form-control" placeholder="City">
-        <span asp-validation-for="City" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="State">State</label>
-        <input asp-for="State" class="form-control" placeholder="State">
-        <span asp-validation-for="State" class="text-danger"></span>
-    </div>
+<div class="card mb-3" style="max-width: 100%">
+    <div class=" row g-0">
+        <div class="col-md-4">
+            <img src="@Model.ProfileImageUrl" class="img-fluid rounded-start" width="100%" height="auto" alt="@Model.UserName">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h6>User Name</h6>
+                <p class="card-text">@Model.UserName</p>
+                <form method="post" asp-action="EditUserProfile" enctype="multipart/form-data">
+                    <input type="hidden" id="Id" name="Id" asp-for="Id" />
+                    <input type="hidden" id="UserName" name="UserName" asp-for="UserName" />
+                    <div class="form-group">
+                        <label asp-for="City">City</label>
+                        <input asp-for="City" class="form-control" placeholder="City">
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="State">State</label>
+                        <input asp-for="State" class="form-control" placeholder="State">
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <label asp-for="ProfileImageUrl">Profile Image</label>
-        <input asp-for="ProfileImageUrl" class="form-control" placeholder="Profile Picture">
-        <span asp-validation-for="ProfileImageUrl" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="ProfileImageUrl">Profile Image</label>
+                        <input asp-for="ProfileImageUrl" class="form-control" placeholder="Profile Picture">
+                        <span asp-validation-for="ProfileImageUrl" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Image">Image</label>
+                        <input asp-for="Image" type="file" class="form-control" placeholder="Image">
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
+                    <a asp-action="Index" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark">Back</a>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Image">Image</label>
-        <input asp-for="Image" type="file" class="form-control" placeholder="Image">
-        <span asp-validation-for="Image" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
-</form>
+</div>
+
