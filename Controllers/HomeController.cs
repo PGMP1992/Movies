@@ -27,7 +27,7 @@ namespace MoviesApp.Controllers
             var homeVM = new HomeVM();
             try
             {
-                string url = "https://ipinfo.io?be339e669dc21b"; //IPInfo.IO My Private Token
+                string url = "https://ipinfo.io?your token here"; //IPInfo.IO My Private Token
                 var info = new WebClient().DownloadString(url);
                 ipInfo = JsonConvert.DeserializeObject<IPInfo>(info);
                 RegionInfo myRI1 = new RegionInfo(ipInfo.Country);
