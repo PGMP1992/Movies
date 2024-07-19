@@ -40,20 +40,22 @@ namespace MoviesApp.Repos
         
         public async Task<List<Playlist>> GetAll()
         {
-            return await _context.Playlists.ToListAsync();
+            return await _context.Playlists
+                .Include(p=>p.AppUser)
+                .ToListAsync();
         }
 
         public async Task<Playlist> GetByIdAsync(int? id)
         {
             return await _context.Playlists
-               //.Include(m => m.Movies)
+               //.Include(m => m.MoviesList)
                .FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public Playlist GetPlaylistById(int id)
         {
             return _context.Playlists
-               //.Include(m => m.MoviesList)
+               .Include(m => m.MoviesList)
                .FirstOrDefault(m => m.Id == id);
         }
 
@@ -70,6 +72,12 @@ namespace MoviesApp.Repos
         public async Task<List<Playlist>> GetAllByUserName(string appUser)
         {
             return await _context.Playlists.Where(a => a.AppUserId == appUser).ToListAsync();
+        }
+
+        public bool AddMovie(Movie movie)
+        {
+            
+            return Save();
         }
     }
 }

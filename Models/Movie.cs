@@ -29,5 +29,6 @@ namespace MoviesApp.Models
         public string? PictUrl { get; set; } = "";
 
         public int? PlaylistId { get; set; }
+        public List<Playlist> PlaylistList { get; set; }
     }
 }

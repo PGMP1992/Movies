@@ -46,7 +46,6 @@ namespace MoviesApp.Controllers
             };
 
             return View(dashboardVM);
-            return View();
         }
 
         public async Task<IActionResult> EditUserProfile()
