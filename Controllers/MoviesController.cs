@@ -7,6 +7,7 @@ using MoviesApp.Repos;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MoviesApp.Controllers
 {
@@ -44,6 +45,8 @@ namespace MoviesApp.Controllers
             return View(movies);
         }
 
+        // -----------------------------Fix This here ---------------------
+        // Add to Playlist 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -51,15 +54,20 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-
+            
+            var user = _httpContextAccessor.HttpContext.User.GetUserId();
             var movie = await _movieRepos.GetByIdAsync(id);
+            
             if (movie == null)
             {
                 return NotFound();
             }
             
+            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user)
+                    .ConfigureAwait(false), "Id", "Name");
             return View(movie);
         }
+
 
         // GET: Movies/Create
         public IActionResult Create()
@@ -152,6 +160,7 @@ namespace MoviesApp.Controllers
                 PlaylistId = movieVM.PlaylistId
             };
 
+
             _movieRepos.Update(movie);
             return RedirectToAction(nameof(Index));
         }
@@ -171,7 +180,7 @@ namespace MoviesApp.Controllers
             }
             return View(movie);
         }
-
+        
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -182,6 +191,40 @@ namespace MoviesApp.Controllers
             {
                 _movieRepos.Delete(movie);
             }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> AddToPlaylist(int? id, int playlistId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            // Get playlist 
+            var user = _httpContextAccessor.HttpContext.User.GetUserId();
+            var playlist = await _playlistRepos.GetByIdAsync(playlistId);
+            var movie = await _movieRepos.GetByIdAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            //playlist.AddMovie(movie);
+            //_movieRepos.Add(movie);
+            return View(movie);
+        }
+                
+        // POST: Movies/AddToPlaylist
+        [HttpPost, ActionName("AddToPlaylist")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToPlaylist(int id)
+        {
+            var movie = await _movieRepos.GetByIdAsync(id);
+            if (movie != null)
+            {
+                _movieRepos.Delete(movie);
+            }
+            // Get playlistId and update on both Movies and Playlist tables
             return RedirectToAction(nameof(Index));
         }
     }

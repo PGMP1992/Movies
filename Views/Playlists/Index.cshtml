@@ -21,15 +21,15 @@
             {
                 <div class="card mb-3" style="max-width: 500px;">
                     <div class="row g-0">
-                        @*<div class="col-md-4">
-                            <img src="@item.PictUrl" class="img-fluid rounded-start" width="100%" height="245" alt="@item.Title">
-                          </div> *@
                         <div class="col-md-8">
                             <div class="card-body">
+                                @if (User.IsInRole("admin"))
+                                {
+                                    <h5>User: <small>@item.AppUser.Email</small></h5>
+                                }
                                 <h5 class="card-title">@item.Name</h5>
                                 <p class="card-text">@item.Description</p>
-                                @*<h6 class="text-body-primary">@item.Genre</h6> *@
-                                <small class="text-body-secondary">Something here </small>
+                                <small class="text-body-secondary"></small>
 
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
