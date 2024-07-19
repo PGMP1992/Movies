@@ -13,29 +13,29 @@ namespace Movies.Data.Migrations
             migrationBuilder.DropTable(
                 name: "MoviePlaylist");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Movies_PlaylistId",
-                table: "Movies",
-                column: "PlaylistId");
+            migrationBuilder.DropColumn(
+                name: "MovieId",
+                table: "Playlists");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Movies_Playlists_PlaylistId",
-                table: "Movies",
-                column: "PlaylistId",
-                principalTable: "Playlists",
-                principalColumn: "Id");
+            migrationBuilder.DropColumn(
+                name: "PlaylistId",
+                table: "Movies");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Movies_Playlists_PlaylistId",
-                table: "Movies");
+            migrationBuilder.AddColumn<int>(
+                name: "MovieId",
+                table: "Playlists",
+                type: "int",
+                nullable: true);
 
-            migrationBuilder.DropIndex(
-                name: "IX_Movies_PlaylistId",
-                table: "Movies");
+            migrationBuilder.AddColumn<int>(
+                name: "PlaylistId",
+                table: "Movies",
+                type: "int",
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "MoviePlaylist",

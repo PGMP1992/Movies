@@ -12,7 +12,7 @@ using MoviesApp.Data;
 namespace Movies.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240719162731_NewModel")]
+    [Migration("20240719163521_NewModel")]
     partial class NewModel
     {
         /// <inheritdoc />
@@ -262,17 +262,12 @@ namespace Movies.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int?>("PlaylistId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PlaylistId");
 
                     b.ToTable("Movies");
                 });
@@ -292,9 +287,6 @@ namespace Movies.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("MovieId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -359,13 +351,6 @@ namespace Movies.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MoviesApp.Models.Movie", b =>
-                {
-                    b.HasOne("MoviesApp.Models.Playlist", null)
-                        .WithMany("MoviesList")
-                        .HasForeignKey("PlaylistId");
-                });
-
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
                 {
                     b.HasOne("MoviesApp.Models.AppUser", "AppUser")
@@ -378,11 +363,6 @@ namespace Movies.Data.Migrations
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
                 {
                     b.Navigation("Playlists");
-                });
-
-            modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
-                {
-                    b.Navigation("MoviesList");
                 });
 #pragma warning restore 612, 618
         }

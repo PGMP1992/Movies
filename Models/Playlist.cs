@@ -21,7 +21,7 @@ namespace MoviesApp.Models
         public string? AppUserId { get; set; } = "";
         public AppUser? AppUser { get; set; }
 
-        public int? MovieId { get; set; }
+        public int MovieId { get; set; }
         [ValidateNever]
         public List<Movie>? MoviesList { get; set; }
     }
