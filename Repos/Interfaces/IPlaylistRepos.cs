@@ -1,6 +1,6 @@
 ﻿using MoviesApp.Models;
 
-namespace MoviesApp.Interfaces
+namespace MoviesApp.Repos.Interfaces
 {
     public interface IPlaylistRepos
     {

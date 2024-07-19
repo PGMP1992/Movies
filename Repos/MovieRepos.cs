@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
-using MoviesApp.Interfaces;
 using MoviesApp.Models;
+using MoviesApp.Repos.Interfaces;
 
 namespace MoviesApp.Repos
 {
@@ -74,9 +74,9 @@ namespace MoviesApp.Repos
             return _context.Movies.Any(e => e.Id == id);
         }
 
-        public async Task<List<Movie>> GetByPlaylistId(int? id)
-        {
-            return await _context.Movies.Where(p => p.PlaylistId == id).ToListAsync();
-        }
+        //public async Task<List<Movie>> GetByPlaylistId(int? id)
+        //{
+        //    return await _context.Movies.Where(p => p.PlaylistId == id).ToListAsync();
+        //}
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MoviesApp.Interfaces;
 using MoviesApp.Models;
 using MoviesApp.ViewModels;
 using MoviesApp.Repos;
@@ -8,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using MoviesApp.Repos.Interfaces;
 
 namespace MoviesApp.Controllers
 {
@@ -157,7 +157,7 @@ namespace MoviesApp.Controllers
                 Genre = movieVM.Genre,
                 Age = movieVM.Age,
                 PictUrl = movieVM.PictUrl,
-                PlaylistId = movieVM.PlaylistId
+                //PlaylistId = movieVM.PlaylistId
             };
 
 

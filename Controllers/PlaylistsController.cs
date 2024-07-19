@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
-using MoviesApp.Interfaces;
 using MoviesApp.Models;
+using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers
@@ -55,7 +55,7 @@ namespace MoviesApp.Controllers
             PlaylistMoviesVM playlistMoviesVM = new PlaylistMoviesVM
             {
                 Playlist = await _playlistRepos.GetByIdAsync(id),
-                Movies = await _movieRepos.GetByPlaylistId(id)
+                //Movies = await _movieRepos.GetByPlaylistId(id)
             };
 
             return View(playlistMoviesVM);

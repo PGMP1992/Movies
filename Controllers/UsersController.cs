@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MoviesApp.Interfaces;
 using MoviesApp.Models;
+using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers

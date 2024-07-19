@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using MoviesApp.Helpers;
-using MoviesApp.Interfaces;
 using MoviesApp.Models;
 using MoviesApp.Repos;
+using MoviesApp.Repos.Interfaces;
 using MoviesApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);

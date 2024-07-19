@@ -1,8 +1,8 @@
 ﻿using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Data;
-using MoviesApp.Interfaces;
 using MoviesApp.Models;
+using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers

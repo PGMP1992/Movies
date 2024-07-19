@@ -1,6 +1,6 @@
 ﻿using CloudinaryDotNet.Actions;
 
-namespace MoviesApp.Interfaces
+namespace MoviesApp.Repos.Interfaces
 {
     public interface IPhotoService
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
-using MoviesApp.Interfaces;
 using MoviesApp.Models;
+using MoviesApp.Repos.Interfaces;
 
 namespace MoviesApp.Repos
 {
