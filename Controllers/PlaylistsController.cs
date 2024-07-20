@@ -52,21 +52,25 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            PlaylistMoviesVM playlistMoviesVM = new PlaylistMoviesVM
-            {
-                Playlist = await _playlistRepos.GetByIdAsync(id),
+            //PlaylistMoviesVM playlistMoviesVM = new PlaylistMoviesVM
+            //{
+            Playlist playlist = await _playlistRepos.GetByIdAsync(id);
                 //Movies = await _movieRepos.GetByPlaylistId(id)
-            };
-
-            return View(playlistMoviesVM);
+            //};
+            
+            //return View(playlistMoviesVM);
+            return View(playlist);
         }
 
         // GET: Playlists/Create
         public IActionResult Create()
         {
             var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-            var createPlaylistMoviesVM = new PlaylistMoviesVM { AppUserId = curUserId };
-            return View(createPlaylistMoviesVM);
+            //var createPlaylistMoviesVM = new PlaylistMoviesVM { AppUserId = curUserId };
+            var playlist = new Playlist { AppUserId = curUserId };
+
+            //return View(createPlaylistMoviesVM);
+            return View(playlist);
             //return View();
         }
 
