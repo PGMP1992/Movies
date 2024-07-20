@@ -290,9 +290,6 @@ namespace Movies.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -358,9 +355,11 @@ namespace Movies.Data.Migrations
 
             modelBuilder.Entity("MoviesApp.Models.Movie", b =>
                 {
-                    b.HasOne("MoviesApp.Models.Playlist", null)
+                    b.HasOne("MoviesApp.Models.Playlist", "Playlist")
                         .WithMany("MoviesList")
                         .HasForeignKey("PlaylistId");
+
+                    b.Navigation("Playlist");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>

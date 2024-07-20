@@ -21,8 +21,4 @@
     <None Include="wwwroot\images\Films.jpg" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Migrations\" />
-  </ItemGroup>
-
 </Project>
