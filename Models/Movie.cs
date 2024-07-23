@@ -23,7 +23,7 @@ namespace MoviesApp.Models
         [Display(Name = "Minimun Age")]
         public int Age { get; set; }
 
-        [Required]
+        //[Required]
         [MaxLength(500)]
         [Display(Name = "Picture URL")]
         public string? PictUrl { get; set; } = "";

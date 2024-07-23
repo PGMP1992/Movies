@@ -78,7 +78,7 @@ namespace MoviesApp.Controllers
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl,
+                ProfileImageUrl = user.ProfileImageryUrl
             };
             return View(editUserVM);
         }
@@ -117,7 +117,7 @@ namespace MoviesApp.Controllers
                 user.ProfileImageryUrl = photoResult.Url.ToString();
                 editVM.ProfileImageUrl = user.ProfileImageryUrl;
 
-                await _userManager.UpdateAsync(user);
+                //await _userManager.UpdateAsync(user);
 
                 //return View(editVM);
             }
@@ -160,70 +160,5 @@ namespace MoviesApp.Controllers
             _userRepos.Delete(user);
             return RedirectToAction(nameof(Index));
         }
-
-        // GET: Movies/Edit/5 -----------------------------------------------------------------
-        //[HttpGet]
-        //public async Task<IActionResult> Edit(string id)
-        //{
-        //    var user = await _userRepos.GetUserById(id);
-
-        //    if (user == null)
-        //    {
-        //        return View("Error");
-        //    }
-
-        //    var editVM = new EditUserVM()
-        //    {
-        //        City = user.City,
-        //        State = user.State,
-        //        ProfileImageUrl = user.ProfileImageryUrl,
-        //    };
-        //    return View(editVM);
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> Edit(string id, EditUserVM editVM)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        ModelState.AddModelError("", "Failed to edit profile");
-        //        return View("Edit", editVM);
-        //    }
-
-        //    var user = await _userRepos.GetUserById(id);
-
-        //    if (user == null)
-        //    {
-        //        return View("Error");
-        //    }
-
-        //    if (editVM.Image != null) // only update profile image
-        //    {
-        //        var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
-
-        //        if (photoResult.Error != null)
-        //        {
-        //            ModelState.AddModelError("Image", "Failed to upload image");
-        //            return View("Edit", editVM);
-        //        }
-
-        //        if (!string.IsNullOrEmpty(user.ProfileImageryUrl))
-        //        {
-        //            _ = _photoService.DeletePhotoAsync(user.ProfileImageryUrl);
-        //        }
-
-        //        user.ProfileImageryUrl = photoResult.Url.ToString();
-        //        editVM.ProfileImageUrl = user.ProfileImageryUrl;
-
-        //        //_userRepos.Update(user);
-        //    }
-
-        //    user.City = editVM.City;
-        //    user.State = editVM.State;
-
-        //    _userRepos.Update(user);
-
-        //    return RedirectToAction(nameof(Index));
-        //}
     }
 }

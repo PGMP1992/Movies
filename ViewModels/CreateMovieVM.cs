@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
+//Created this for Saving Picture to Cloudinary
+
 namespace MoviesApp.ViewModels
 {
     public class CreateMovieVM
@@ -27,20 +29,7 @@ namespace MoviesApp.ViewModels
         [ValidateNever]
         [MaxLength(300)]
         [Display(Name = "Picture URL")]
-        public IFormFile PictUrl { get; set; }
-
-        //[Required]
-        //[Display(Name = "Buy")]
-        //[DataType(DataType.Currency)]
-        //public double BuyPrice { get; set; }
-
-        //[Required]
-        //[Display(Name = "Rent")]
-        //[DataType(DataType.Currency)]
-        //public double RentPrice { get; set; }
-
-        //public string? AppUserId { get; set; }
-        //public AppUser? AppUser { get; set; }
+        public IFormFile Image { get; set; }
     }
 }
 

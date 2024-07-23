@@ -36,26 +36,13 @@
             <div class="form-group">
                 <label asp-for="Age" class="control-label"></label>
                 <input asp-for="Age" class="form-control" placeholder="Age" />
-                @* <select asp-for="Age" asp-items="@Html.GetEnumSelectList<AgeLimit>()"  /> 
-                    <option>-- Select --</option>
-                </select>*@
                 <span asp-validation-for="Age" class="text-danger"></span>
             </div>
             
-            @* <div class="form-group">
-                <label asp-for="BuyPrice" class="control-label"></label>
-                <input asp-for="BuyPrice" class="form-control" placeholder="Buy Price" />
-                <span asp-validation-for="BuyPrice" class="text-danger"></span>
-            </div>
             <div class="form-group">
-                <label asp-for="RentPrice" class="control-label"></label>
-                <input asp-for="RentPrice" class="form-control" placeholder="Rent Price" />
-                <span asp-validation-for="RentPrice" class="text-danger"></span>
-            </div> *@
-             <div class="form-group">
-                <label asp-for="PictUrl">Picture</label>
-                <input asp-for="PictUrl" type="file" class="form-control" placeholder="Image" />
-                <span asp-validation-for="PictUrl" class="text-danger"></span>
+                <label asp-for="Image">Picture</label>
+                <input asp-for="Image" type="file" class="form-control" placeholder="Image" />
+                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-sm btn-outline-primary" />

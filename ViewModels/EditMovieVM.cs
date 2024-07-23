@@ -25,10 +25,10 @@ namespace MoviesApp.ViewModels
         [Display(Name = "Minimun Age")]
         public int Age { get; set; }
 
+        [Display(Name = "Picture URL")]
         public string? PictUrl { get; set; }
-
-        public int? PlaylistId { get; set; }
-        public List<Playlist>? Playlists { get; set; }
+                
+        public IFormFile? Image { get; set; }
     }
 }
 

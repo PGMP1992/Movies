@@ -6,6 +6,7 @@ namespace MoviesApp.Repos.Interfaces
     {
         Task<List<Movie>> GetAll();
         Task<Movie> GetByIdAsync(int? id);
+        Task<Movie> GetByIdAsyncNoTracking(int? id);
         Task<List<Movie>> GetByName(string name);
         Task<List<Movie>> GetByGenre(string genre);
         Task<List<Movie>> GetByAge(int age);

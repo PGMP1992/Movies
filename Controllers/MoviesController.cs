@@ -8,6 +8,8 @@ using MoviesApp.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using MoviesApp.Repos.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace MoviesApp.Controllers
 {
@@ -69,23 +71,20 @@ namespace MoviesApp.Controllers
         }
 
 
-        // GET: Movies/Create
+        // GET: Movies/Create ------------------------------------------------------
         public IActionResult Create()
         {
-            //var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
-            var movieVM = new CreateMovieVM();// { AppUserId = curUserId }; 
+            var movieVM = new CreateMovieVM();
             return View(movieVM);
         }
 
         // POST: Movies/Create
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,Title,Description,Genre,Age,PictUrl,BuyPrice,RentPrice")] Movie movie)
         public async Task<IActionResult> Create(CreateMovieVM movieVM)
         {
             if (ModelState.IsValid)
             {
-                var result = await _photoService.AddPhotoAsync(movieVM.PictUrl);
+                var result = await _photoService.AddPhotoAsync(movieVM.Image);
                 var movie = new Movie
                 {
                     Title = movieVM.Title,
@@ -105,67 +104,74 @@ namespace MoviesApp.Controllers
             return View(movieVM);
         }
 
-        // GET: Movies/Edit/5
+        // GET: Movies/Edit/5 ------------------------------------------------------
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = _httpContextAccessor.HttpContext.User.GetUserId();
             var movie = await _movieRepos.GetByIdAsync(id);
+
             if (movie == null)
             {
                 return NotFound();
             }
-
             var movieVM = new EditMovieVM()
             {
+                Id = movie.Id,
                 Title = movie.Title,
                 Description = movie.Description,
                 Genre = movie.Genre,
                 Age = movie.Age,
                 PictUrl = movie.PictUrl
             };
-            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user).ConfigureAwait(false), "Id", "Name");
             return View(movieVM);
         }
 
         // POST: Movies/Edit/5
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Genre,Age,PictUrl")] Movie movie)
         public async Task<IActionResult> Edit(int id, EditMovieVM movieVM)
         {
-            if (id != movieVM.Id)
-            {
-                return NotFound();
-            }
-
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Failed to Edit Movie");
                 return View("Edit", movieVM);
             }
-
-            var movie = new Movie
+            
+            var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
+            
+            if (movieVM.Image != null)
             {
-                Id = movieVM.Id,
+                var photoResult = await _photoService.AddPhotoAsync(movieVM.Image);
+
+                if (photoResult.Error != null)
+                {
+                    ModelState.AddModelError("Image", "Failed to upload image");
+                    return View("Edit", movieVM);
+                }
+
+                if (!string.IsNullOrEmpty(movie.PictUrl))
+                {
+                    _ = _photoService.DeletePhotoAsync(movie.PictUrl);
+                }
+
+                movie.PictUrl = photoResult.Url.ToString();
+                movieVM.PictUrl = movie.PictUrl;
+            }
+
+            var editMovie = new Movie
+            {
+                Id = id,
                 Title = movieVM.Title,
                 Description = movieVM.Description,
                 Genre = movieVM.Genre,
                 Age = movieVM.Age,
-                PictUrl = movieVM.PictUrl,
-                //PlaylistId = movieVM.PlaylistId
+                PictUrl = movieVM.PictUrl
             };
 
-
-            _movieRepos.Update(movie);
+            _movieRepos.Update(editMovie);
+            
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Movies/Delete/5
+        // GET: Movies/Delete/5 --------------------------------------------------------
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -194,38 +200,25 @@ namespace MoviesApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> AddToPlaylist(int? id, int playlistId)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            // Get playlist 
-            var user = _httpContextAccessor.HttpContext.User.GetUserId();
-            var playlist = await _playlistRepos.GetByIdAsync(playlistId);
-            var movie = await _movieRepos.GetByIdAsync(id);
-            if (movie == null)
-            {
-                return NotFound();
-            }
-
-            //playlist.AddMovie(movie);
-            //_movieRepos.Add(movie);
-            return View(movie);
-        }
-                
-        // POST: Movies/AddToPlaylist
+        // POST: Movies/AddToPlaylist ----------------------------------------------------------
         [HttpPost, ActionName("AddToPlaylist")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddToPlaylist(int id)
+        public async Task<IActionResult> AddToPlaylist(int id, int playlistId)
         {
+            var user = _httpContextAccessor.HttpContext.User.GetUserId();
             var movie = await _movieRepos.GetByIdAsync(id);
-            if (movie != null)
+            var playlist = await _playlistRepos.GetByIdAsync(playlistId);
+            // Get in Selected List 
+            if (playlist != null)
             {
-                _movieRepos.Delete(movie);
+                if ( ! playlist.MoviesList.Contains(movie))
+                {
+                    playlist.MoviesList.Add(movie);
+                    _playlistRepos.Update(playlist);
+                };
             }
+            
             // Get playlistId and update on both Movies and Playlist tables
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details));
         }
     }
 }
