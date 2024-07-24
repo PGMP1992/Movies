@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
+using System.Security.Claims;
 
 namespace MoviesApp.Controllers
 {
+    [Authorize]
     public class PlaylistsController : Controller
     {
         private readonly IPlaylistRepos _playlistRepos;
@@ -19,6 +22,7 @@ namespace MoviesApp.Controllers
             _movieRepos = movieRepos;
             _httpContextAccessor = httpContextAccessor;
         }
+
 
         // GET: Playlists
         public async Task<IActionResult> Index()
@@ -52,15 +56,27 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            //PlaylistMoviesVM playlistMoviesVM = new PlaylistMoviesVM
-            //{
             Playlist playlist = await _playlistRepos.GetByIdAsync(id);
-                //Movies = await _movieRepos.GetByPlaylistId(id)
-            //};
-            
-            //return View(playlistMoviesVM);
             return View(playlist);
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Details(int id, Playlist playlist)
+        //{
+        //    if (id != playlist.Id)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+        //        //playlist.MoviesList.Add(movie);
+        //        //_playlistRepos.Update(playlist);
+        //    }
+        //    return View(playlist);
+        //}
 
         // GET: Playlists/Create
         public IActionResult Create()
@@ -152,7 +168,7 @@ namespace MoviesApp.Controllers
             }
             return View(playlist);
         }
-
+        
         // POST: Playlists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -170,14 +186,6 @@ namespace MoviesApp.Controllers
         private bool PlaylistExists(int id)
         {
             return _playlistRepos.PlaylistExists(id);
-
         }
-        
-        //public void AddMovie(int id, Movie movie)
-        //{
-        //    var playlist = _playlistRepos.GetPlaylistById(id);
-        //    _playlistRepos.AddMovieToPlaylist(playlist, movie);
-        //    _playlistRepos.Update(playlist);
-        //}
     }
 }

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
+
 
 namespace MoviesApp.Controllers
 {
@@ -43,6 +45,7 @@ namespace MoviesApp.Controllers
             return View(result);
         }
 
+        [Authorize]
         public async Task<ActionResult> Detail(string id)
         {
             var user = await _userRepos.GetUserById(id);
@@ -62,7 +65,10 @@ namespace MoviesApp.Controllers
             return View(usersDetailsVM);
         }
 
+
         // GET: Movies/EditProfile/5 -----------------------------------------------------------------
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -83,6 +89,7 @@ namespace MoviesApp.Controllers
             return View(editUserVM);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Edit(string id, EditUserVM editVM)
         {
@@ -130,6 +137,7 @@ namespace MoviesApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         public async Task<IActionResult> Delete (string id)
         {
             var user = await _userRepos.GetUserById(id);
@@ -149,6 +157,7 @@ namespace MoviesApp.Controllers
             return View(editUserVM);
         }
 
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirm(string id)
         {

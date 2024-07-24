@@ -29,15 +29,16 @@ namespace MoviesApp.Controllers
             {
                 string url = "https://ipinfo.io?be339e669dc21b"; //IPInfo.IO My Private Token
                 var info = new WebClient().DownloadString(url);
+                
                 ipInfo = JsonConvert.DeserializeObject<IPInfo>(info);
                 RegionInfo myRI1 = new RegionInfo(ipInfo.Country);
+                
                 ipInfo.Country = myRI1.EnglishName;
                 homeVM.City = ipInfo.City;
                 homeVM.State = ipInfo.Region;
 
                 if (homeVM.State != null)
                 {
-                    //homeVM.UserName = await _usersRepos.;
                     homeVM.Users = await _usersRepos.GetAllUsers();
                 }
                 else
@@ -61,7 +62,9 @@ namespace MoviesApp.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View( new ErrorViewModel { 
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier 
+            });
         }
     }
 }
