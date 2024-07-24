@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MoviesApp.Data;
 using MoviesApp.Models;
 using MoviesApp.Repos;
-using Microsoft.EntityFrameworkCore;
-using MoviesApp.Data;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
 using MoviesApp.Repos.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -56,10 +55,10 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-            
+
             var user = _httpContextAccessor.HttpContext.User.GetUserId();
             var movie = await _movieRepos.GetByIdAsync(id);
-            
+
             if (movie == null)
             {
                 return NotFound();
@@ -67,10 +66,34 @@ namespace MoviesApp.Controllers
             
             ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user)
                     .ConfigureAwait(false), "Id", "Name");
+
             return View(movie);
         }
 
+        [Authorize]
+        // POST: Movies/Edit/5
+        [HttpPost]
+        public async Task<IActionResult> Details(int id, int playlistId)
+        {
+            var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
+            var playlist = await _playlistRepos.GetByIdAsync(playlistId);
 
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Failed to Add Movie");
+                return View("Details", movie);
+            }
+            
+            //playlist.AppUser.Id = _httpContextAccessor.HttpContext.User.GetUserId();
+            playlist.MoviesList.Add(movie);
+            
+            _playlistRepos.Update(playlist);
+            _playlistRepos.Save();
+            
+            return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize]
         // GET: Movies/Create ------------------------------------------------------
         public IActionResult Create()
         {
@@ -78,6 +101,7 @@ namespace MoviesApp.Controllers
             return View(movieVM);
         }
 
+        [Authorize]
         // POST: Movies/Create
         [HttpPost]
         public async Task<IActionResult> Create(CreateMovieVM movieVM)
@@ -104,6 +128,7 @@ namespace MoviesApp.Controllers
             return View(movieVM);
         }
 
+        [Authorize]
         // GET: Movies/Edit/5 ------------------------------------------------------
         public async Task<IActionResult> Edit(int? id)
         {
@@ -125,6 +150,7 @@ namespace MoviesApp.Controllers
             return View(movieVM);
         }
 
+        [Authorize]
         // POST: Movies/Edit/5
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditMovieVM movieVM)
@@ -134,9 +160,9 @@ namespace MoviesApp.Controllers
                 ModelState.AddModelError("", "Failed to Edit Movie");
                 return View("Edit", movieVM);
             }
-            
+
             var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
-            
+
             if (movieVM.Image != null)
             {
                 var photoResult = await _photoService.AddPhotoAsync(movieVM.Image);
@@ -167,10 +193,11 @@ namespace MoviesApp.Controllers
             };
 
             _movieRepos.Update(editMovie);
-            
+
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         // GET: Movies/Delete/5 --------------------------------------------------------
         public async Task<IActionResult> Delete(int? id)
         {
@@ -186,7 +213,7 @@ namespace MoviesApp.Controllers
             }
             return View(movie);
         }
-        
+        [Authorize]
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -198,27 +225,6 @@ namespace MoviesApp.Controllers
                 _movieRepos.Delete(movie);
             }
             return RedirectToAction(nameof(Index));
-        }
-
-        // POST: Movies/AddToPlaylist ----------------------------------------------------------
-        [HttpPost, ActionName("AddToPlaylist")]
-        public async Task<IActionResult> AddToPlaylist(int id, int playlistId)
-        {
-            var user = _httpContextAccessor.HttpContext.User.GetUserId();
-            var movie = await _movieRepos.GetByIdAsync(id);
-            var playlist = await _playlistRepos.GetByIdAsync(playlistId);
-            // Get in Selected List 
-            if (playlist != null)
-            {
-                if ( ! playlist.MoviesList.Contains(movie))
-                {
-                    playlist.MoviesList.Add(movie);
-                    _playlistRepos.Update(playlist);
-                };
-            }
-            
-            // Get playlistId and update on both Movies and Playlist tables
-            return RedirectToAction(nameof(Details));
         }
     }
 }

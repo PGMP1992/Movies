@@ -1,4 +1,5 @@
 ﻿using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Data;
 using MoviesApp.Models;
@@ -28,6 +29,7 @@ namespace MoviesApp.Controllers
             user.ImageUrl = photoResult.Url.ToString();
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
@@ -48,6 +50,7 @@ namespace MoviesApp.Controllers
             return View(dashboardVM);
         }
 
+        [Authorize]
         public async Task<IActionResult> EditUserProfile()
         {
             var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
@@ -67,6 +70,7 @@ namespace MoviesApp.Controllers
             return View(editUserVM);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> editUserProfile(UserVM editVM)
         {
