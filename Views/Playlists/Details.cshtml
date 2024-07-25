@@ -59,6 +59,8 @@
                 {
                     <a asp-action="Delete" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
                 }
+                @* Passing Playlist Id *@
+                <a asp-action="AddMovie" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark">Add Movie</a>
             }
             <a asp-action="Index" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark">Back</a>
         </div>
