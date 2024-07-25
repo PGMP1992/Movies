@@ -68,28 +68,28 @@ namespace MoviesApp.Controllers
             return View(movie);
         }
 
-        [Authorize]
-        // POST: Movies/Edit/5
-        [HttpPost]
-        public async Task<IActionResult> Details(int id, int playlistId)
-        {
-            var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
-            var playlist = await _playlistRepos.GetByIdAsync(playlistId);
+        //[Authorize]
+        //// POST: Movies/Edit/5
+        //[HttpPost]
+        //public async Task<IActionResult> Details(int playlistId)
+        //{
+        //    var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
+        //    var playlist = await _playlistRepos.GetByIdAsync(playlistId);
 
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("", "Failed to Add Movie");
-                return View("Details", movie);
-            }
+        //    if (!ModelState.IsValid)
+        //    {
+        //        ModelState.AddModelError("", "Failed to Add Movie");
+        //        return View("Details", movie);
+        //    }
             
-            //playlist.AppUser.Id = _httpContextAccessor.HttpContext.User.GetUserId();
-            playlist.MoviesList.Add(movie);
+        //    //playlist.AppUser.Id = _httpContextAccessor.HttpContext.User.GetUserId();
+        //    playlist.MoviesList.Add(movie);
             
-            _playlistRepos.Update(playlist);
-            _playlistRepos.Save();
+        //    _playlistRepos.Update(playlist);
+        //    _playlistRepos.Save();
             
-            return RedirectToAction(nameof(Index));
-        }
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         [Authorize]
         // GET: Movies/Create ------------------------------------------------------

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace MoviesApp.Models
 {
@@ -27,8 +28,8 @@ namespace MoviesApp.Models
         [MaxLength(500)]
         [Display(Name = "Picture URL")]
         public string? PictUrl { get; set; } = "";
-
-        public int? PlaylistId { get; set; }
-        public Playlist Playlist { get; set; }
+        
+        [ValidateNever]
+        public List<Playlist> Playlists{ get; set; }
     }
 }

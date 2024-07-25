@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoviesApp.Data;
 
@@ -11,9 +12,11 @@ using MoviesApp.Data;
 namespace Movies.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240725150351_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,21 +162,6 @@ namespace Movies.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MoviePlaylist", b =>
-                {
-                    b.Property<int>("MoviesListId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlaylistsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MoviesListId", "PlaylistsId");
-
-                    b.HasIndex("PlaylistsId");
-
-                    b.ToTable("MoviePlaylist");
-                });
-
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -273,12 +261,17 @@ namespace Movies.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<int?>("PlaylistId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PlaylistId");
 
                     b.ToTable("Movies");
                 });
@@ -362,19 +355,11 @@ namespace Movies.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MoviePlaylist", b =>
+            modelBuilder.Entity("MoviesApp.Models.Movie", b =>
                 {
-                    b.HasOne("MoviesApp.Models.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MoviesListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MoviesApp.Models.Playlist", null)
-                        .WithMany()
-                        .HasForeignKey("PlaylistsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("MoviesList")
+                        .HasForeignKey("PlaylistId");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
@@ -389,6 +374,11 @@ namespace Movies.Data.Migrations
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
                 {
                     b.Navigation("Playlists");
+                });
+
+            modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
+                {
+                    b.Navigation("MoviesList");
                 });
 #pragma warning restore 612, 618
         }

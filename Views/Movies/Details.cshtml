@@ -10,40 +10,37 @@
     <small class="text-body-secondary">@Model.Title</small>
 </h5>
 
-<div class="card mb-3" style="max-width: 100%">
-    <div class=" row g-0">
-        <div class="col-md-4">
-            <img src="@Model.PictUrl" class="img-fluid rounded-start" width="100%" height="auto" alt="@Model.Title">
-        </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h6>Description</h6>
-                <p class="card-text">@Model.Description</p>
-                <h6>Genre: </h6>
-                <p class="card-text">@Model.Genre</p>
-                <form asp-action="Details">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="PlaylistId" />
-                    @* <input type="hidden" id="AppUSerId" name="UserName" asp-for="AppUserId" /> *@
-                    <div class="form-group">
-                        <label asp-for="PlaylistId" class="control-label">User Playlists: </label>
-                        <select asp-for="PlaylistId" class="form-control" asp-items="ViewBag.playlistName"></select>
-                        @* <a asp-action="Details" asp-route-id="PlaylistId" type="button" class="btn btn-sm btn-outline-primary"> *@
-                        <a asp-action="Details" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-primary">
-                            Add To Playlist
-                        </a> 
-                    </div>                 
-                
+<form asp-action="Details" method="post">
+    @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+    <input hidden asp-for="Id" />
+    <div class="card mb-3" style="max-width: 100%">
+        <div class=" row g-0">
+            <div class="col-md-4">
+                <img src="@Model.PictUrl" class="img-fluid rounded-start" width="100%" height="auto" alt="@Model.Title">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h6>Description</h6>
+                    <p class="card-text">@Model.Description</p>
+                    <h6>Genre: </h6>
+                    <p class="card-text">@Model.Genre</p>
                     <div class="card-footer">
                         <div class="d-flex justify-content-between align-items-center">
                             <small class="text-body-secondary">Minimum Age: @Model.Age</small>
                         </div>
                     </div>
-                </form>
+                    @* <div class="form-group">
+                        <label asp-for="PlaylistId" class="control-label">User Playlists: </label>
+                        <select asp-for="PlaylistId" class="form-control" asp-items="ViewBag.playlistName"></select>
+                        <a asp-action="Details" asp-route-id="PlaylistId" value="PlaylistId" type="button" class="btn btn-sm btn-outline-primary">
+                            Add To Playlist 
+                        </a>
+                    </div> *@
+                </div>
             </div>
-        </div>
-    </div> 
-</div>
+        </div> 
+    </div>
+</form>
 
 
 <div class="d-flex justify-content-between align-items-center">

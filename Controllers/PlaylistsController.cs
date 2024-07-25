@@ -5,6 +5,8 @@ using MoviesApp.Data;
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
+using NuGet.ContentModel;
+using System.Reflection;
 using System.Security.Claims;
 
 namespace MoviesApp.Controllers
@@ -60,22 +62,22 @@ namespace MoviesApp.Controllers
             return View(playlist);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Details(int id, Playlist playlist)
+        //public IActionResult AddMovie(Playlist playlist)
         //{
-        //    if (id != playlist.Id)
-        //    {
-        //        return NotFound();
-        //    }
+            //if (ModelState.IsValid)
+            //{
+            //    Task<List<Movie>> movies = _movieRepos.GetAll();
+            //    var newPlaylist = playlist;
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-        //        //playlist.MoviesList.Add(movie);
-        //        //_playlistRepos.Update(playlist);
-        //    }
-        //    return View(playlist);
+            //    for( int i = 0; i++; i < movies.)
+            //    {
+            //        playlist.MoviesList.Add(item[i]);
+            //    }
+                
+                //playlist.MoviesList.Add(movie);
+                //_playlistRepos.Update(playlist);
+          //  }
+          //  return View();
         //}
 
         // GET: Playlists/Create
