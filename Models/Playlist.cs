@@ -22,6 +22,6 @@ namespace MoviesApp.Models
         public AppUser? AppUser { get; set; }
 
         [ValidateNever]
-        public List<Movie>? MoviesList { get; set; }
+        public List<Movie>? MovieList { get; set; }
     }
 }

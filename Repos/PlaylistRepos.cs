@@ -42,26 +42,32 @@ namespace MoviesApp.Repos
         {
             return await _context.Playlists
                 .Include(p=>p.AppUser)
+                .Include(m => m.MovieList)
                 .ToListAsync();
         }
 
         public async Task<Playlist> GetByIdAsync(int? id)
         {
             return await _context.Playlists
-               //.Include(m => m.MoviesList)
+               .Include(p => p.AppUser)
+               .Include(m => m.MovieList)
                .FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public Playlist GetById(int id)
         {
             return _context.Playlists
-               .Include(m => m.MoviesList)
+               .Include(p => p.AppUser)
+               .Include(m => m.MovieList)
                .FirstOrDefault(m => m.Id == id);
         }
 
         public async Task<List<Playlist>> GetByName(string name)
         {
-            return await _context.Playlists.Where(n => n.Name == name).ToListAsync();
+            return await _context.Playlists.Where(n => n.Name == name)
+                .Include(p => p.AppUser)
+                .Include(m => m.MovieList)
+                .ToListAsync();
         }
 
         public bool PlaylistExists(int id)
@@ -71,7 +77,10 @@ namespace MoviesApp.Repos
 
         public async Task<List<Playlist>> GetAllByUserName(string appUser)
         {
-            return await _context.Playlists.Where(a => a.AppUserId == appUser).ToListAsync();
+            return await _context.Playlists.Where(a => a.AppUserId == appUser)
+                .Include(p => p.AppUser)
+                .Include(m => m.MovieList)
+                .ToListAsync();
         }
 
         public bool AddMovie(Movie movie)

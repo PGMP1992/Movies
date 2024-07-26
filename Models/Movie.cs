@@ -30,6 +30,6 @@ namespace MoviesApp.Models
         public string? PictUrl { get; set; } = "";
         
         [ValidateNever]
-        public List<Playlist> Playlists{ get; set; }
+        public List<Playlist>? PlaylistList{ get; set; }
     }
 }
