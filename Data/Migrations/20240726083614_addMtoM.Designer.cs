@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoviesApp.Data;
 
@@ -11,9 +12,11 @@ using MoviesApp.Data;
 namespace Movies.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240726083614_addMtoM")]
+    partial class addMtoM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,15 +164,15 @@ namespace Movies.Data.Migrations
 
             modelBuilder.Entity("MoviePlaylist", b =>
                 {
-                    b.Property<int>("MovieListId")
+                    b.Property<int>("MoviesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PlaylistListId")
+                    b.Property<int>("PlaylistsId")
                         .HasColumnType("int");
 
-                    b.HasKey("MovieListId", "PlaylistListId");
+                    b.HasKey("MoviesId", "PlaylistsId");
 
-                    b.HasIndex("PlaylistListId");
+                    b.HasIndex("PlaylistsId");
 
                     b.ToTable("MoviePlaylist");
                 });
@@ -366,13 +369,13 @@ namespace Movies.Data.Migrations
                 {
                     b.HasOne("MoviesApp.Models.Movie", null)
                         .WithMany()
-                        .HasForeignKey("MovieListId")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MoviesApp.Models.Playlist", null)
                         .WithMany()
-                        .HasForeignKey("PlaylistListId")
+                        .HasForeignKey("PlaylistsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

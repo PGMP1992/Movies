@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using MoviesApp.Models;
 
 namespace MoviesApp.Data
@@ -32,4 +33,6 @@ namespace MoviesApp.Data
         //        .WithMany(e => e.MovieList);
         //}
     }
+
+    
 }
