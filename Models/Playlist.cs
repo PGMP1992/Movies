@@ -17,11 +17,12 @@ namespace MoviesApp.Models
         [MaxLength(100)]
         public string Description { get; set; } = "";
 
-        [ForeignKey("AppUser")]
-        public string? AppUserId { get; set; } = "";
-        public AppUser? AppUser { get; set; }
+        public string AppUserId { get; set; } = "";
+        [ForeignKey("AppUserId")]
+        [ValidateNever]
+        public AppUser AppUser { get; set; }
 
         [ValidateNever]
-        public List<Movie>? MovieList { get; set; }
+        public List<Movie> MovieList { get; set; }
     }
 }

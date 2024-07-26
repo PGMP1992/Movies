@@ -42,7 +42,7 @@ namespace MoviesApp.Repos
         {
             return await _context.Playlists
                 .Include(p=>p.AppUser)
-                .Include(m => m.MovieList)
+                .Include(p=>p.MovieList)
                 .ToListAsync();
         }
 
@@ -50,7 +50,7 @@ namespace MoviesApp.Repos
         {
             return await _context.Playlists
                .Include(p => p.AppUser)
-               .Include(m => m.MovieList)
+               .Include(p => p.MovieList)
                .FirstOrDefaultAsync(m => m.Id == id);
         }
 
@@ -58,7 +58,7 @@ namespace MoviesApp.Repos
         {
             return _context.Playlists
                .Include(p => p.AppUser)
-               .Include(m => m.MovieList)
+               .Include(p => p.MovieList)
                .FirstOrDefault(m => m.Id == id);
         }
 
@@ -66,7 +66,7 @@ namespace MoviesApp.Repos
         {
             return await _context.Playlists.Where(n => n.Name == name)
                 .Include(p => p.AppUser)
-                .Include(m => m.MovieList)
+                .Include(p => p.MovieList)
                 .ToListAsync();
         }
 
@@ -79,14 +79,8 @@ namespace MoviesApp.Repos
         {
             return await _context.Playlists.Where(a => a.AppUserId == appUser)
                 .Include(p => p.AppUser)
-                .Include(m => m.MovieList)
+                .Include(p => p.MovieList)
                 .ToListAsync();
-        }
-
-        public bool AddMovie(Movie movie)
-        {
-            
-            return Save();
         }
     }
 }

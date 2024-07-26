@@ -5,7 +5,7 @@
 namespace Movies.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class MtoMTest : Migration
+    public partial class MovieList : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,30 +26,30 @@ namespace Movies.Data.Migrations
                 name: "MoviePlaylist",
                 columns: table => new
                 {
-                    MoviesListId = table.Column<int>(type: "int", nullable: false),
-                    PlaylistsId = table.Column<int>(type: "int", nullable: false)
+                    MovieListId = table.Column<int>(type: "int", nullable: false),
+                    PlaylistListId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MoviePlaylist", x => new { x.MoviesListId, x.PlaylistsId });
+                    table.PrimaryKey("PK_MoviePlaylist", x => new { x.MovieListId, x.PlaylistListId });
                     table.ForeignKey(
-                        name: "FK_MoviePlaylist_Movies_MoviesListId",
-                        column: x => x.MoviesListId,
+                        name: "FK_MoviePlaylist_Movies_MovieListId",
+                        column: x => x.MovieListId,
                         principalTable: "Movies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MoviePlaylist_Playlists_PlaylistsId",
-                        column: x => x.PlaylistsId,
+                        name: "FK_MoviePlaylist_Playlists_PlaylistListId",
+                        column: x => x.PlaylistListId,
                         principalTable: "Playlists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MoviePlaylist_PlaylistsId",
+                name: "IX_MoviePlaylist_PlaylistListId",
                 table: "MoviePlaylist",
-                column: "PlaylistsId");
+                column: "PlaylistListId");
         }
 
         /// <inheritdoc />

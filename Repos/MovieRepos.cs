@@ -41,21 +41,18 @@ namespace MoviesApp.Repos
         public async Task<List<Movie>> GetAll()
         {
             return await _context.Movies.OrderBy(m=>m.Title)
-                .Include(m => m.PlaylistList)
                 .ToListAsync();
         }
 
         public async Task<Movie> GetByIdAsync(int? id)
         {
             return await _context.Movies
-                .Include(m => m.PlaylistList)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<Movie> GetByIdAsyncNoTracking(int? id)
         {
             return await _context.Movies.AsNoTracking()
-                .Include(m => m.PlaylistList)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
@@ -71,12 +68,9 @@ namespace MoviesApp.Repos
 
         public async Task<List<Movie>> GetByName(string name)
         {
-            //return await _context.Movies.Where(g => g.Title == name).ToListAsync();
-            var res = await _context.Movies
-                .Include(m => m.PlaylistList)
+            return await _context.Movies
                 .Where(m => m.Title!.Contains(name))
                 .ToListAsync();
-            return res;
         }
 
         public bool MovieExists(int id)

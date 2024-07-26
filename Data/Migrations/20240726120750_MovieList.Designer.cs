@@ -12,8 +12,8 @@ using MoviesApp.Data;
 namespace Movies.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240513085557_PlaylistAddMoviesList")]
-    partial class PlaylistAddMoviesList
+    [Migration("20240726120750_MovieList")]
+    partial class MovieList
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,32 +162,19 @@ namespace Movies.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MoviesApp.Models.Address", b =>
+            modelBuilder.Entity("MoviePlaylist", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("MovieListId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ZipCode")
+                    b.Property<int>("PlaylistListId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("MovieListId", "PlaylistListId");
 
-                    b.ToTable("Address");
+                    b.HasIndex("PlaylistListId");
+
+                    b.ToTable("MoviePlaylist");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
@@ -196,9 +183,6 @@ namespace Movies.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("City")
@@ -256,8 +240,6 @@ namespace Movies.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -291,12 +273,8 @@ namespace Movies.Data.Migrations
                         .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("PictUrl")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("PlaylistId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -304,8 +282,6 @@ namespace Movies.Data.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PlaylistId");
 
                     b.ToTable("Movies");
                 });
@@ -318,10 +294,8 @@ namespace Movies.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("AppUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
@@ -335,8 +309,6 @@ namespace Movies.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
 
                     b.HasIndex("AppUserId");
 
@@ -394,35 +366,28 @@ namespace Movies.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
+            modelBuilder.Entity("MoviePlaylist", b =>
                 {
-                    b.HasOne("MoviesApp.Models.Address", "Address")
+                    b.HasOne("MoviesApp.Models.Movie", null)
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("MovieListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("MoviesApp.Models.Movie", b =>
-                {
-                    b.HasOne("MoviesApp.Models.Playlist", "Playlist")
-                        .WithMany("MoviesList")
-                        .HasForeignKey("PlaylistId");
-
-                    b.Navigation("Playlist");
+                    b.HasOne("MoviesApp.Models.Playlist", null)
+                        .WithMany()
+                        .HasForeignKey("PlaylistListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
                 {
-                    b.HasOne("MoviesApp.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId");
-
                     b.HasOne("MoviesApp.Models.AppUser", "AppUser")
                         .WithMany("Playlists")
-                        .HasForeignKey("AppUserId");
-
-                    b.Navigation("Address");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppUser");
                 });
@@ -430,11 +395,6 @@ namespace Movies.Data.Migrations
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
                 {
                     b.Navigation("Playlists");
-                });
-
-            modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
-                {
-                    b.Navigation("MoviesList");
                 });
 #pragma warning restore 612, 618
         }
