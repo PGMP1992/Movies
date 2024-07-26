@@ -1,9 +1,10 @@
-﻿@model Playlist
-@* @model MoviesApp.ViewModels.PlaylistMoviesVM *@
+﻿@* @model Playlist *@
+@model MoviesApp.ViewModels.PlaylistMoviesVM
 
-@{
+@* @{
     ViewData["Title"] = "Details";
 }
+ *@
 
 <h3>Playlist</h3>
 
@@ -14,24 +15,23 @@
             <div class="col-md-8">
                 <div class="card-body">
                     <h6>Name</h6>
-                    <p class="card-text">@Model.Name<p>
+                    <p class="card-text">@Model.Playlist.Name<p>
 
                     <h6>Description</h6>
-                    <p class="card-text">@Model.Description</p>
+                    <p class="card-text">@Model.Playlist.Description</p>
            
-                    @* @if (Model.MoviesList.Any()) *@
-                    @if (Model.MovieList != null)
-                    {
+                     @if (Model.Playlist.MovieList.Any())
+                     {
                         <h6>Movies</h6>
                         <div class=container>
                             <table class="table table-responsive">
                                 <tr>
-                                    <th>Title </th>
+                                    <th>Title</th>
                                     <th>Genre</th>
                                     <th>Age</th>
                                 </tr>
                                 <td>
-                                    @foreach( var item in Model.MovieList)
+                                    @foreach( Movie item in Model.Playlist.MovieList)
                                     {
                                         <tr>
                                             <td>@item.Title</td>
@@ -42,7 +42,7 @@
                                 </td>
                             </table>
                         </div>
-                    } 
+                    }
                 </div>
             </div>
         </div>
@@ -54,15 +54,15 @@
         <div class="btn-group">
             @if (User.Identity.IsAuthenticated)
             {
-                <a asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-primary">Edit</a>
+                <a asp-action="Edit" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-primary">Edit</a>
                 @if (User.IsInRole("admin"))
                 {
-                    <a asp-action="Delete" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
                 }
                 @* Passing Playlist Id *@
-                <a asp-action="AddMovie" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark">Add Movie</a>
+                <a asp-action="AddMovie" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-dark">Add Movie</a>
             }
-            <a asp-action="Index" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark">Back</a>
+            <a asp-action="Index" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-dark">Back</a>
         </div>
     </div>
 </div>

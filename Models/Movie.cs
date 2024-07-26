@@ -28,8 +28,7 @@ namespace MoviesApp.Models
         [MaxLength(500)]
         [Display(Name = "Picture URL")]
         public string? PictUrl { get; set; } = "";
-        
-        [ValidateNever]
-        public List<Playlist>? PlaylistList{ get; set; }
+
+        public List<Playlist> PlaylistList { get; set; }
     }
 }

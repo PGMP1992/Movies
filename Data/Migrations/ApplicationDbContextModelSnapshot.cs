@@ -171,7 +171,7 @@ namespace Movies.Data.Migrations
 
                     b.HasIndex("PlaylistListId");
 
-                    b.ToTable("MoviePlaylist");
+                    b.ToTable("MoviePlaylist", (string)null);
                 });
 
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
@@ -280,7 +280,7 @@ namespace Movies.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Movies", (string)null);
                 });
 
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
@@ -292,6 +292,7 @@ namespace Movies.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AppUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
@@ -308,7 +309,7 @@ namespace Movies.Data.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Playlists");
+                    b.ToTable("Playlists", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -381,7 +382,9 @@ namespace Movies.Data.Migrations
                 {
                     b.HasOne("MoviesApp.Models.AppUser", "AppUser")
                         .WithMany("Playlists")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppUser");
                 });

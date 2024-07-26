@@ -6,6 +6,7 @@ using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
 using NuGet.ContentModel;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Claims;
 
@@ -59,7 +60,16 @@ namespace MoviesApp.Controllers
             }
 
             Playlist playlist = await _playlistRepos.GetByIdAsync(id);
-            return View(playlist);
+            PlaylistMoviesVM newVm = new PlaylistMoviesVM()
+            {
+                Playlist = playlist,
+                PlaylistId = playlist.Id,
+                AppUser = playlist.AppUser,
+                AppUserId = playlist.AppUserId,
+                MoviesList = playlist.MovieList
+            };
+            
+            return View(newVm);
         }
 
         //public IActionResult AddMovie(Playlist playlist)
