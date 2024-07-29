@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CloudinaryDotNet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
@@ -27,7 +28,7 @@ namespace MoviesApp.Controllers
         }
 
 
-        // GET: Playlists
+        // GET: Playlists ---------------------------------------------------
         public async Task<IActionResult> Index()
         {
             IEnumerable<Playlist> list;
@@ -51,7 +52,7 @@ namespace MoviesApp.Controllers
             return View(list);
         }
 
-        // GET: Playlists/Details/5
+        // GET: Playlists/Details/5 -------------------------------------------
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -72,25 +73,40 @@ namespace MoviesApp.Controllers
             return View(newVm);
         }
 
-        //public IActionResult AddMovie(Playlist playlist)
-        //{
-            //if (ModelState.IsValid)
-            //{
-            //    Task<List<Movie>> movies = _movieRepos.GetAll();
-            //    var newPlaylist = playlist;
+        // GET: Playlists/AddMovie -------------------------------------------
+        public async Task<IActionResult> AddMovie(int id)
+        {
+            var movies = await _movieRepos.GetAll();
+            ViewBag.Message = "";
+            
+            return View(movies);
+        }
 
-            //    for( int i = 0; i++; i < movies.)
-            //    {
-            //        playlist.MoviesList.Add(item[i]);
-            //    }
-                
-                //playlist.MoviesList.Add(movie);
+        // POST: Playlists/AddMovie/5
+        [HttpPost]
+        public IActionResult AddMovie(Movie movie)
+        {
+            if (ModelState.IsValid)
+            {
+                //playlist.MovieList.Add(movie); 
                 //_playlistRepos.Update(playlist);
-          //  }
-          //  return View();
-        //}
+            }
+            return View();
+        }
 
-        // GET: Playlists/Create
+        // POST: Playlists/RemoveMovie/5
+        [HttpPost]
+        public IActionResult RemoveMovie(Playlist playlist, Movie movie)
+        {
+            if (ModelState.IsValid)
+            {
+                playlist.MovieList.Remove(movie);
+                _playlistRepos.Update(playlist);
+            }
+            return View();
+        }
+
+        // GET: Playlists/Create -------------------------------------------
         public IActionResult Create()
         {
             var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
@@ -116,7 +132,7 @@ namespace MoviesApp.Controllers
             return View(playlist);
         }
 
-        // GET: Playlists/Edit/5
+        // GET: Playlists/Edit/5 ------------------------------------------------
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -165,8 +181,8 @@ namespace MoviesApp.Controllers
             return View(playlist);
         }
 
-        // GET: Playlists/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Playlists/Delete/5 ------------------------------------------------
+         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -195,6 +211,7 @@ namespace MoviesApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // -------------------------------------------------------
         private bool PlaylistExists(int id)
         {
             return _playlistRepos.PlaylistExists(id);
