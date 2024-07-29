@@ -19,7 +19,7 @@ namespace MoviesApp.ViewModels
         public string Genre { get; set; } = "";
 
         [Required]
-        [Range(1, 18)]
+        [Range(0, 18)]
         [Display(Name = "Minimun Age")]
         public int Age { get; set; }
 

@@ -55,41 +55,54 @@ namespace MoviesApp.Controllers
             }
 
             var user = _httpContextAccessor.HttpContext.User.GetUserId();
-            var movie = await _movieRepos.GetByIdAsync(id);
-
+            var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
             if (movie == null)
             {
                 return NotFound();
             }
+
+            AddMovieVM movieVM = new AddMovieVM
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                Genre = movie.Genre,
+                Age = movie.Age,
+                PictUrl = movie.PictUrl
+                //PlaylistSelect = await _playlistRepos.GetAllByUserName(user)
+                //    .Select(i => new SelectListItem {
+                //   Text  = i.Name,
+                //   Value = i.Id.ToString()  
+                //})
+            };
             
             ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user)
                     .ConfigureAwait(false), "Id", "Name");
 
-            return View(movie);
+            return View(movieVM);
         }
 
         //[Authorize]
-        //// POST: Movies/Edit/5
-        //[HttpPost]
-        //public async Task<IActionResult> Details(int playlistId)
-        //{
-        //    var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
-        //    var playlist = await _playlistRepos.GetByIdAsync(playlistId);
+        // POST: Movies/AddMovie/5
+        [HttpPost]
+        public async Task<IActionResult> Details(AddMovieVM movieVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Failed to Add Movie");
+                return View("Details", movieVM);
+            }
+            
+            var movie = await _movieRepos.GetByIdAsyncNoTracking(movieVM.Id);
+            var playlist = await _playlistRepos.GetByIdAsync(movieVM.PlaylistId);
 
-        //    if (!ModelState.IsValid)
-        //    {
-        //        ModelState.AddModelError("", "Failed to Add Movie");
-        //        return View("Details", movie);
-        //    }
-            
-        //    //playlist.AppUser.Id = _httpContextAccessor.HttpContext.User.GetUserId();
-        //    playlist.MoviesList.Add(movie);
-            
-        //    _playlistRepos.Update(playlist);
-        //    _playlistRepos.Save();
-            
-        //    return RedirectToAction(nameof(Index));
-        //}
+            playlist.MovieList.Add(movie);
+
+            _playlistRepos.Update(playlist);
+            _playlistRepos.Save();
+
+            return RedirectToAction(nameof(Details));
+        }
 
         [Authorize]
         // GET: Movies/Create ------------------------------------------------------
@@ -136,6 +149,7 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
+
             var movieVM = new EditMovieVM()
             {
                 Id = movie.Id,
@@ -211,10 +225,10 @@ namespace MoviesApp.Controllers
             }
             return View(movie);
         }
+
         [Authorize]
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var movie = await _movieRepos.GetByIdAsync(id);
