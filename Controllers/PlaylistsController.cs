@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CloudinaryDotNet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
@@ -77,15 +78,37 @@ namespace MoviesApp.Controllers
             return View(newVm);
         }
 
-        // POST: Playlists/RemoveMovie/5
-        //[HttpPost] -It doen't work. Returns Error 405 Not Found
-        public IActionResult RemoveMovie(int id)
+        // GET: Playlists/AddMovie -------------------------------------------
+        public async Task<IActionResult> AddMovie(int id)
         {
-            var playlist = _playlist;
-            var movie = _movieRepos.GetById(id);
-            //playlist.MovieList.Remove(movie);
-            _playlistRepos.Update(playlist);
-            return RedirectToAction(nameof(Details));
+            var movies = await _movieRepos.GetAll();
+            ViewBag.Message = "";
+            
+            return View(movies);
+        }
+
+        // POST: Playlists/AddMovie/5
+        [HttpPost]
+        public IActionResult AddMovie(Movie movie)
+        {
+            if (ModelState.IsValid)
+            {
+                //playlist.MovieList.Add(movie); 
+                //_playlistRepos.Update(playlist);
+            }
+            return View();
+        }
+
+        // POST: Playlists/RemoveMovie/5
+        [HttpPost]
+        public IActionResult RemoveMovie(Playlist playlist, Movie movie)
+        {
+            if (ModelState.IsValid)
+            {
+                playlist.MovieList.Remove(movie);
+                _playlistRepos.Update(playlist);
+            }
+            return View();
         }
 
         // GET: Playlists/Create -------------------------------------------
