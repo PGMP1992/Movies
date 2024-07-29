@@ -59,6 +59,7 @@ namespace MoviesApp.Controllers
             }
 
             var user = _httpContextAccessor.HttpContext.User.GetUserId();
+            var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
             var movie = await _movieRepos.GetByIdNoTracking(id);
             var movies = await _playlistMovieRepos.GetAll();
             
@@ -66,6 +67,24 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
+
+            AddMovieVM movieVM = new AddMovieVM
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                Genre = movie.Genre,
+                Age = movie.Age,
+                PictUrl = movie.PictUrl
+                //PlaylistSelect = await _playlistRepos.GetAllByUserName(user)
+                //    .Select(i => new SelectListItem {
+                //   Text  = i.Name,
+                //   Value = i.Id.ToString()  
+                //})
+            };
+            
+            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user)
+                    .ConfigureAwait(false), "Id", "Name");
 
             PlaylistMovie newPM = new PlaylistMovie()
             {
