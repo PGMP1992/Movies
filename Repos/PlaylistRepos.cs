@@ -42,7 +42,7 @@ namespace MoviesApp.Repos
         {
             return await _context.Playlists
                 .Include(p=>p.AppUser)
-                .Include(p=>p.MovieList)
+                .OrderBy(p => p.Name)
                 .ToListAsync();
         }
 
@@ -50,23 +50,23 @@ namespace MoviesApp.Repos
         {
             return await _context.Playlists
                .Include(p => p.AppUser)
-               .Include(p => p.MovieList)
+               .OrderBy(p => p.Name)
                .FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public Playlist GetById(int id)
         {
             return _context.Playlists
+                .OrderBy(p => p.Name)
                .Include(p => p.AppUser)
-               .Include(p => p.MovieList)
                .FirstOrDefault(m => m.Id == id);
         }
 
         public async Task<List<Playlist>> GetByName(string name)
         {
-            return await _context.Playlists.Where(n => n.Name == name)
+            return await _context.Playlists
+                .Where(n => n.Name == name)
                 .Include(p => p.AppUser)
-                .Include(p => p.MovieList)
                 .ToListAsync();
         }
 
@@ -79,7 +79,7 @@ namespace MoviesApp.Repos
         {
             return await _context.Playlists.Where(a => a.AppUserId == appUser)
                 .Include(p => p.AppUser)
-                .Include(p => p.MovieList)
+                .OrderBy(p => p.Name)
                 .ToListAsync();
         }
     }

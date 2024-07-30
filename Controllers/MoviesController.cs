@@ -44,8 +44,7 @@ namespace MoviesApp.Controllers
             return View(movies);
         }
 
-        // -----------------------------Fix This here ---------------------
-        // Add to Playlist 
+        // Added - Add Movie to Playlist 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -61,46 +60,43 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            AddMovieVM movieVM = new AddMovieVM
+            PlaylistMovie newPM = new PlaylistMovie() 
             {
-                Id = movie.Id,
-                Title = movie.Title,
-                Description = movie.Description,
-                Genre = movie.Genre,
-                Age = movie.Age,
-                PictUrl = movie.PictUrl
-                //PlaylistSelect = await _playlistRepos.GetAllByUserName(user)
-                //    .Select(i => new SelectListItem {
-                //   Text  = i.Name,
-                //   Value = i.Id.ToString()  
-                //})
+                MovieId = movie.Id
             };
             
+            ViewBag.Message = "";
             ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user)
                     .ConfigureAwait(false), "Id", "Name");
 
-            return View(movieVM);
+            return View(newPM);
         }
 
-        //[Authorize]
-        // POST: Movies/AddMovie/5
+        [Authorize]
+        // POST: Movies/AddMovie/5 
         [HttpPost]
-        public async Task<IActionResult> Details(AddMovieVM movieVM)
+        public async Task<IActionResult> Details(PlaylistMovie pm)
         {
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Failed to Add Movie");
-                return View("Details", movieVM);
+                return View("Details", pm);
             }
+
+            var newMovie = await _movieRepos.GetByIdAsyncNoTracking(pm.MovieId);
+            var playlist = await _playlistRepos.GetByIdAsync(pm.PlaylistId);
+
+            // Check if Movie in Playlist.MovieList
+            //if (playlist.MovieList.FirstOrDefault(newMovie) != null)
+            //{
+            //    ViewBag.Message = "Film is already in this Playlist!";
+            //}
+            //else
+            //{
             
-            var movie = await _movieRepos.GetByIdAsyncNoTracking(movieVM.Id);
-            var playlist = await _playlistRepos.GetByIdAsync(movieVM.PlaylistId);
-
-            playlist.MovieList.Add(movie);
-
             _playlistRepos.Update(playlist);
-            _playlistRepos.Save();
-
+            ViewBag.Message = "Movie Added to Playlist.";
+            //} 
             return RedirectToAction(nameof(Details));
         }
 

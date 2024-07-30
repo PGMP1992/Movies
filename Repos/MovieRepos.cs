@@ -40,8 +40,16 @@ namespace MoviesApp.Repos
 
         public async Task<List<Movie>> GetAll()
         {
-            return await _context.Movies.OrderBy(m=>m.Title)
+            return await _context.Movies
+                .OrderBy(m=>m.Title)
                 .ToListAsync();
+        }
+
+        public Movie GetById(int? id)
+        {
+            return _context.Movies
+                .AsNoTracking()
+                .FirstOrDefault(i => i.Id == id);
         }
 
         public async Task<Movie> GetByIdAsync(int? id)
@@ -52,18 +60,23 @@ namespace MoviesApp.Repos
 
         public async Task<Movie> GetByIdAsyncNoTracking(int? id)
         {
-            return await _context.Movies.AsNoTracking()
+            return await _context.Movies
+                .AsNoTracking()
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<List<Movie>> GetByAge(int age)
         {
-            return await _context.Movies.Where(a => a.Age == age).ToListAsync();
+            return await _context.Movies
+                .Where(a => a.Age == age)
+                .ToListAsync();
         }
 
         public async Task<List<Movie>> GetByGenre(string genre)
         {
-            return await _context.Movies.Where(g => g.Genre == genre).ToListAsync();
+            return await _context.Movies
+                .Where(g => g.Genre == genre)
+                .ToListAsync();
         }
 
         public async Task<List<Movie>> GetByName(string name)
