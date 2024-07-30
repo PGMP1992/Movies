@@ -29,6 +29,6 @@ namespace MoviesApp.Models
         [Display(Name = "Picture URL")]
         public string? PictUrl { get; set; } = "";
 
-        public List<Playlist> PlaylistList { get; set; }
+        //public List<Playlist> PlaylistList { get; set; }
     }
 }

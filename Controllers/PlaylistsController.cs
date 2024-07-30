@@ -1,15 +1,10 @@
-﻿using CloudinaryDotNet;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
-using NuGet.ContentModel;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Security.Claims;
 
 namespace MoviesApp.Controllers
 {
@@ -19,12 +14,14 @@ namespace MoviesApp.Controllers
         private readonly IPlaylistRepos _playlistRepos;
         private readonly IMovieRepos _movieRepos;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private static Playlist _playlist;
 
         public PlaylistsController(IPlaylistRepos playlistRepos, IMovieRepos movieRepos, IHttpContextAccessor httpContextAccessor)
         {
             _playlistRepos = playlistRepos;
             _movieRepos = movieRepos;
             _httpContextAccessor = httpContextAccessor;
+            //_playlist = new Playlist();
         }
 
 
@@ -32,19 +29,19 @@ namespace MoviesApp.Controllers
         public async Task<IActionResult> Index()
         {
             IEnumerable<Playlist> list;
-            
+
             if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
             {
                 IEnumerable<Playlist> playlists = await _playlistRepos.GetAll();
                 list = playlists;
                 ViewBag.Message = "";
             }
-            else 
+            else
             {
                 var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
                 IEnumerable<Playlist> playlists = await _playlistRepos.GetAllByUserName(curUserId);
                 list = playlists;
-                if( list.Count() == 0)
+                if (list.Count() == 0)
                 {
                     ViewBag.Message = "There are no Playlists in your account.";
                 }
@@ -60,50 +57,29 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            Playlist playlist = await _playlistRepos.GetByIdAsync(id);
+            //Playlist playlist = await _playlistRepos.GetByIdAsync(id);
+            _playlist = await _playlistRepos.GetByIdAsync(id);
+
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
-                Playlist = playlist,
-                PlaylistId = playlist.Id,
-                AppUser = playlist.AppUser,
-                AppUserId = playlist.AppUserId,
-                MoviesList = playlist.MovieList
+                Playlist = _playlist,
+                PlaylistId = _playlist.Id,
+                AppUser = _playlist.AppUser,
+                AppUserId = _playlist.AppUserId,
             };
-            
+
             return View(newVm);
         }
 
-        // GET: Playlists/AddMovie -------------------------------------------
-        public async Task<IActionResult> AddMovie(int id)
-        {
-            var movies = await _movieRepos.GetAll();
-            ViewBag.Message = "";
-            
-            return View(movies);
-        }
-
-        // POST: Playlists/AddMovie/5
-        [HttpPost]
-        public IActionResult AddMovie(Movie movie)
-        {
-            if (ModelState.IsValid)
-            {
-                //playlist.MovieList.Add(movie); 
-                //_playlistRepos.Update(playlist);
-            }
-            return View();
-        }
-
         // POST: Playlists/RemoveMovie/5
-        [HttpPost]
-        public IActionResult RemoveMovie(Playlist playlist, Movie movie)
+        //[HttpPost] -It doen't work. Returns Error 405 Not Found
+        public IActionResult RemoveMovie(int id)
         {
-            if (ModelState.IsValid)
-            {
-                playlist.MovieList.Remove(movie);
-                _playlistRepos.Update(playlist);
-            }
-            return View();
+            var playlist = _playlist;
+            var movie = _movieRepos.GetById(id);
+            //playlist.MovieList.Remove(movie);
+            _playlistRepos.Update(playlist);
+            return RedirectToAction(nameof(Details));
         }
 
         // GET: Playlists/Create -------------------------------------------
@@ -182,7 +158,7 @@ namespace MoviesApp.Controllers
         }
 
         // GET: Playlists/Delete/5 ------------------------------------------------
-         public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -196,7 +172,7 @@ namespace MoviesApp.Controllers
             }
             return View(playlist);
         }
-        
+
         // POST: Playlists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

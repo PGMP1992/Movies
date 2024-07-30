@@ -5,6 +5,7 @@
     ViewData["Title"] = "Details";
 }
  *@
+<form method="post">
 
 <h3>Playlist</h3>
 
@@ -12,7 +13,7 @@
     <h5>Details</h5>
     <div class="card mb-3" style="max-width: 100%">
         <div class=" row g-0">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card-body">
                     <h6>Name</h6>
                     <p class="card-text">@Model.Playlist.Name<p>
@@ -20,8 +21,9 @@
                     <h6>Description</h6>
                     <p class="card-text">@Model.Playlist.Description</p>
            
-                     @if (Model.Playlist.MovieList.Any())
-                     {
+                     @* @if (Model.Playlist.MovieList.Any())
+                     { *@
+                        <hr />
                         <h6>Movies</h6>
                         <div class=container>
                             <table class="table table-responsive">
@@ -31,15 +33,17 @@
                                     <th>Age</th>
                                     <th></th>
                                 </tr>
-                                @foreach( Movie item in Model.Playlist.MovieList)
+                         @*        @foreach( Movie item in Model.Playlist.MovieList)
                                 {
-                                    <tr>
+                                     <tr>
                                         <td>@item.Title</td>
                                         <td>@item.Genre</td>
                                         <td>@item.Age</td>
-                                        <td><a asp-action="RemoveMovie" asp-controller="Playlists" asp-route-id="@Model.Playlist.MovieList" type="button" class="btn btn-sm btn-outline-danger">Delete</a></td>
+                                        <td><a asp-action="RemoveMovie" asp-route-id="@item.Id" 
+                                            type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+                                        </td>
                                     </tr>
-                                }
+                                } *@
                             </table>
                         </div>
                     }
@@ -48,18 +52,15 @@
         </div>
     </div>
 
-    </main>
-
     <div class="d-flex justify-content-between align-items-center">
         <div class="btn-group">
             @if (User.Identity.IsAuthenticated)
             {
-                <a asp-action="Edit" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-primary">Edit</a>
-                <a asp-action="DeleteMovie" asp-route-id="@Model.Playlist.MovieList.Remove" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
-                @* Passing Playlist Id
-            <a asp-action="AddMovie" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-dark">Add Movie</a> *@
+                <a asp-action="Edit" asp-route-id="@Model.Playlist.Id" type="button" 
+                    class="btn btn-sm btn-outline-primary">Edit</a>
             }
             <a asp-action="Index" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-dark">Back</a>
         </div>
     </div>
 </div>
+</form>
