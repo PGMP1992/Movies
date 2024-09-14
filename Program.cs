@@ -10,17 +10,20 @@ using MoviesApp.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// All Models 
 builder.Services.AddScoped<IMovieRepos, MovieRepos>();
 builder.Services.AddScoped<IPlaylistRepos, PlaylistRepos>();
+builder.Services.AddScoped<IPlaylistMovieRepos, PlaylistMovieRepos>();
 builder.Services.AddScoped<IDashboardRepos, DashboardRepos>();
 builder.Services.AddScoped<IUsersRepos, UsersRepos>();
-builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interface
+// Cloudinary Interface
+builder.Services.AddScoped<IPhotoService, PhotoService>(); 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -34,7 +37,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    //app.UseMigrationsEndPoint();
 }
 else
 {

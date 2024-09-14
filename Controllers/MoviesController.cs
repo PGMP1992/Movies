@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MoviesApp.Data;
 using MoviesApp.Models;
-using MoviesApp.Repos;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
 
@@ -14,14 +12,20 @@ namespace MoviesApp.Controllers
     {
         private readonly IMovieRepos _movieRepos;
         private readonly IPlaylistRepos _playlistRepos;
+        private readonly IPlaylistMovieRepos _playlistMovieRepos;
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MoviesController(IMovieRepos movieRepos, IPlaylistRepos playlistRepos,
-                IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
+        public MoviesController(
+            IMovieRepos movieRepos,
+            IPlaylistRepos playlistRepos,
+            IPlaylistMovieRepos playlistMovieRepos,
+            IPhotoService photoService, 
+            IHttpContextAccessor httpContextAccessor)
         {
             _movieRepos = movieRepos;
             _playlistRepos = playlistRepos;
+            _playlistMovieRepos = playlistMovieRepos;
             _photoService = photoService;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -46,6 +50,7 @@ namespace MoviesApp.Controllers
 
         // Added - Add Movie to Playlist 
         // GET: Movies/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -60,11 +65,11 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            PlaylistMovie newPM = new PlaylistMovie() 
+            PlaylistMovie newPM = new PlaylistMovie()
             {
                 MovieId = movie.Id
             };
-            
+
             ViewBag.Message = "";
             ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user)
                     .ConfigureAwait(false), "Id", "Name");
@@ -87,13 +92,13 @@ namespace MoviesApp.Controllers
             var playlist = await _playlistRepos.GetByIdAsync(pm.PlaylistId);
 
             // Check if Movie in Playlist.MovieList
-            //if (playlist.MovieList.FirstOrDefault(newMovie) != null)
+            //if ( _playlistMovieRepos.FirstOrDefault(pm.PlaylistId) != null)
             //{
             //    ViewBag.Message = "Film is already in this Playlist!";
             //}
             //else
             //{
-            
+
             _playlistRepos.Update(playlist);
             ViewBag.Message = "Movie Added to Playlist.";
             //} 
