@@ -52,7 +52,7 @@ namespace MoviesApp.Repos
                .FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public Playlist GetPlaylistById(int id)
+        public Playlist GetById(int id)
         {
             return _context.Playlists
                .Include(m => m.MoviesList)
@@ -76,7 +76,6 @@ namespace MoviesApp.Repos
 
         public bool AddMovie(Movie movie)
         {
-            
             return Save();
         }
     }
