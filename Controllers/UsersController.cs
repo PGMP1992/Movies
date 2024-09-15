@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Models;
+using MoviesApp.Models.ViewModels;
 using MoviesApp.Repos.Interfaces;
-using MoviesApp.ViewModels;
 
 
 namespace MoviesApp.Controllers
@@ -27,18 +27,18 @@ namespace MoviesApp.Controllers
         [HttpGet("Users")]
         public async Task<IActionResult> Index()
         {
-            var users = await _userRepos.GetAllUsers();
-            List<UsersVM> result = new List<UsersVM>();
+            var users = await _userRepos.GetAll();
+            List<UserVM> result = new List<UserVM>();
 
             foreach (var user in users)
             {
-                var usersVM = new UsersVM()
+                var usersVM = new UserVM()
                 {
                     Id = user.Id,
                     UserName = user.UserName,
                     City = user.City,
                     State = user.State,
-                    ProfileImageUrl = user.ProfileImageryUrl,
+                    ImageUrl = user.ImageUrl,
                 };
                 result.Add(usersVM);
             }
@@ -48,19 +48,19 @@ namespace MoviesApp.Controllers
         [Authorize]
         public async Task<ActionResult> Detail(string id)
         {
-            var user = await _userRepos.GetUserById(id);
+            var user = await _userRepos.GetById(id);
             if (user == null)
             {
                 return RedirectToAction("Index", "Users");
             }
 
-            var usersDetailsVM = new UsersDetailsVM()
+            var usersDetailsVM = new UserVM()
             {
                 Id = user.Id,
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl ?? "/img/avatar-male-4.jpg",
+                ImageUrl = user.ImageUrl ?? "/img/avatar-male-4.jpg",
             };
             return View(usersDetailsVM);
         }
@@ -72,26 +72,26 @@ namespace MoviesApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            var user = await _userRepos.GetUserById(id);
+            var user = await _userRepos.GetById(id);
             if (user == null)
             {
                 return View("Error");
             }
 
-            var editUserVM = new EditUserVM()
+            var editUserVM = new UserVM()
             {
                 Id = user.Id,
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl
+                ImageUrl = user.ImageUrl
             };
             return View(editUserVM);
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, EditUserVM editVM)
+        public async Task<IActionResult> Edit(string id, UserVM editVM)
         {
             if (!ModelState.IsValid)
             {
@@ -99,7 +99,7 @@ namespace MoviesApp.Controllers
                 return View("Edit", editVM);
             }
 
-            var user = await _userRepos.GetUserById(id);
+            var user = await _userRepos.GetById(id);
 
             if (user == null)
             {
@@ -116,13 +116,13 @@ namespace MoviesApp.Controllers
                     return View("Edit", editVM);
                 }
 
-                if (!string.IsNullOrEmpty(user.ProfileImageryUrl))
+                if (!string.IsNullOrEmpty(user.ImageUrl))
                 {
-                    _ = _photoService.DeletePhotoAsync(user.ProfileImageryUrl);
+                    _ = _photoService.DeletePhotoAsync(user.ImageUrl);
                 }
 
-                user.ProfileImageryUrl = photoResult.Url.ToString();
-                editVM.ProfileImageUrl = user.ProfileImageryUrl;
+                user.ImageUrl = photoResult.Url.ToString();
+                editVM.ImageUrl = user.ImageUrl;
 
                 //await _userManager.UpdateAsync(user);
 
@@ -140,19 +140,19 @@ namespace MoviesApp.Controllers
         [Authorize]
         public async Task<IActionResult> Delete (string id)
         {
-            var user = await _userRepos.GetUserById(id);
+            var user = await _userRepos.GetById(id);
             if (user == null)
             {
                 return View("Error");
             }
 
-            var editUserVM = new EditUserVM()
+            var editUserVM = new UserVM()
             {
                 Id = user.Id,
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl,
+                ImageUrl = user.ImageUrl,
             };
             return View(editUserVM);
         }
@@ -161,7 +161,7 @@ namespace MoviesApp.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirm(string id)
         {
-            var user = await _userRepos.GetUserById(id);
+            var user = await _userRepos.GetById(id);
             if (user == null)
             {
                 return View("Error");
