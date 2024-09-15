@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
-using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers
 {

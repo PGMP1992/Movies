@@ -2,7 +2,7 @@
 using MoviesApp.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace MoviesApp.ViewModels
+namespace MoviesApp.Models.ViewModels
 {
     public class EditMovieVM
     {
@@ -27,7 +27,7 @@ namespace MoviesApp.ViewModels
 
         [Display(Name = "Picture URL")]
         public string? PictUrl { get; set; }
-                
+
         public IFormFile? Image { get; set; }
     }
 }

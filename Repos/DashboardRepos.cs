@@ -25,12 +25,12 @@ namespace MoviesApp.Repos
 
         public async Task<AppUser> GetUserById(string id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.AppUsers.FindAsync(id);
         }
 
         public async Task<AppUser> GetByIdNoTracking(string id)
         {
-            return await _context.Users.Where(u => u.Id == id).AsNoTracking().FirstOrDefaultAsync();
+            return await _context.AppUsers.Where(u => u.Id == id).AsNoTracking().FirstOrDefaultAsync();
         }
         
         public bool Save()

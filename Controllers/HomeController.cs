@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Helpers;
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
-using MoviesApp.ViewModels;
+using MoviesApp.Models.ViewModels;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Globalization;
@@ -37,18 +37,17 @@ namespace MoviesApp.Controllers
 
                 if (homeVM.State != null)
                 {
-                    //homeVM.UserName = await _usersRepos.;
-                    homeVM.Users = await _usersRepos.GetAllUsers();
+                    homeVM.AppUsers = await _usersRepos.GetAll();
                 }
                 else
                 {
-                    homeVM.Users = null;
+                    homeVM.AppUsers = null;
                 }
                 return View(homeVM);
             }
             catch
             {
-                homeVM.Users = null;
+                homeVM.AppUsers = null;
             }
             return View(homeVM);
         }

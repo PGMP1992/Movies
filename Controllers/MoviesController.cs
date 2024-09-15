@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MoviesApp.Models;
-using MoviesApp.ViewModels;
 using MoviesApp.Repos;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using MoviesApp.Repos.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
+using MoviesApp.Models.ViewModels;
 
 namespace MoviesApp.Controllers
 {

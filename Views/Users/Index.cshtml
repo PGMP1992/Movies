@@ -1,5 +1,5 @@
-﻿@using MoviesApp.ViewModels
-@model List<UsersVM>
+﻿@using MoviesApp.Models.ViewModels
+@model List<UserVM>
 
 <h3>Active Users</h3>
 
@@ -10,7 +10,7 @@
             {
                 <div class="col-md-4">
                     <div class="card mb-4 box-shadow">
-                         <img class="card-img-top" src="@item.ProfileImageUrl" alt="Photo">
+                         <img class="card-img-top" src="@item.ImageUrl" alt="Photo">
                         <div class="card-body">
                             <h5 style="color:cornflowerblue;">@item.UserName</h5>
                             <hr/>

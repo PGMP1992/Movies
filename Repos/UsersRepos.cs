@@ -14,25 +14,20 @@ namespace MoviesApp.Repos
             _context = context;
         }
 
-        public bool Add(AppUser user)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool Delete(AppUser user)
         {
             _context.Remove(user);
             return Save();
         }
 
-        public async Task<List<AppUser>> GetAllUsers()
+        public async Task<List<AppUser>> GetAll()
         {
-            return await _context.Users.OrderBy(u=>u.UserName).ToListAsync();
+            return await _context.AppUsers.OrderBy(u=>u.UserName).ToListAsync();
         }
 
-        public async Task<AppUser> GetUserById(string id)
+        public async Task<AppUser> GetById(string id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.AppUsers.FindAsync(id);
         }
 
         public bool Save()

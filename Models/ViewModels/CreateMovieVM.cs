@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 //Created this for Saving Picture to Cloudinary
 
-namespace MoviesApp.ViewModels
+namespace MoviesApp.Models.ViewModels
 {
     public class CreateMovieVM
     {

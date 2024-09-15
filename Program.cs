@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
+using MoviesApp.Data.DBInitialiser;
 using MoviesApp.Helpers;
 using MoviesApp.Models;
 using MoviesApp.Repos;
@@ -9,24 +10,23 @@ using MoviesApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddScoped<IMovieRepos, MovieRepos>();
-builder.Services.AddScoped<IPlaylistRepos, PlaylistRepos>();
-builder.Services.AddScoped<IDashboardRepos, DashboardRepos>();
-builder.Services.AddScoped<IUsersRepos, UsersRepos>();
-builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interface
-builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+// Add services to the container
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddScoped<IMovieRepos, MovieRepos>();
+builder.Services.AddScoped<IPlaylistRepos, PlaylistRepos>();
+builder.Services.AddScoped<IDashboardRepos, DashboardRepos>();
+builder.Services.AddScoped<IUsersRepos, UsersRepos>();
+builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interface
+builder.Services.AddScoped<IDbInitializer, DbInitializer>(); // Feed Data
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -50,60 +50,20 @@ app.UseRouting();
 
 app.UseAuthentication(); // Has to be before authorization. 
 app.UseAuthorization();
+SeedDB();
 
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
-
-//creating Roles - OK
-//using (var scope = app.Services.CreateScope())
-//{
-//    var roleManager =
-//            scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-//    var roles = new[] { "admin", "user" };
-//    foreach (var role in roles)
-//    {
-//        if (!await roleManager.RoleExistsAsync(role))
-//            await roleManager.CreateAsync(new IdentityRole(role));
-//    }
-//}
-
-//// creating Roles with the same password
-//using (var scope = app.Services.CreateScope())
-//{
-//    var userManager =
-//            scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-//    // Admin ---------------------------------
-//    string email = "admin@host.com";
-//    string password = "Password1_";
-
-//    if (await userManager.FindByEmailAsync(email) == null)
-//    {
-//        var user = new IdentityUser();
-//        user.UserName = email;
-//        user.Email = email;
-//        user.EmailConfirmed = true;
-
-//        await userManager.CreateAsync(user, password);
-//        await userManager.AddToRoleAsync(user, "admin");
-//    }
-
-//    // User --------------------------------- 
-//    string userAcc = "user@host.com";
-
-//    if (await userManager.FindByEmailAsync(userAcc) == null)
-//    {
-//        var user1 = new IdentityUser();
-//        user1.UserName = userAcc;
-//        user1.Email = userAcc;
-//        user1.EmailConfirmed = true;
-
-//        await userManager.CreateAsync(user1, password);
-//        await userManager.AddToRoleAsync(user1, "user");
-//    }
-//}
 
 app.Run();
+
+void SeedDB()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInitializer.Initialize();
+    }
+}
