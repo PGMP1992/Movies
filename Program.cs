@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Data.DbInitializer;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using MoviesApp.Data.DBInitialiser;
@@ -29,6 +30,7 @@ builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interfa
 builder.Services.AddScoped<IDbInitializer, DbInitializer>(); // Feed Data
 builder.Services.AddControllersWithViews();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,9 +47,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthentication(); // Has to be before authorization. 
 app.UseAuthorization();
 SeedDB();

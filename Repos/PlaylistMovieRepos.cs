@@ -45,20 +45,12 @@ namespace MoviesApp.Repos
                 .ToListAsync();
         }
 
-        public async Task<PlaylistMovie> GetByIdAsync(int? id)
+        public async Task<PlaylistMovie> GetById(int? id)
         {
             return await _context.PlaylistMovies
                .Include(p => p.Playlist)
                .Include(p => p.Movie)
                .FirstOrDefaultAsync(p => p.Id == id);
-        }
-
-        public PlaylistMovie GetById(int id)
-        {
-            return _context.PlaylistMovies
-                .Include(p => p.Playlist)
-               .Include(p => p.Movie)
-               .FirstOrDefault(m => m.Id == id);
         }
 
         public bool PlaylistMovieExists(int id)

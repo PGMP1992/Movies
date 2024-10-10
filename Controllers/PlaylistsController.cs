@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using MoviesApp.Models;
+using MoviesApp.Repos;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
 
@@ -13,17 +14,21 @@ namespace MoviesApp.Controllers
     {
         private readonly IPlaylistRepos _playlistRepos;
         private readonly IMovieRepos _movieRepos;
+        private readonly IPlaylistMovieRepos _playlistMoviesRepos;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private static Playlist _playlist;
 
-        public PlaylistsController(IPlaylistRepos playlistRepos, IMovieRepos movieRepos, IHttpContextAccessor httpContextAccessor)
+        public PlaylistsController(IPlaylistRepos playlistRepos
+            ,IMovieRepos movieRepos
+            ,IPlaylistMovieRepos playlistMoviesRepos
+            ,IHttpContextAccessor httpContextAccessor)
         {
             _playlistRepos = playlistRepos;
             _movieRepos = movieRepos;
+            _playlistMoviesRepos = playlistMoviesRepos;
             _httpContextAccessor = httpContextAccessor;
             //_playlist = new Playlist();
         }
-
 
         // GET: Playlists ---------------------------------------------------
         public async Task<IActionResult> Index()
@@ -58,14 +63,16 @@ namespace MoviesApp.Controllers
             }
 
             //Playlist playlist = await _playlistRepos.GetByIdAsync(id);
-            _playlist = await _playlistRepos.GetByIdAsync(id);
-
+            _playlist = await _playlistRepos.GetById(id);
+            
+            
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
                 Playlist = _playlist,
                 PlaylistId = _playlist.Id,
                 AppUser = _playlist.AppUser,
                 AppUserId = _playlist.AppUserId,
+                //MovieList = _playlistMoviesRepos.GetByIdAsync(id) 
             };
 
             return View(newVm);
@@ -116,7 +123,7 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var playlist = await _playlistRepos.GetByIdAsync(id);
+            var playlist = await _playlistRepos.GetById(id);
             if (playlist == null)
             {
                 return NotFound();
@@ -165,7 +172,7 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var playlist = await _playlistRepos.GetByIdAsync(id);
+            var playlist = await _playlistRepos.GetById(id);
             if (playlist == null)
             {
                 return NotFound();
@@ -178,7 +185,7 @@ namespace MoviesApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var playlist = await _playlistRepos.GetByIdAsync(id);
+            var playlist = await _playlistRepos.GetById(id);
             if (playlist != null)
             {
                 _playlistRepos.Delete(playlist);

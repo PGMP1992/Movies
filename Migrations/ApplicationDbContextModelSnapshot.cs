@@ -3,24 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoviesApp.Data;
 
 #nullable disable
 
-namespace Movies.Data.Migrations
+namespace MoviesApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240730111115_CreatedPlaylistMovie")]
-    partial class CreatedPlaylistMovie
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -160,6 +157,21 @@ namespace Movies.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("MoviePlaylist", b =>
+                {
+                    b.Property<int>("MoviesListId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlaylistListId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MoviesListId", "PlaylistListId");
+
+                    b.HasIndex("PlaylistListId");
+
+                    b.ToTable("MoviePlaylist");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
@@ -370,6 +382,21 @@ namespace Movies.Data.Migrations
                     b.HasOne("MoviesApp.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MoviePlaylist", b =>
+                {
+                    b.HasOne("MoviesApp.Models.Movie", null)
+                        .WithMany()
+                        .HasForeignKey("MoviesListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MoviesApp.Models.Playlist", null)
+                        .WithMany()
+                        .HasForeignKey("PlaylistListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
