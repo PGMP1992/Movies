@@ -1,3 +1,5 @@
+<H6> Created Users admin@host.com and user@host.com both with Password "Admin123*"</h6>
+<br/>
 <h1>Movie Web Application</h1> 
 
 <h2>Introduction </h2>
