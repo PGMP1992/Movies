@@ -46,20 +46,12 @@ namespace MoviesApp.Repos
                 .ToListAsync();
         }
 
-        public async Task<Playlist> GetByIdAsync(int? id)
+        public async Task<Playlist> GetById(int? id)
         {
             return await _context.Playlists
                .Include(p => p.AppUser)
                .OrderBy(p => p.Name)
                .FirstOrDefaultAsync(m => m.Id == id);
-        }
-
-        public Playlist GetById(int id)
-        {
-            return _context.Playlists
-                .OrderBy(p => p.Name)
-               .Include(p => p.AppUser)
-               .FirstOrDefault(m => m.Id == id);
         }
 
         public async Task<List<Playlist>> GetByName(string name)

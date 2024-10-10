@@ -45,31 +45,17 @@ namespace MoviesApp.Repos
                 .ToListAsync();
         }
 
-        public Movie GetById(int? id)
-        {
-            return _context.Movies
-                .AsNoTracking()
-                .FirstOrDefault(i => i.Id == id);
-        }
-
-        public async Task<Movie> GetByIdAsync(int? id)
+        public async Task<Movie> GetById(int? id)
         {
             return await _context.Movies
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task<Movie> GetByIdAsyncNoTracking(int? id)
+        public async Task<Movie> GetByIdNoTracking(int? id)
         {
             return await _context.Movies
                 .AsNoTracking()
                 .FirstOrDefaultAsync(i => i.Id == id);
-        }
-
-        public async Task<List<Movie>> GetByAge(int age)
-        {
-            return await _context.Movies
-                .Where(a => a.Age == age)
-                .ToListAsync();
         }
 
         public async Task<List<Movie>> GetByGenre(string genre)

@@ -59,7 +59,9 @@ namespace MoviesApp.Controllers
             }
 
             var user = _httpContextAccessor.HttpContext.User.GetUserId();
-            var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
+            var movie = await _movieRepos.GetByIdNoTracking(id);
+            var movies = await _playlistMovieRepos.GetAll();
+            
             if (movie == null)
             {
                 return NotFound();
@@ -67,12 +69,12 @@ namespace MoviesApp.Controllers
 
             PlaylistMovie newPM = new PlaylistMovie()
             {
-                MovieId = movie.Id
+                MovieId = movie.Id,
             };
 
             ViewBag.Message = "";
-            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user)
-                    .ConfigureAwait(false), "Id", "Name");
+            //ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user)
+            //        .ConfigureAwait(false), "Id", "Name");
 
             return View(newPM);
         }
@@ -88,8 +90,8 @@ namespace MoviesApp.Controllers
                 return View("Details", pm);
             }
 
-            var newMovie = await _movieRepos.GetByIdAsyncNoTracking(pm.MovieId);
-            var playlist = await _playlistRepos.GetByIdAsync(pm.PlaylistId);
+            var newMovie = await _movieRepos.GetByIdNoTracking(pm.MovieId);
+            var playlist = await _playlistRepos.GetById(pm.PlaylistId);
 
             // Check if Movie in Playlist.MovieList
             //if ( _playlistMovieRepos.FirstOrDefault(pm.PlaylistId) != null)
@@ -144,7 +146,7 @@ namespace MoviesApp.Controllers
         // GET: Movies/Edit/5 ------------------------------------------------------
         public async Task<IActionResult> Edit(int? id)
         {
-            var movie = await _movieRepos.GetByIdAsync(id);
+            var movie = await _movieRepos.GetById(id);
 
             if (movie == null)
             {
@@ -174,7 +176,7 @@ namespace MoviesApp.Controllers
                 return View("Edit", movieVM);
             }
 
-            var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
+            var movie = await _movieRepos.GetByIdNoTracking(id);
 
             if (movieVM.Image != null)
             {
@@ -219,7 +221,7 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var movie = await _movieRepos.GetByIdAsync(id);
+            var movie = await _movieRepos.GetById(id);
             if (movie == null)
             {
                 return NotFound();
@@ -232,7 +234,7 @@ namespace MoviesApp.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _movieRepos.GetByIdAsync(id);
+            var movie = await _movieRepos.GetById(id);
             if (movie != null)
             {
                 _movieRepos.Delete(movie);

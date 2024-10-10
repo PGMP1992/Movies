@@ -14,11 +14,6 @@ namespace MoviesApp.Repos
             _context = context;
         }
 
-        //public bool Add(AppUser user)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         public bool Delete(AppUser user)
         {
             _context.Remove(user);

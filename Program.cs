@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Data.DbInitializer;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using MoviesApp.Helpers;
@@ -16,6 +17,8 @@ builder.Services.AddScoped<IPlaylistRepos, PlaylistRepos>();
 builder.Services.AddScoped<IPlaylistMovieRepos, PlaylistMovieRepos>();
 builder.Services.AddScoped<IDashboardRepos, DashboardRepos>();
 builder.Services.AddScoped<IUsersRepos, UsersRepos>();
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+
 // Cloudinary Interface
 builder.Services.AddScoped<IPhotoService, PhotoService>(); 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
@@ -31,6 +34,7 @@ builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireCo
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
+
 
 var app = builder.Build();
 
@@ -48,9 +52,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthentication(); // Has to be before authorization. 
 app.UseAuthorization();
 
@@ -58,6 +60,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+SeedDatabase();
 
 //creating Roles - OK
 //using (var scope = app.Services.CreateScope())
@@ -110,3 +114,12 @@ app.MapRazorPages();
 //}
 
 app.Run();
+
+void SeedDatabase()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var DbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        DbInitializer.Initialize();
+    }
+}

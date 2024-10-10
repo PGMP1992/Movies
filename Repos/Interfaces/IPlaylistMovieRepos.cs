@@ -5,8 +5,8 @@ namespace MoviesApp.Repos.Interfaces
     public interface IPlaylistMovieRepos
     {
         Task<List<PlaylistMovie>> GetAll();
-        Task<PlaylistMovie> GetByIdAsync(int? id);
-        PlaylistMovie GetById(int id);
+        Task<PlaylistMovie> GetById(int? id);
+        //PlaylistMovie GetById(int id);
 
         bool Add(PlaylistMovie playlistMovie);
         bool Update(PlaylistMovie playlistMovie);

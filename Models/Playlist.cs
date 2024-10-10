@@ -17,8 +17,12 @@ namespace MoviesApp.Models
         public string Description { get; set; } = "";
 
         public string AppUserId { get; set; } = "";
-        [ForeignKey("AppUserId")]
+        
         [ValidateNever]
+        [ForeignKey("AppUserId")]
         public AppUser AppUser { get; set; }
+
+        [ValidateNever]
+        public List<Movie> MoviesList { get; set; }
     }
 }
