@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Data;
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
-using MoviesApp.ViewModels;
+using MoviesApp.Models.ViewModels;
 
 namespace MoviesApp.Controllers
 {
@@ -24,10 +24,10 @@ namespace MoviesApp.Controllers
         }
 
         [Authorize]
-        private void MapUserEdit(AppUser user, EditUserDashboardVM editVM, ImageUploadResult photoResult)
+        private void MapUserEdit(AppUser user, UserVM editVM, ImageUploadResult photoResult)
         {
             user.Id = editVM.Id;
-            user.ProfileImageryUrl = photoResult.Url.ToString();
+            user.ImageUrl = photoResult.Url.ToString();
         }
 
         [Authorize]
@@ -38,14 +38,14 @@ namespace MoviesApp.Controllers
 
             var userPlaylists = await _dashboardRepos.GetAllUserPlaylists();
             
-            var dashboardVM = new DashboardVM()
+            var dashboardVM = new UserVM()
             {
                 Playlists = userPlaylists,
                 Id = curUserId,
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl
+                ImageUrl = user.ImageUrl
             };
 
             return View(dashboardVM);
@@ -59,13 +59,13 @@ namespace MoviesApp.Controllers
 
             if (user == null) return View("Error");
 
-            var editUserVM = new EditUserDashboardVM()
+            var editUserVM = new UserVM()
             {
                 Id = curUserId,
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl
+                ImageUrl = user.ImageUrl
             };
 
             return View(editUserVM);
@@ -73,7 +73,7 @@ namespace MoviesApp.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> editUserProfile(EditUserDashboardVM editVM)
+        public async Task<IActionResult> editUserProfile(UserVM editVM)
         {
             if (!ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace MoviesApp.Controllers
             }
 
             var user = await _dashboardRepos.GetByIdNoTracking(editVM.Id);
-            if (user.ProfileImageryUrl == "" || user.ProfileImageryUrl == null)
+            if (user.ImageUrl == "" || user.ImageUrl == null)
             {
                 var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
                 MapUserEdit(user, editVM, photoResult);
@@ -95,7 +95,7 @@ namespace MoviesApp.Controllers
             {
                 try
                 {
-                    await _photoService.DeletePhotoAsync(user.ProfileImageryUrl);
+                    await _photoService.DeletePhotoAsync(user.ImageUrl);
                 }
                 catch (Exception ex)
                 {
