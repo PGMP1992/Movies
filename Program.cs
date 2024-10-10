@@ -1,17 +1,16 @@
-using Microsoft.AspNetCore.Identity;
 using Data.DbInitializer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
-using MoviesApp.Data.DBInitialiser;
 using MoviesApp.Helpers;
-using MoviesApp.Models;
 using MoviesApp.Repos;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -29,7 +28,6 @@ builder.Services.AddScoped<IUsersRepos, UsersRepos>();
 builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interface
 builder.Services.AddScoped<IDbInitializer, DbInitializer>(); // Feed Data
 builder.Services.AddControllersWithViews();
-
 
 var app = builder.Build();
 
