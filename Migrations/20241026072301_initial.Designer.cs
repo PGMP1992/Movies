@@ -12,7 +12,7 @@ using MoviesApp.Data;
 namespace MoviesApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241010134011_initial")]
+    [Migration("20241026072301_initial")]
     partial class initial
     {
         /// <inheritdoc />
