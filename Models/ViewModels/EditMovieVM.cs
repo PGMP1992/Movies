@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MoviesApp.ViewModels
+namespace MoviesApp.Models.ViewModels
 {
     public class EditMovieVM
     {

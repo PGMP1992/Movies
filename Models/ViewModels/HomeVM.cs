@@ -1,6 +1,6 @@
 ﻿using MoviesApp.Models;
 
-namespace MoviesApp.ViewModels
+namespace MoviesApp.Models.ViewModels
 {
     public class HomeVM
     {

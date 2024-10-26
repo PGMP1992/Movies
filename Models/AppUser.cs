@@ -4,7 +4,7 @@ namespace MoviesApp.Models
 {
     public class AppUser : IdentityUser
     {
-        public string? ProfileImageryUrl { get; set; }
+        public string? ImageUrl { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
 

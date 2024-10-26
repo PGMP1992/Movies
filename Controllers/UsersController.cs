@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Models;
+using MoviesApp.Models.ViewModels;
 using MoviesApp.Repos.Interfaces;
-using MoviesApp.ViewModels;
 
 
 namespace MoviesApp.Controllers
@@ -38,7 +38,7 @@ namespace MoviesApp.Controllers
                     UserName = user.UserName,
                     City = user.City,
                     State = user.State,
-                    ProfileImageUrl = user.ProfileImageryUrl,
+                    ImageUrl = user.ImageUrl,
                 };
                 result.Add(usersVM);
             }
@@ -60,7 +60,7 @@ namespace MoviesApp.Controllers
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl ?? "/img/avatar-male-4.jpg",
+                ImageUrl = user.ImageUrl ?? "/img/avatar-male-4.jpg",
             };
             return View(usersDetailsVM);
         }
@@ -84,7 +84,7 @@ namespace MoviesApp.Controllers
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl
+                ImageUrl = user.ImageUrl
             };
             return View(editUserVM);
         }
@@ -116,13 +116,13 @@ namespace MoviesApp.Controllers
                     return View("Edit", editVM);
                 }
 
-                if (!string.IsNullOrEmpty(user.ProfileImageryUrl))
+                if (!string.IsNullOrEmpty(user.ImageUrl))
                 {
-                    _ = _photoService.DeletePhotoAsync(user.ProfileImageryUrl);
+                    _ = _photoService.DeletePhotoAsync(user.ImageUrl);
                 }
 
-                user.ProfileImageryUrl = photoResult.Url.ToString();
-                editVM.ProfileImageUrl = user.ProfileImageryUrl;
+                user.ImageUrl = photoResult.Url.ToString();
+                editVM.ImageUrl = user.ImageUrl;
 
                 //await _userManager.UpdateAsync(user);
 
@@ -152,7 +152,7 @@ namespace MoviesApp.Controllers
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl,
+                ImageUrl = user.ImageUrl,
             };
             return View(editUserVM);
         }

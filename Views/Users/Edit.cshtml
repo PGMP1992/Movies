@@ -1,4 +1,5 @@
-﻿@model MoviesApp.ViewModels.EditUserVM
+﻿﻿@using MoviesApp.Models.ViewModels;
+@model EditUserVM
 
 <h4>User Profile</h4>
 </<br />
@@ -23,9 +24,9 @@
             </div>
             
             <div class="form-group">
-                <label asp-for="ProfileImageUrl" class="control-label"></label>
-                <input asp-for="ProfileImageUrl" class="form-control" />
-                <span asp-validation-for="ProfileImageUrl" class="text-danger"></span>
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
             </div>
             
             <div class="form-group">

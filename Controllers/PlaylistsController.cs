@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using MoviesApp.Models;
+using MoviesApp.Models.ViewModels;
 using MoviesApp.Repos;
 using MoviesApp.Repos.Interfaces;
-using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers
 {

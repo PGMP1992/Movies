@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Data;
 using MoviesApp.Models;
+using MoviesApp.Models.ViewModels;
 using MoviesApp.Repos.Interfaces;
-using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers
 {
@@ -27,7 +27,7 @@ namespace MoviesApp.Controllers
         private void MapUserEdit(AppUser user, EditUserDashboardVM editVM, ImageUploadResult photoResult)
         {
             user.Id = editVM.Id;
-            user.ProfileImageryUrl = photoResult.Url.ToString();
+            user.ImageUrl = photoResult.Url.ToString();
         }
 
         [Authorize]
@@ -45,7 +45,7 @@ namespace MoviesApp.Controllers
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl
+                ImageUrl = user.ImageUrl
             };
 
             return View(dashboardVM);
@@ -65,7 +65,7 @@ namespace MoviesApp.Controllers
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl
+                ImageUrl = user.ImageUrl
             };
 
             return View(editUserVM);
@@ -82,7 +82,7 @@ namespace MoviesApp.Controllers
             }
 
             var user = await _dashboardRepos.GetByIdNoTracking(editVM.Id);
-            if (user.ProfileImageryUrl == "" || user.ProfileImageryUrl == null)
+            if (user.ImageUrl == "" || user.ImageUrl == null)
             {
                 var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
                 MapUserEdit(user, editVM, photoResult);
@@ -95,7 +95,7 @@ namespace MoviesApp.Controllers
             {
                 try
                 {
-                    await _photoService.DeletePhotoAsync(user.ProfileImageryUrl);
+                    await _photoService.DeletePhotoAsync(user.ImageUrl);
                 }
                 catch (Exception ex)
                 {
