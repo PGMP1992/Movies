@@ -1,4 +1,6 @@
-﻿namespace MoviesApp.Models.ViewModels
+﻿using MoviesApp.Models;
+
+namespace MoviesApp.Models.ViewModels
 {
     public class HomeVM
     {

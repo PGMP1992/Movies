@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Data;
 using MoviesApp.Models;
-using MoviesApp.Repos.Interfaces;
 using MoviesApp.Models.ViewModels;
+using MoviesApp.Repos.Interfaces;
 
 namespace MoviesApp.Controllers
 {
@@ -65,7 +65,7 @@ namespace MoviesApp.Controllers
                 UserName = user.UserName,
                 City = user.City,
                 State = user.State,
-                ImageUrl = user.ImageUrl
+                ProfileImageUrl = user.ProfileImageryUrl
             };
 
             return View(editUserVM);
@@ -82,7 +82,7 @@ namespace MoviesApp.Controllers
             }
 
             var user = await _dashboardRepos.GetByIdNoTracking(editVM.Id);
-            if (user.ImageUrl == "" || user.ImageUrl == null)
+            if (user.ProfileImageryUrl == "" || user.ProfileImageryUrl == null)
             {
                 var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
                 MapUserEdit(user, editVM, photoResult);
@@ -95,7 +95,7 @@ namespace MoviesApp.Controllers
             {
                 try
                 {
-                    await _photoService.DeletePhotoAsync(user.ImageUrl);
+                    await _photoService.DeletePhotoAsync(user.ProfileImageryUrl);
                 }
                 catch (Exception ex)
                 {
