@@ -111,14 +111,14 @@ namespace MoviesApp.Controllers
         // GET: Movies/Create ------------------------------------------------------
         public IActionResult Create()
         {
-            var movieVM = new CreateMovieVM();
+            var movieVM = new MovieVM();
             return View(movieVM);
         }
 
         [Authorize]
         // POST: Movies/Create
         [HttpPost]
-        public async Task<IActionResult> Create(CreateMovieVM movieVM)
+        public async Task<IActionResult> Create(MovieVM movieVM)
         {
             if (ModelState.IsValid)
             {
@@ -153,7 +153,7 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var movieVM = new EditMovieVM()
+            var editMovie = new MovieVM()
             {
                 Id = movie.Id,
                 Title = movie.Title,
@@ -162,13 +162,13 @@ namespace MoviesApp.Controllers
                 Age = movie.Age,
                 PictUrl = movie.PictUrl
             };
-            return View(movieVM);
+            return View(editMovie);
         }
 
         [Authorize]
         // POST: Movies/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, EditMovieVM movieVM)
+        public async Task<IActionResult> Edit(int id, MovieVM movieVM)
         {
             if (!ModelState.IsValid)
             {

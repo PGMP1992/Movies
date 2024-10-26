@@ -24,7 +24,7 @@ namespace MoviesApp.Controllers
         }
 
         [Authorize]
-        private void MapUserEdit(AppUser user, EditUserDashboardVM editVM, ImageUploadResult photoResult)
+        private void MapUserEdit(AppUser user, EditUserVM editVM, ImageUploadResult photoResult)
         {
             user.Id = editVM.Id;
             user.ImageUrl = photoResult.Url.ToString();
@@ -59,7 +59,7 @@ namespace MoviesApp.Controllers
 
             if (user == null) return View("Error");
 
-            var editUserVM = new EditUserDashboardVM()
+            var editUserVM = new EditUserVM()
             {
                 Id = curUserId,
                 UserName = user.UserName,
@@ -73,7 +73,7 @@ namespace MoviesApp.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> editUserProfile(EditUserDashboardVM editVM)
+        public async Task<IActionResult> editUserProfile(EditUserVM editVM)
         {
             if (!ModelState.IsValid)
             {

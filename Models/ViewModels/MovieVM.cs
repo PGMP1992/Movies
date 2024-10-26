@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
+
+//Created this for Saving Picture to Cloudinary
 
 namespace MoviesApp.Models.ViewModels
 {
-    public class EditMovieVM
+    public class MovieVM
     {
         public int Id { get; set; }
 
@@ -19,14 +22,16 @@ namespace MoviesApp.Models.ViewModels
         public string Genre { get; set; } = "";
 
         [Required]
-        [Range(0, 18)]
+        [Range(1, 18)]
         [Display(Name = "Minimun Age")]
         public int Age { get; set; }
 
-        [Display(Name = "Picture URL")]
-        public string? PictUrl { get; set; }
+        public string? PictUrl { get; set; } = "";
 
-        public IFormFile? Image { get; set; }
+        [ValidateNever]
+        [MaxLength(300)]
+        [Display(Name = "Picture URL")]
+        public IFormFile Image { get; set; }
     }
 }
 

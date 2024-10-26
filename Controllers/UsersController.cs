@@ -28,11 +28,11 @@ namespace MoviesApp.Controllers
         public async Task<IActionResult> Index()
         {
             var users = await _userRepos.GetAllUsers();
-            List<UsersVM> result = new List<UsersVM>();
+            List<UserVM> result = new List<UserVM>();
 
             foreach (var user in users)
             {
-                var usersVM = new UsersVM()
+                var usersVM = new UserVM()
                 {
                     Id = user.Id,
                     UserName = user.UserName,
@@ -54,7 +54,7 @@ namespace MoviesApp.Controllers
                 return RedirectToAction("Index", "Users");
             }
 
-            var usersDetailsVM = new UsersDetailsVM()
+            var usersDetailsVM = new UserVM()
             {
                 Id = user.Id,
                 UserName = user.UserName,
