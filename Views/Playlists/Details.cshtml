@@ -17,10 +17,8 @@
                     <h6>Name</h6>
                     <p class="card-text">@Model.Playlist.Name<p>
 
-                    <h6>Description</h6>
-                    <p class="card-text">@Model.Playlist.Description</p>
            
-                     @if (Model.Playlist.MovieList.Any())
+                     @if (Model.Playlist.Movies.Any())
                      {
                         <h6>Movies</h6>
                         <div class=container>
@@ -31,13 +29,16 @@
                                     <th>Age</th>
                                     <th></th>
                                 </tr>
-                                @foreach( Movie item in Model.Playlist.MovieList)
+                                @foreach( Movie item in Model.Playlist.Movies)
                                 {
                                     <tr>
                                         <td>@item.Title</td>
                                         <td>@item.Genre</td>
                                         <td>@item.Age</td>
-                                        <td><a asp-action="RemoveMovie" asp-controller="Playlists" asp-route-id="@Model.Playlist.MovieList" type="button" class="btn btn-sm btn-outline-danger">Delete</a></td>
+                                        <td><a asp-action="RemoveMovie" 
+                                            asp-controller="Playlists" 
+                                            asp-route-id="@Model.Playlist.Movies" 
+                                            type="button" class="btn btn-sm btn-outline-danger">Delete</a></td>
                                     </tr>
                                 }
                             </table>
@@ -55,7 +56,8 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <a asp-action="Edit" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-primary">Edit</a>
-                <a asp-action="DeleteMovie" asp-route-id="@Model.Playlist.MovieList.Remove" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+                <a asp-action="DeleteMovie" asp-route-id="@Model.Playlist.Movies.Remove" 
+                    type="button" class="btn btn-sm btn-outline-danger">Delete</a>
                 @* Passing Playlist Id
             <a asp-action="AddMovie" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-dark">Add Movie</a> *@
             }

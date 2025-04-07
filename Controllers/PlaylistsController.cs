@@ -67,7 +67,7 @@ namespace MoviesApp.Controllers
                 PlaylistId = playlist.Id,
                 AppUser = playlist.AppUser,
                 AppUserId = playlist.AppUserId,
-                MoviesList = playlist.MovieList
+                MoviesList = playlist.Movies
             };
             
             return View(newVm);
@@ -88,7 +88,7 @@ namespace MoviesApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                //playlist.MovieList.Add(movie); 
+                //playlist.Movies.Add(movie); 
                 //_playlistRepos.Update(playlist);
             }
             return View();
@@ -100,7 +100,7 @@ namespace MoviesApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                playlist.MovieList.Remove(movie);
+                playlist.Movies.Remove(movie);
                 _playlistRepos.Update(playlist);
             }
             return View();
@@ -110,12 +110,9 @@ namespace MoviesApp.Controllers
         public IActionResult Create()
         {
             var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-            //var createPlaylistMoviesVM = new PlaylistMoviesVM { AppUserId = curUserId };
             var playlist = new Playlist { AppUserId = curUserId };
 
-            //return View(createPlaylistMoviesVM);
             return View(playlist);
-            //return View();
         }
 
         // POST: Playlists/Create

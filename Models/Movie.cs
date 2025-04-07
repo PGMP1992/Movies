@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MoviesApp.Models
 {
@@ -24,11 +23,10 @@ namespace MoviesApp.Models
         [Display(Name = "Minimun Age")]
         public int Age { get; set; }
 
-        //[Required]
         [MaxLength(500)]
         [Display(Name = "Picture URL")]
         public string? PictUrl { get; set; } = "";
 
-        public List<Playlist> PlaylistList { get; set; }
+        public List<Playlist> Playlists { get; set; }
     }
 }

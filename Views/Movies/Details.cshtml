@@ -10,13 +10,16 @@
     <small class="text-body-secondary">@Model.Title</small>
 </h5>
 
+<p class="text-danger">@ViewBag.Message </p>
+
 <form asp-action="Details" method="post">
     <input hidden asp-for="Id" />
     <div class="card mb-3" style="max-width: 100%">
         <div class=" row g-0">
             <div class="col-md-4">
-                <img src="@Model.PictUrl" class="img-fluid rounded-start" width="100%" height="auto" alt="@Model.Title">
+                <img src="@Model.PictUrl" class="img-fluid rounded-start w-100" alt="@Model.Title">
             </div>
+            
             <div class="col-md-8">
                 <div class="card-body">
                     <h6>Description</h6>
@@ -25,13 +28,14 @@
                     <p class="card-text">@Model.Genre</p>
                     <h6>Minimum Age:</h6>
                     <p class="card-text"> @Model.Age</p>
+            
                     @if (User.Identity.IsAuthenticated)
                     {
                         <hr />
                         <div class="form-group">
                             <label asp-for="@Model.PlaylistId" class="control-label">User Playlists: </label>
                             <select asp-for="@Model.PlaylistId" class="form-control" asp-items="ViewBag.playlistName"></select>
-                            <button type="submit" class="btn btn-sm btn-outline-primary form-control">Add to Playlist</button>
+                            <button type="submit" class="btn btn-sm btn-outline-primary mt-2">Add to Playlist</button>
                         </div>
                     }
                 </div>

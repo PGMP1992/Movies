@@ -20,13 +20,12 @@ namespace MoviesApp.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Playlist>()
-                .HasMany(x => x.MovieList)
-                .WithMany(y => y.PlaylistList)
-                .UsingEntity(j => j.ToTable("MoviePlaylist"));
+                .HasMany(x => x.Movies)
+                .WithMany(y => y.Playlists);
 
-            //modelBuilder.Entity<Movie>()
-            //    .HasMany(e => e.PlaylistList)
-            //    .WithMany(e => e.MovieList);
+            modelBuilder.Entity<Movie>()
+                .HasMany(e => e.Playlists)
+                .WithMany(e => e.Movies);
         }
     }
 

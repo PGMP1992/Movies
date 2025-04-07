@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MoviesApp.Data;
 using MoviesApp.Models;
-using MoviesApp.Repos;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
 
@@ -69,15 +67,11 @@ namespace MoviesApp.Controllers
                 Genre = movie.Genre,
                 Age = movie.Age,
                 PictUrl = movie.PictUrl
-                //PlaylistSelect = await _playlistRepos.GetAllByUserName(user)
-                //    .Select(i => new SelectListItem {
-                //   Text  = i.Name,
-                //   Value = i.Id.ToString()  
-                //})
             };
-            
-            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user)
-                    .ConfigureAwait(false), "Id", "Name");
+
+            ViewData["playlistName"] = new SelectList(
+                await _playlistRepos.GetAllByUserName(user)
+                .ConfigureAwait(false), "Id", "Name");
 
             return View(movieVM);
         }
@@ -92,14 +86,20 @@ namespace MoviesApp.Controllers
                 ModelState.AddModelError("", "Failed to Add Movie");
                 return View("Details", movieVM);
             }
-            
-            var movie = await _movieRepos.GetByIdAsyncNoTracking(movieVM.Id);
+
+            var movie = await _movieRepos.GetByIdAsync(movieVM.Id);
             var playlist = await _playlistRepos.GetByIdAsync(movieVM.PlaylistId);
 
-            playlist.MovieList.Add(movie);
+            if (playlist.Movies.Contains(movie))
+            {
+                ViewBag.Message = "Movie is already in that playlist!";
+            }
+            else
+            {
+                playlist.Movies.Add(movie);
+                _playlistRepos.Update(playlist);
 
-            _playlistRepos.Update(playlist);
-            _playlistRepos.Save();
+            }
 
             return RedirectToAction(nameof(Details));
         }
