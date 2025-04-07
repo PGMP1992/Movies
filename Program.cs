@@ -57,53 +57,53 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 //creating Roles - OK
-//using (var scope = app.Services.CreateScope())
-//{
-//    var roleManager =
-//            scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager =
+            scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-//    var roles = new[] { "admin", "user" };
-//    foreach (var role in roles)
-//    {
-//        if (!await roleManager.RoleExistsAsync(role))
-//            await roleManager.CreateAsync(new IdentityRole(role));
-//    }
-//}
+    var roles = new[] { "admin", "user" };
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+            await roleManager.CreateAsync(new IdentityRole(role));
+    }
+}
 
 //// creating Roles with the same password
-//using (var scope = app.Services.CreateScope())
-//{
-//    var userManager =
-//            scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+using (var scope = app.Services.CreateScope())
+{
+    var userManager =
+            scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
-//    // Admin ---------------------------------
-//    string email = "admin@host.com";
-//    string password = "Password1_";
+    // Admin ---------------------------------
+    string email = "admin@host.com";
+    string password = "Password1_";
 
-//    if (await userManager.FindByEmailAsync(email) == null)
-//    {
-//        var user = new IdentityUser();
-//        user.UserName = email;
-//        user.Email = email;
-//        user.EmailConfirmed = true;
+    if (await userManager.FindByEmailAsync(email) == null)
+    {
+        var user = new AppUser();
+        user.UserName = email;
+        user.Email = email;
+        user.EmailConfirmed = true;
 
-//        await userManager.CreateAsync(user, password);
-//        await userManager.AddToRoleAsync(user, "admin");
-//    }
+        await userManager.CreateAsync(user, password);
+        await userManager.AddToRoleAsync(user, "admin");
+    }
 
-//    // User --------------------------------- 
-//    string userAcc = "user@host.com";
+    // User --------------------------------- 
+    string userAcc = "user@host.com";
 
-//    if (await userManager.FindByEmailAsync(userAcc) == null)
-//    {
-//        var user1 = new IdentityUser();
-//        user1.UserName = userAcc;
-//        user1.Email = userAcc;
-//        user1.EmailConfirmed = true;
+    if (await userManager.FindByEmailAsync(userAcc) == null)
+    {
+        var user1 = new AppUser();
+        user1.UserName = userAcc;
+        user1.Email = userAcc;
+        user1.EmailConfirmed = true;
 
-//        await userManager.CreateAsync(user1, password);
-//        await userManager.AddToRoleAsync(user1, "user");
-//    }
-//}
+        await userManager.CreateAsync(user1, password);
+        await userManager.AddToRoleAsync(user1, "user");
+    }
+}
 
 app.Run();

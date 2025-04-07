@@ -8,7 +8,7 @@ using MoviesApp.Data;
 
 #nullable disable
 
-namespace Movies.Data.Migrations
+namespace MoviesApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -280,7 +280,7 @@ namespace Movies.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
@@ -309,7 +309,7 @@ namespace Movies.Data.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Playlists", (string)null);
+                    b.ToTable("Playlists");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
