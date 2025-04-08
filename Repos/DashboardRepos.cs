@@ -19,7 +19,9 @@ namespace MoviesApp.Repos
         public async Task<List<Playlist>> GetAllUserPlaylists()
         {
             var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
-            var userPlaylists = _context.Playlists.Where(r => r.AppUser.Id == curUser);
+            var userPlaylists = _context.Playlists
+                .Where(r => r.AppUser.Id == curUser);
+            
             return userPlaylists.ToList();
         }
 

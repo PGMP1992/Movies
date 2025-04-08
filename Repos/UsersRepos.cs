@@ -22,12 +22,16 @@ namespace MoviesApp.Repos
 
         public async Task<List<AppUser>> GetAll()
         {
-            return await _context.AppUsers.OrderBy(u=>u.UserName).ToListAsync();
+            return await _context.Users
+                .AsNoTracking()
+                .OrderBy(u=>u.UserName)
+                .ToListAsync();
         }
 
         public async Task<AppUser> GetById(string id)
         {
-            return await _context.AppUsers.FindAsync(id);
+            return await _context.Users
+                .FindAsync(id);
         }
 
         public bool Save()

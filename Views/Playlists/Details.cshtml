@@ -1,24 +1,19 @@
-﻿@model Playlist 
-@* @model MoviesApp.ViewModels.PlaylistMoviesVM *@
+﻿@model MoviesApp.ViewModels.PlaylistMoviesVM
 
 <form method="post">
 
 <h3>Playlist</h3>
 
 <div>
-    <div class="card mb-3" style="max-width: 100%">
+    <div class="card mb-3">
         <div class=" row g-0">
-            <div class="col-md-12">
+            <div class="col">
                 <div class="card-body">
                     <h6>Name</h6>
-                    <p class="card-text">@Model.Name<p>
-
-                    <h6>Description</h6>
-                    <p class="card-text">@Model.Description</p>
+                    <p class="card-text">@Model.Playlist.Name<p>
            
-                    @if (Model.MoviesList.Any())
-                    {
-                        <hr />
+                     @if (Model.Playlist.Movies.Any())
+                     {
                         <h6>Movies</h6>
                         <div class=container>
                             <table class="table table-responsive">
@@ -28,14 +23,19 @@
                                     <th>Age</th>
                                     <th></th>
                                 </tr>
-                                @* @foreach( Movie item in Model.Playlist.MovieList)
-                                { 
-                                     <tr>
+                                @foreach( Movie item in Model.Playlist.Movies)
+                                {
+                                    <tr>
                                         <td>@item.Title</td>
                                         <td>@item.Genre</td>
                                         <td>@item.Age</td>
-                                        <td><a asp-action="RemoveMovie" asp-route-id="@item.Id" 
-                                            type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+                                        <td>
+                                            <a asp-controller="Playlists"
+                                                asp-action="RemoveMovie" 
+                                                asp-route-playlistId= "@Model.Playlist.Id"
+                                                asp-route-movieId="@item.Id" 
+                                                type="button" class="btn btn-sm btn-outline-danger">Delete
+                                            </a>
                                         </td>
                                     </tr>
                                 } *@
@@ -51,10 +51,11 @@
         <div class="btn-group">
             @if (User.Identity.IsAuthenticated)
             {
-                <a asp-action="Edit" asp-route-id="@Model.Id" type="button" 
-                    class="btn btn-sm btn-outline-primary">Edit</a>
+                <a asp-action="Edit" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-primary mx-1">Edit</a>
+                <a asp-action="DeleteMovie" asp-route-id="@Model.Playlist.Movies.Remove"
+                   type="button" class="btn btn-sm btn-outline-danger">Delete</a>
             }
-            <a asp-action="Index" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark">Back</a>
+            <a asp-action="Index" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-dark  mx-1">Back</a>
         </div>
     </div>
 </div>

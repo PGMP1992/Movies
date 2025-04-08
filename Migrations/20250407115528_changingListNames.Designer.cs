@@ -12,19 +12,15 @@ using MoviesApp.Data;
 namespace MoviesApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Migrations/20241026072301_initial.Designer.cs
-    [Migration("20241026072301_initial")]
-========
-    [Migration("20250407075146_initial")]
->>>>>>>> Dev:Migrations/20250407075146_initial.Designer.cs
-    partial class initial
+    [Migration("20250407115528_changingListNames")]
+    partial class changingListNames
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -168,17 +164,17 @@ namespace MoviesApp.Migrations
 
             modelBuilder.Entity("MoviePlaylist", b =>
                 {
-                    b.Property<int>("MoviesListId")
+                    b.Property<int>("MoviesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PlaylistListId")
+                    b.Property<int>("PlaylistsId")
                         .HasColumnType("int");
 
-                    b.HasKey("MoviesListId", "PlaylistListId");
+                    b.HasKey("MoviesId", "PlaylistsId");
 
-                    b.HasIndex("PlaylistListId");
+                    b.HasIndex("PlaylistsId");
 
-                    b.ToTable("MoviePlaylist", (string)null);
+                    b.ToTable("MoviePlaylist");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
@@ -302,11 +298,6 @@ namespace MoviesApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -317,29 +308,6 @@ namespace MoviesApp.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Playlists");
-                });
-
-            modelBuilder.Entity("MoviesApp.Models.PlaylistMovie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlaylistId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("PlaylistId");
-
-                    b.ToTable("PlaylistMovies");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -397,13 +365,13 @@ namespace MoviesApp.Migrations
                 {
                     b.HasOne("MoviesApp.Models.Movie", null)
                         .WithMany()
-                        .HasForeignKey("MoviesListId")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MoviesApp.Models.Playlist", null)
                         .WithMany()
-                        .HasForeignKey("PlaylistListId")
+                        .HasForeignKey("PlaylistsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -417,25 +385,6 @@ namespace MoviesApp.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
-                });
-
-            modelBuilder.Entity("MoviesApp.Models.PlaylistMovie", b =>
-                {
-                    b.HasOne("MoviesApp.Models.Movie", "Movie")
-                        .WithMany()
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MoviesApp.Models.Playlist", "Playlist")
-                        .WithMany()
-                        .HasForeignKey("PlaylistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Movie");
-
-                    b.Navigation("Playlist");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>

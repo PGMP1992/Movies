@@ -12,10 +12,6 @@ namespace MoviesApp.Models
         [MaxLength(50)]
         public string Name { get; set; } = "";
 
-        [ValidateNever]
-        [MaxLength(100)]
-        public string Description { get; set; } = "";
-
         public string AppUserId { get; set; } = "";
         
         [ValidateNever]
@@ -23,6 +19,6 @@ namespace MoviesApp.Models
         public AppUser AppUser { get; set; }
 
         [ValidateNever]
-        public List<Movie> MoviesList { get; set; }
+        public List<Movie> Movies { get; set; }
     }
 }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MoviesApp.Data;
 using MoviesApp.Models;
-using MoviesApp.Models.ViewModels;
 using MoviesApp.Repos.Interfaces;
 
 namespace MoviesApp.Controllers
@@ -58,10 +57,15 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var user = _httpContextAccessor.HttpContext.User.GetUserId();
-            var movie = await _movieRepos.GetByIdNoTracking(id);
-            var movies = await _playlistMovieRepos.GetAll();
-            
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = _httpContextAccessor.HttpContext.User.GetUserId();
+                ViewData["playlistName"] = new SelectList(
+                    await _playlistRepos.GetAllByUserName(user)
+                        .ConfigureAwait(false), "Id", "Name");
+            }
+            var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
+
             if (movie == null)
             {
                 return NotFound();
@@ -75,15 +79,11 @@ namespace MoviesApp.Controllers
                 Genre = movie.Genre,
                 Age = movie.Age,
                 PictUrl = movie.PictUrl
-                //PlaylistSelect = await _playlistRepos.GetAllByUserName(user)
-                //    .Select(i => new SelectListItem {
-                //   Text  = i.Name,
-                //   Value = i.Id.ToString()  
-                //})
             };
-            
-            ViewData["playlistName"] = new SelectList(await _playlistRepos.GetAllByUserName(user)
-                    .ConfigureAwait(false), "Id", "Name");
+
+                //ViewData["playlistName"] = new SelectList(
+                //    await _playlistRepos.GetAllByUserName(user)
+                //        .ConfigureAwait(false), "Id", "Name");
 
             PlaylistMovie newPM = new PlaylistMovie()
             {
@@ -108,20 +108,14 @@ namespace MoviesApp.Controllers
                 return View("Details", pm);
             }
 
-            var newMovie = await _movieRepos.GetByIdNoTracking(pm.MovieId);
-            var playlist = await _playlistRepos.GetById(pm.PlaylistId);
+            var movie = await _movieRepos.GetByIdAsync(movieVM.Id);
+            var playlist = await _playlistRepos.GetByIdAsync(movieVM.PlaylistId);
 
-            // Check if Movie in Playlist.MovieList
-            //if ( _playlistMovieRepos.FirstOrDefault(pm.PlaylistId) != null)
-            //{
-            //    ViewBag.Message = "Film is already in this Playlist!";
-            //}
-            //else
-            //{
-
-            _playlistRepos.Update(playlist);
-            ViewBag.Message = "Movie Added to Playlist.";
-            //} 
+            if (! playlist.Movies.Contains(movie))
+            {
+                playlist.Movies.Add(movie);
+                _playlistRepos.Update(playlist);
+            }
             return RedirectToAction(nameof(Details));
         }
 

@@ -23,15 +23,14 @@ namespace MoviesApp.Data
         //    // // Added to enable Identity - Not sure if that is a bug 
         //    base.OnModelCreating(modelBuilder);
 
-        //    modelBuilder.Entity<Playlist>()
-        //        .HasMany(x => x.MovieList)
-        //        .WithMany(y => y.PlaylistList);
-        //        //.UsingEntity(j => j.ToTable("MoviePlaylist"));
+            modelBuilder.Entity<Playlist>()
+                .HasMany(x => x.Movies)
+                .WithMany(y => y.Playlists);
 
-        //    modelBuilder.Entity<Movie>()
-        //        .HasMany(e => e.PlaylistList)
-        //        .WithMany(e => e.MovieList);
-        //}
+            modelBuilder.Entity<Movie>()
+                .HasMany(e => e.Playlists)
+                .WithMany(e => e.Movies);
+        }
     }
 
     

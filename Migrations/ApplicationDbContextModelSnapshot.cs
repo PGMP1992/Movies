@@ -161,15 +161,23 @@ namespace MoviesApp.Migrations
 
             modelBuilder.Entity("MoviePlaylist", b =>
                 {
+<<<<<<< HEAD
                     b.Property<int>("MoviesListId")
+=======
+                    b.Property<int>("MoviesId")
+>>>>>>> Dev
                         .HasColumnType("int");
 
-                    b.Property<int>("PlaylistListId")
+                    b.Property<int>("PlaylistsId")
                         .HasColumnType("int");
 
+<<<<<<< HEAD
                     b.HasKey("MoviesListId", "PlaylistListId");
+=======
+                    b.HasKey("MoviesId", "PlaylistsId");
+>>>>>>> Dev
 
-                    b.HasIndex("PlaylistListId");
+                    b.HasIndex("PlaylistsId");
 
                     b.ToTable("MoviePlaylist");
                 });
@@ -295,11 +303,6 @@ namespace MoviesApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -310,6 +313,7 @@ namespace MoviesApp.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Playlists");
+<<<<<<< HEAD
                 });
 
             modelBuilder.Entity("MoviesApp.Models.PlaylistMovie", b =>
@@ -333,6 +337,8 @@ namespace MoviesApp.Migrations
                     b.HasIndex("PlaylistId");
 
                     b.ToTable("PlaylistMovies");
+=======
+>>>>>>> Dev
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -390,13 +396,17 @@ namespace MoviesApp.Migrations
                 {
                     b.HasOne("MoviesApp.Models.Movie", null)
                         .WithMany()
+<<<<<<< HEAD
                         .HasForeignKey("MoviesListId")
+=======
+                        .HasForeignKey("MoviesId")
+>>>>>>> Dev
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MoviesApp.Models.Playlist", null)
                         .WithMany()
-                        .HasForeignKey("PlaylistListId")
+                        .HasForeignKey("PlaylistsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
