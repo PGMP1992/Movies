@@ -54,6 +54,7 @@ namespace MoviesApp.Controllers
 
             var user = _httpContextAccessor.HttpContext.User.GetUserId();
             var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
+
             if (movie == null)
             {
                 return NotFound();
@@ -71,7 +72,7 @@ namespace MoviesApp.Controllers
 
             ViewData["playlistName"] = new SelectList(
                 await _playlistRepos.GetAllByUserName(user)
-                .ConfigureAwait(false), "Id", "Name");
+                    .ConfigureAwait(false), "Id", "Name");
 
             return View(movieVM);
         }
@@ -90,17 +91,11 @@ namespace MoviesApp.Controllers
             var movie = await _movieRepos.GetByIdAsync(movieVM.Id);
             var playlist = await _playlistRepos.GetByIdAsync(movieVM.PlaylistId);
 
-            if (playlist.Movies.Contains(movie))
-            {
-                ViewBag.Message = "Movie is already in that playlist!";
-            }
-            else
+            if (! playlist.Movies.Contains(movie))
             {
                 playlist.Movies.Add(movie);
                 _playlistRepos.Update(playlist);
-
             }
-
             return RedirectToAction(nameof(Details));
         }
 
