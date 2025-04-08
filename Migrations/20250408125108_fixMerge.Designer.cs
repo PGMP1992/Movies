@@ -12,8 +12,8 @@ using MoviesApp.Data;
 namespace MoviesApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250407075146_initial")]
-    partial class initial
+    [Migration("20250408125108_fixMerge")]
+    partial class fixMerge
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,17 +164,17 @@ namespace MoviesApp.Migrations
 
             modelBuilder.Entity("MoviePlaylist", b =>
                 {
-                    b.Property<int>("MovieListId")
+                    b.Property<int>("MoviesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PlaylistListId")
+                    b.Property<int>("PlaylistsId")
                         .HasColumnType("int");
 
-                    b.HasKey("MovieListId", "PlaylistListId");
+                    b.HasKey("MoviesId", "PlaylistsId");
 
-                    b.HasIndex("PlaylistListId");
+                    b.HasIndex("PlaylistsId");
 
-                    b.ToTable("MoviePlaylist", (string)null);
+                    b.ToTable("MoviePlaylist");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
@@ -298,11 +298,6 @@ namespace MoviesApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -370,13 +365,13 @@ namespace MoviesApp.Migrations
                 {
                     b.HasOne("MoviesApp.Models.Movie", null)
                         .WithMany()
-                        .HasForeignKey("MovieListId")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MoviesApp.Models.Playlist", null)
                         .WithMany()
-                        .HasForeignKey("PlaylistListId")
+                        .HasForeignKey("PlaylistsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

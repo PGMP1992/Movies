@@ -20,7 +20,8 @@ namespace MoviesApp.Repos
         {
             var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
             var userPlaylists = _context.Playlists
-                .Where(r => r.AppUser.Id == curUser);
+                .Where(r => r.AppUser.Id == curUser)
+                .Include(r=>r.Movies);
             
             return userPlaylists.ToList();
         }
