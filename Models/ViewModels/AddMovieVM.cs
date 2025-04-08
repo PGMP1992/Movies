@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using MoviesApp.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace MoviesApp.ViewModels
+namespace MoviesApp.Models.ViewModels
 {
     public class AddMovieVM
     {

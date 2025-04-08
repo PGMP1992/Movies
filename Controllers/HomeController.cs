@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Helpers;
 using MoviesApp.Models;
+using MoviesApp.Models.ViewModels;
 using MoviesApp.Repos.Interfaces;
-using MoviesApp.ViewModels;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Globalization;

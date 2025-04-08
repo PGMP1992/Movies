@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Data;
 using MoviesApp.Models;
+using MoviesApp.Models.ViewModels;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.Models.ViewModels;
 
