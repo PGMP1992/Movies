@@ -24,7 +24,7 @@ namespace MoviesApp.Controllers
         }
 
         [Authorize]
-        private void MapUserEdit(AppUser user, EditUserDashboardVM editVM, ImageUploadResult photoResult)
+        private void MapUserEdit(AppUser user, EditUserVM editVM, ImageUploadResult photoResult)
         {
             user.Id = editVM.Id;
             user.ProfileImageryUrl = photoResult.Url.ToString();
@@ -59,7 +59,7 @@ namespace MoviesApp.Controllers
 
             if (user == null) return View("Error");
 
-            var editUserVM = new EditUserDashboardVM()
+            var editUserVM = new EditUserVM()
             {
                 Id = curUserId,
                 UserName = user.UserName,
@@ -73,7 +73,7 @@ namespace MoviesApp.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> editUserProfile(EditUserDashboardVM editVM)
+        public async Task<IActionResult> editUserProfile(EditUserVM editVM)
         {
             if (!ModelState.IsValid)
             {
@@ -82,6 +82,7 @@ namespace MoviesApp.Controllers
             }
 
             var user = await _dashboardRepos.GetByIdNoTracking(editVM.Id);
+            
             if (user.ProfileImageryUrl == "" || user.ProfileImageryUrl == null)
             {
                 var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
@@ -95,7 +96,13 @@ namespace MoviesApp.Controllers
             {
                 try
                 {
-                    await _photoService.DeletePhotoAsync(user.ProfileImageryUrl);
+                    if(editVM.ProfileImageUrl != user.ProfileImageryUrl)
+                    {
+                        // This is wrong. Should have a check if it is different image
+                        await _photoService.DeletePhotoAsync(user.ProfileImageryUrl);
+                        var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
+                        MapUserEdit(user, editVM, photoResult);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -103,9 +110,9 @@ namespace MoviesApp.Controllers
                     return View(editVM);
                 }
 
-                var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
-                MapUserEdit(user, editVM, photoResult);
-                
+                user.City = editVM.City;
+                user.State = editVM.State;
+
                 // Optmistic Concurrency - 
                 _dashboardRepos.Update(user);
                 return RedirectToAction("Index");

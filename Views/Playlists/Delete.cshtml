@@ -7,24 +7,11 @@
 <h3>Playlist</h3>
 
 <h5>Are you sure you want to delete this?</h5>
-<br />
 
 <h5>
     Playlist:
-    <small class="text-body-secondary">@Model.Name</small>
+    <small class="text-body-secondary mb-2">@Model.Name</small>
 </h5>
-
-<main>
-    <div class="card mb-3" style="max-width: 100%">
-        <div class=" row g-0">
-            <div class="col-md-8">
-                <div class="card-body">
-            
-                 </div>
-            </div>
-        </div>
-    </div>
-</main>
 
 <form asp-action="Delete">
     <input type="hidden" asp-for="Id" />

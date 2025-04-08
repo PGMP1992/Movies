@@ -21,9 +21,9 @@
                 <div class="container">
                     <h6>Playlists</h6>
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                                        @foreach (var item in Model.Playlists)
+                            @foreach (var item in Model.Playlists)
                             {
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 <div class="card mb-4 box-shadow">
                                     @* <img class="card-img-top" src="@item.PictUrl" width="100%" height="225" alt="Card image cap"> *@ 
                                     <div class="card-body">
@@ -34,11 +34,10 @@
                                                    class="btn btn-sm btn-outline-primary">View</a>
                                                     @if (User.Identity.IsAuthenticated)
                                                     {
-                                                        <a asp-controller="Playlists" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                                        <a asp-controller="Playlists" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary mx-1">Edit</a>
                                                         <a asp-controller="Playlists" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
                                                     }
                                             </div>
-                                            @* <small class="text-muted">@item.RaceCategory</small> *@
                                         </div>
                                     </div>
                                 </div>

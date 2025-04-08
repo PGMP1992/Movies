@@ -19,13 +19,13 @@
         <div class="row g-0">
             @foreach (var item in Model)
             {
-                <div class="card mb-3" style="max-width: 500px;">
+                <div class="card mb-2 mx-1" style="max-width: 500px;">
                     <div class="row g-0">
                         <div class="col-md-8">
                             <div class="card-body">
                                 @if (User.IsInRole("admin"))
                                 {
-                                    <h5>User: <small>@item.AppUser.Email</small></h5>
+                                    <h5>@item.AppUser.Email</h5>
                                 }
                                 <h5 class="card-title">@item.Name</h5>
 
@@ -36,7 +36,7 @@
                                         @if (User.Identity.IsAuthenticated)
                                         {
                                             <a asp-action="Edit" asp-route-id="@item.Id" type="button"
-                                                class="btn btn-sm btn-outline-primary">Edit</a>
+                                                class="btn btn-sm btn-outline-primary mx-1">Edit</a>
                                             <a asp-action="Delete" asp-route-id="@item.Id" type="button"
                                                 class="btn btn-sm btn-outline-danger">Delete</a>
                                         }
