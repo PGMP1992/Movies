@@ -1,3 +1,23 @@
+:root {
+    --blur-bg: rgba(233, 236, 241, 0.877);
+    --back: #ffffffff;
+    --font: #1f1f1f;
+    --a: #007AFF;
+    --tablinks: var(--blur-bg);
+    --h: #1c1c1e;
+    --card-shadow: rgba(0, 0, 0, 0.1);
+}
+
+    :root .dark-theme {
+        --blur-bg: rgb(23, 23, 24);
+        --back: #1c1c1e;
+        --font: #ffffffd2;
+        --a: #2f90f8;
+        --tablinks: var(--blur-bg);
+        --h: #ffffffff;
+        --card-shadow: rgba(0, 0, 0, 0.4);
+    } 
+
 html {
     position: relative;
     min-height: 100%;
@@ -21,7 +41,7 @@ body {
     flex-direction: column;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: var(--blur-bg);
+    background-color:var(--back);
     color: var(--font);
 }
 
@@ -34,7 +54,7 @@ h1,h2,h3,h4,h5,h6 {
 
 
 .navbar {
-    background-color:white;
+    background-color: var(--blur-bg);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     top: 0;
@@ -68,9 +88,10 @@ main {
 
 footer {
     flex-shrink: 0;
+    padding: 5px;
     width: 100%;
     text-align: center;
-    background-color: rgba(233, 236, 241, 0.877);
+    background-color: var(--blur-bg);
     backdrop-filter: blur(10px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     margin-top: auto;

@@ -12,16 +12,16 @@
     <p><a asp-action="Create" class="btn btn-sm btn-outline-primary">Create</a></p>
 }
 
-<form asp-controller="Movies" asp-action="Index">
+@* <form asp-controller="Movies" asp-action="Index">
     <div>
         <input type="text" name="search" placeholder="Movie Name..." />
         <input type="submit" value="Search" class=" btn btn-sm btn-outline-primary" />
     </div>
 </form>
- 
+ *@ 
 <p class="text-danger">@ViewBag.Message </p>
  
-<div class="album py-5 bg-body-tertiary">
+<div class="album py-2 bg-body-tertiary">
     <div class="container">
         <div class="row g-0">
             @foreach (var item in Model)
