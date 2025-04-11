@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using MoviesApp.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using MoviesApp.Models;
 
 namespace MoviesApp.ViewModels
 {
@@ -12,7 +10,6 @@ namespace MoviesApp.ViewModels
         public string Genre { get; set; } = "";
         public int Age { get; set; }
         public string PictUrl { get; set; } = "";
-        //public IEnumerable<SelectListItem> PlaylistSelect { get; set; }
         public int PlaylistId { get; set; }
     }
 }

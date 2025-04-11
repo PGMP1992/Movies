@@ -55,10 +55,13 @@ namespace MoviesApp.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var user = _httpContextAccessor.HttpContext.User.GetUserId();
+
                 ViewData["playlistName"] = new SelectList(
                     await _playlistRepos.GetAllByUserName(user)
                         .ConfigureAwait(false), "Id", "Name");
+                
             }
+
             var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
 
             if (movie == null)
@@ -73,12 +76,8 @@ namespace MoviesApp.Controllers
                 Description = movie.Description,
                 Genre = movie.Genre,
                 Age = movie.Age,
-                PictUrl = movie.PictUrl
+                PictUrl = movie.PictUrl,
             };
-
-                //ViewData["playlistName"] = new SelectList(
-                //    await _playlistRepos.GetAllByUserName(user)
-                //        .ConfigureAwait(false), "Id", "Name");
 
             return View(movieVM);
         }
@@ -97,10 +96,13 @@ namespace MoviesApp.Controllers
             var movie = await _movieRepos.GetByIdAsync(movieVM.Id);
             var playlist = await _playlistRepos.GetByIdAsync(movieVM.PlaylistId);
 
-            if (! playlist.Movies.Contains(movie))
+            if (playlist != null) //Check if No Playlists
             {
-                playlist.Movies.Add(movie);
-                _playlistRepos.Update(playlist);
+                if (!playlist.Movies.Contains(movie))
+                {
+                    playlist.Movies.Add(movie);
+                    _playlistRepos.Update(playlist);
+                }
             }
             return RedirectToAction(nameof(Details));
         }

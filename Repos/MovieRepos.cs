@@ -43,6 +43,7 @@ namespace MoviesApp.Repos
             return await _context.Movies
                 .OrderBy(m=>m.Title)
                 .AsNoTracking()
+                .Include(m => m.Playlists)
                 .ToListAsync();
         }
 
