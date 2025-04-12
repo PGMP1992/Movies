@@ -1,8 +1,6 @@
-﻿using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Data;
-using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
 
@@ -10,15 +8,15 @@ namespace MoviesApp.Controllers
 {
     public class DashboardController : Controller
     {
-        private readonly IDashboardRepos _dashboardRepos;
+        private readonly IUsersRepos _usersRepos;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPhotoService _photoService;
 
-        public DashboardController(IDashboardRepos dashboardRepos,
+        public DashboardController(IUsersRepos usersRepos,
                                     IHttpContextAccessor httpContextAccessor,
                                     IPhotoService photoService)
         {
-            _dashboardRepos = dashboardRepos;
+            _usersRepos = usersRepos;
             _httpContextAccessor = httpContextAccessor;
             _photoService = photoService;
         }
@@ -34,10 +32,10 @@ namespace MoviesApp.Controllers
         public async Task<IActionResult> Index()
         {
             var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-            var user = await _dashboardRepos.GetUserById(curUserId);
+            var user = await _usersRepos.GetUserById(curUserId);
 
-            var userPlaylists = await _dashboardRepos.GetAllUserPlaylists();
-            
+            var userPlaylists = await _usersRepos.GetAllUserPlaylists();
+
             var userDetailsVM = new UsersDetailsVM()
             {
                 Playlists = userPlaylists,
@@ -82,7 +80,7 @@ namespace MoviesApp.Controllers
         //    }
 
         //    var user = await _dashboardRepos.GetByIdNoTracking(editVM.Id);
-            
+
         //    if (user.ProfileImageryUrl == "" || user.ProfileImageryUrl == null)
         //    {
         //        var photoResult = await _photoService.AddPhotoAsync(editVM.Image);

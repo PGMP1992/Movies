@@ -10,7 +10,7 @@
         <div class="col-md-8">
             <div class="card-body">
                 <h6 class="card-text">User Name: @Model.UserName</h6>
-                <form method="post" asp-action="EditUserProfile" enctype="multipart/form-data">
+                <form method="post" asp-action="Edit" enctype="multipart/form-data">
                     <input type="hidden" id="Id" name="Id" asp-for="Id" />
                     <input type="hidden" id="UserName" name="UserName" asp-for="UserName" />
                     <div class="form-group">

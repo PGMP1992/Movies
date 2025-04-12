@@ -8,10 +8,13 @@ namespace MoviesApp.Repos
     public class UsersRepos : IUsersRepos
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UsersRepos(ApplicationDbContext context)
+        public UsersRepos(ApplicationDbContext context,
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public bool Add(AppUser user)
@@ -37,6 +40,16 @@ namespace MoviesApp.Repos
         {
             return await _context.Users
                 .FindAsync(id);
+        }
+
+        public async Task<List<Playlist>> GetAllUserPlaylists()
+        {
+            var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
+            var userPlaylists = _context.Playlists
+                .Where(r => r.AppUser.Id == curUser)
+                .Include(r => r.Movies);
+
+            return userPlaylists.ToList();
         }
 
         public bool Save()
