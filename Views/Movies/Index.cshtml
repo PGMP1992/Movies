@@ -6,61 +6,51 @@
 
 <h3>Movies</h3>
 
-@* <a asp-action="Create">Create New</a> *@
 @if (User.Identity.IsAuthenticated) @*&& User.IsInRole("admin")) *@
 {
     <p><a asp-action="Create" class="btn btn-sm btn-outline-primary">Create</a></p>
 }
 
-@* <form asp-controller="Movies" asp-action="Index">
-    <div>
-        <input type="text" name="search" placeholder="Movie Name..." />
-        <input type="submit" value="Search" class=" btn btn-sm btn-outline-primary" />
-    </div>
-</form>
- *@ 
 <p class="text-danger">@ViewBag.Message </p>
  
-<div class="album py-2 bg-body-tertiary">
-    <div class="container">
-        <div class="row g-0">
-            @foreach (var item in Model)
-            {
-                <div class="card mx-2 mb-2" style="max-width: 500px;">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="@item.PictUrl" class="img-fluid rounded-start w-100" height="245" alt="@item.Title">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">@item.Title</h5>
-                                @*<p class="card-text">@item.Description</p> *@
-                                <h6 class="text-body-primary">@item.Genre</h6>
-                                <small class="text-body-secondary">Minimum Age: @item.Age</small>
+<div class="album bg-body-tertiary">
+    
+    <div class="row g-0">
+        @foreach (var item in Model)
+        {
+            <div class="card mx-2 mb-2" style="max-width: 400px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="@item.PictUrl" class="img-fluid rounded-start w-100" alt="@item.Title">
+                    </div>
+                    <div class="col-md-8 p-2">
+                        <h5 class="card-title">@item.Title</h5>
+                        <h6 class="text-body-primary">@item.Genre</h6>
+                        <p class="text-body-secondary">Minimum Age: @item.Age</p>
                                 
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group mt-3">
-                                        <a asp-action="Details" asp-route-id="@item.Id" 
-                                                class="btn btn-sm btn-outline-primary mx-1">View
-                                        </a>
-                                        
-                                        @if (User.Identity.IsAuthenticated) 
-                                        {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" type="button" 
-                                            class="btn btn-sm btn-outline-primary">Edit</a>
-                                            @if (User.IsInRole("admin"))
-                                            {
-                                                <a asp-action="Delete" asp-route-id="@item.Id" type="button" 
-                                                class="btn btn-sm btn-outline-danger mx-1">Delete</a>
-                                            }
-                                        }
-                                    </div>
-                                </div>
-                            </div>
+                        
+                    </div>
+                    <div class="card-footer border-0">
+                        <div class="btn-group">
+                            <a asp-action="Details" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-outline-primary mx-1">
+                                View
+                            </a>
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id" type="button"
+                                   class="btn btn-sm btn-outline-primary">Edit</a>
+                                @if (User.IsInRole("admin"))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" type="button"
+                                       class="btn btn-sm btn-outline-danger mx-1">Delete</a>
+                                }
+                            }
                         </div>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
 </div>

@@ -9,6 +9,6 @@ namespace MoviesApp.ViewModels
         public string City {  get; set; }
         public string State { get; set; }
         public string? ProfileImageUrl { get; set; }
-        public List<Playlist> playlists { get; set; }
+        public List<Playlist> Playlists { get; set; }
     }
 }

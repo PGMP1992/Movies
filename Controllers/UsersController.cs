@@ -5,7 +5,6 @@ using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
 
-
 namespace MoviesApp.Controllers
 {
     public class UsersController : Controller
@@ -45,25 +44,25 @@ namespace MoviesApp.Controllers
             return View(result);
         }
 
-        [Authorize]
-        public async Task<ActionResult> Detail(string id)
-        {
-            var user = await _userRepos.GetUserById(id);
-            if (user == null)
-            {
-                return RedirectToAction("Index", "Users");
-            }
+        //[Authorize]
+        //public async Task<ActionResult> Detail(string id)
+        //{
+        //    var user = await _userRepos.GetUserById(id);
+        //    if (user == null)
+        //    {
+        //        return RedirectToAction("Index", "Users");
+        //    }
 
-            var usersDetailsVM = new UsersDetailsVM()
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                City = user.City,
-                State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl ?? "/img/avatar-male-4.jpg",
-            };
-            return View(usersDetailsVM);
-        }
+        //    var usersDetailsVM = new UsersDetailsVM()
+        //    {
+        //        Id = user.Id,
+        //        UserName = user.UserName,
+        //        City = user.City,
+        //        State = user.State,
+        //        ProfileImageUrl = user.ProfileImageryUrl ?? "/img/avatar-male-4.jpg",
+        //    };
+        //    return View(usersDetailsVM);
+        //}
 
 
         // GET: Movies/EditProfile/5 -----------------------------------------------------------------

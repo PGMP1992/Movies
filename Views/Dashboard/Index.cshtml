@@ -1,8 +1,10 @@
-﻿@model MoviesApp.ViewModels.DashboardVM
+﻿@model MoviesApp.ViewModels.UsersDetailsVM
+
 @{
     ViewData["Title"] = "Profile";
 }
 
+<h4>Profile</h4>
 <div class="card mb-3" style="max-width: 100%">
     <div class=" row g-0">
         <div class="col-md-4">
@@ -10,10 +12,9 @@
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h6>Profile</h6> 
                 <a type="button" class="btn btn-sm btn-outline-primary" asp-area="" asp-controller="Playlists" asp-action="Create">Create Playlist</a>
                 <a type="button" class="btn btn-sm btn-outline-primary" asp-area="" asp-controller="Movies" asp-action="Create">Create Movie</a>
-                <a type="button" class="btn btn-sm btn-outline-primary" asp-area="" asp-controller="Dashboard" asp-action="EditUserProfile">Edit Profile</a>
+                <a type="button" class="btn btn-sm btn-outline-primary" asp-area="" asp-controller="Users" asp-action="Edit" asp-route-id="@Model.Id">Edit Profile</a>
 
                 @if ( Model.Playlists.Any())
                 {

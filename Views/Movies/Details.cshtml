@@ -14,7 +14,7 @@
 
 <form asp-action="Details" method="post">
     <input hidden asp-for="Id" />
-    <div class="card mb-3" style="max-width: 100%">
+    <div class="card mb-3">
         <div class=" row g-0">
             <div class="col-md-4">
                 <img src="@Model.PictUrl" class="img-fluid rounded-start w-100" alt="@Model.Title">
@@ -53,21 +53,21 @@
 
                 </div>
             </div>
-        </div> 
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group m-3">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-primary mx-1">Edit</a>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-danger ">Delete</a>
+                    }
+                }
+                <a asp-action="Index" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark mx-1">Back</a>
+            </div>
+        </div>
     </div>
 </form>
 
 
-<div class="d-flex justify-content-between align-items-center">
-    <div class="btn-group">
-        @if (User.Identity.IsAuthenticated)
-        {
-            <a asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-primary mx-1">Edit</a>
-            @if (User.IsInRole("admin"))
-            {
-                <a asp-action="Delete" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-danger ">Delete</a>
-            }
-        }
-        <a asp-action="Index" asp-route-id="@Model.Id" type="button" class="btn btn-sm btn-outline-dark mx-1">Back</a>
-    </div>
-</div>
