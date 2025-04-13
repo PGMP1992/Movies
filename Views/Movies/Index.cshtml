@@ -13,13 +13,12 @@
 
 <p class="text-danger">@ViewBag.Message </p>
  
-<div class="album bg-body-tertiary">
     
-    <div class="row g-0">
+    <div class="row row-cols-3 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 g-2">
         @foreach (var item in Model)
         {
-            <div class="card mx-2 mb-2" style="max-width: 400px;">
-                <div class="row g-0">
+            <div class="card mx-2 mb-2">
+                <div class="row g-3">
                     <div class="col-md-4">
                         <img src="@item.PictUrl" class="img-fluid rounded-start w-100" alt="@item.Title">
                     </div>
@@ -27,10 +26,6 @@
                         <h5 class="card-title">@item.Title</h5>
                         <h6 class="text-body-primary">@item.Genre</h6>
                         <p class="text-body-secondary">Minimum Age: @item.Age</p>
-                                
-                        
-                    </div>
-                    <div class="card-footer border-0">
                         <div class="btn-group">
                             <a asp-action="Details" asp-route-id="@item.Id"
                                class="btn btn-sm btn-outline-primary mx-1">
@@ -50,7 +45,8 @@
                         </div>
                     </div>
                 </div>
+
+                
             </div>
         }
     </div>
-</div>

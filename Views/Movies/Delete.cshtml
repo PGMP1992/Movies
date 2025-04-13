@@ -4,16 +4,15 @@
     ViewData["Title"] = "Delete";
 }
 
-<h5>Are you sure you want to delete this Movie?</h5>
+<h4 class="text-danger">Are you sure you want to delete this Movie?</h4>
 <br />
 
 <h5>
-    Movie:
-    <small class="text-body-secondary">@Model.Title</small>
+    @Model.Title
 </h5>
 
-    <div class="card mb-3">
-        <div class=" row g-0">
+<div class="card mb-3">
+    <div class=" row g-0">
         <div class="col-md-4">
             <img src="@Model.PictUrl" class="img-fluid rounded-start w-100" alt="@Model.Title">
         </div>
@@ -32,7 +31,8 @@
                     <dt class="col-sm-3">Minimum Age:</dt>
                     <dd class="col-sm-8">@Model.Age</dd>
                 </dl>
-
+                
+            </div>
         </div>
         <div class="form-group m-3">
             <form asp-action="Delete">
@@ -42,5 +42,6 @@
             </form>
         </div>
     </div>
+</div>
     
 

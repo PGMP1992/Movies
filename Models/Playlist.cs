@@ -6,7 +6,6 @@ namespace MoviesApp.Models
 {
     public class Playlist
     {
-        [Key]
         public int Id { get; set; }
 
         [Required]
