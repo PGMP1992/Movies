@@ -17,7 +17,7 @@ namespace MoviesApp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -171,7 +171,7 @@ namespace MoviesApp.Migrations
 
                     b.HasIndex("PlaylistsId");
 
-                    b.ToTable("MoviePlaylist");
+                    b.ToTable("MoviePlaylist", (string)null);
                 });
 
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
@@ -280,7 +280,7 @@ namespace MoviesApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Movies", (string)null);
                 });
 
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
@@ -304,7 +304,7 @@ namespace MoviesApp.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Playlists");
+                    b.ToTable("Playlists", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

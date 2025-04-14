@@ -5,30 +5,30 @@ namespace MoviesApp.Helpers
     public class IPInfo
     {
         [JsonProperty("ip")]
-        public string Ip { get; set; }
+        public string? Ip { get; set; }
         
         [JsonProperty("hostname")]
-        public string Hostname { get; set; }
+        public string? Hostname { get; set; }
         
         [JsonProperty("city")]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         [JsonProperty("region")]
-        public string Region { get; set; }
+        public string? Region { get; set; }
         
         [JsonProperty("country")]
-        public string Country { get; set; }
+        public string? Country { get; set; }
 
         [JsonProperty("loc")]
-        public string Location { get; set; }
+        public string? Location { get; set; }
         
         [JsonProperty("org")]
-        public string Org { get; set; }
+        public string? Org { get; set; }
         
         [JsonProperty("postal")]
-        public string Postal { get; set; }
+        public string? Postal { get; set; }
         
         [JsonProperty("timezone")]
-        public string Timezone { get; set; }
+        public string? Timezone { get; set; }
     }
 }

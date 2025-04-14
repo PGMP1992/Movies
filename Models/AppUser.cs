@@ -8,6 +8,6 @@ namespace MoviesApp.Models
         public string? City { get; set; }
         public string? State { get; set; }
 
-        public List<Playlist> Playlists { get; set; }
+        public List<Playlist>? Playlists { get; set; }
     }
 }

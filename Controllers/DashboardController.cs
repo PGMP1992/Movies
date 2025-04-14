@@ -21,8 +21,24 @@ namespace MoviesApp.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+            // Ensure HttpContext and User are not null before accessing them
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext == null || httpContext.User == null)
+            {
+                return BadRequest("Unable to retrieve user information.");
+            }
+
+            var curUserId = httpContext.User.GetUserId();
+            if (curUserId == null)
+            {
+                return BadRequest("User ID is null.");
+            }
+
             var user = await _usersRepos.GetUserById(curUserId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
 
             var userPlaylists = await _usersRepos.GetAllUserPlaylists();
 

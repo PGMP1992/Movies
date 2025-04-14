@@ -29,7 +29,7 @@ namespace MoviesApp.ViewModels
         [ValidateNever]
         [MaxLength(300)]
         [Display(Name = "Picture URL")]
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }
 

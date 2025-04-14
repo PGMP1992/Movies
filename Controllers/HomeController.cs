@@ -6,7 +6,6 @@ using MoviesApp.ViewModels;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Globalization;
-using System.Net;
 
 namespace MoviesApp.Controllers
 {
@@ -28,11 +27,13 @@ namespace MoviesApp.Controllers
             try
             {
                 string url = "https://ipinfo.io?be339e669dc21b"; //IPInfo.IO My Private Token
-                var info = new WebClient().DownloadString(url);
-                
-                ipInfo = JsonConvert.DeserializeObject<IPInfo>(info);
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.GetStringAsync(url);
+                    ipInfo = JsonConvert.DeserializeObject<IPInfo>(response);
+                }
+
                 RegionInfo myRI1 = new RegionInfo(ipInfo.Country);
-                
                 ipInfo.Country = myRI1.EnglishName;
                 homeVM.City = ipInfo.City;
                 homeVM.State = ipInfo.Region;
@@ -40,10 +41,6 @@ namespace MoviesApp.Controllers
                 if (homeVM.State != null)
                 {
                     homeVM.Users = await _usersRepos.GetAllUsers();
-                }
-                else
-                {
-                    homeVM.Users = null;
                 }
                 return View(homeVM);
             }
@@ -54,16 +51,12 @@ namespace MoviesApp.Controllers
             return View(homeVM);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View( new ErrorViewModel { 
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier 
+            return View(new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             });
         }
     }
