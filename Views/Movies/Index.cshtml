@@ -13,52 +13,55 @@
 
 <p class="text-danger"><b>@ViewBag.Message</b> </p>
     
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-4 g-2">
+<div class="album">
+    <div class="row">
     @foreach (var item in Model)
     {
-        <div class="card mx-1">
-            <div class="row">
-                <div class="col-md-4">
-                    @if (item.PictUrl != null)
-                    {
-                        // if image not found put default.png instead
-                        <img src="@(item.PictUrl ?? "/images/default.png")"
-                             class="card-img-top product-image"
-                             alt="@(string.IsNullOrWhiteSpace(item.Title) ? "Product image" : item.Title + " image")"
-                             loading="lazy"
-                             onerror="this.onerror=null; this.src='/images/default.png';" />
-                    }
-                    else
-                    {
-                        <img src="./images/default.png"
-                             class="card-img-top"
-                             alt="Default product image"
-                             style="max-height: 200px; object-fit: cover;" loading="lazy" />
-                    }
-                </div>
-                <div class="col-md-8">
-                    <h5 class="card-title">@item.Title</h5>
-                    <h6 class="text-body-primary">@item.Genre</h6>
-                    <p class="text-body-secondary">Minimum Age: @item.Age</p>
-                </div>
-            </div>
-            <div class="card-footer border-0">
-                <a asp-action="Details" asp-route-id="@item.Id"
-                    class="btn btn-sm btn-outline-primary">
-                    View
-                </a>
+            <div class="col-md-3">
+                <div class="card mb-4 box-shadow p-2">
+                    <div class="row">
+                        @if (item.PictUrl != null)
+                        {
+                            // if image not found put default.png instead
+                            <img src="@(item.PictUrl ?? "/images/default.png")"
+                                 class="card-img-top product-image"
+                                 alt="@(string.IsNullOrWhiteSpace(item.Title) ? "Product image" : item.Title + " image")"
+                                 loading="lazy"
+                                 onerror="this.onerror=null; this.src='/images/default.png';" />
+                        }
+                        else
+                        {
+                            <img src="/images/default.png"
+                                 class="card-img-top"
+                                 alt="Default product image"
+                                 style="max-height: 200px; object-fit: cover;" loading="lazy" />
+                        }
+                    </div>
+                    <div class="col-md-8">
+                        <h5 class="card-title">@item.Title</h5>
+                        <h6 class="text-body-primary">@item.Genre</h6>
+                        <p class="text-body-secondary">Minimum Age: @item.Age</p>
+                    </div>
+                    <div class="card-footer border-0">
+                        <a asp-action="Details" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
 
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <a asp-action="Edit" asp-route-id="@item.Id" type="button"
-                        class="btn btn-sm btn-outline-primary">Edit</a>
-                    @if (User.IsInRole("admin"))
-                    {
-                        <a asp-action="Delete" asp-route-id="@item.Id" type="button"
-                            class="btn btn-sm btn-outline-danger">Delete</a>
-                    }
-                }
-            </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" type="button"
+                               class="btn btn-sm btn-outline-primary">Edit</a>
+                            @if (User.IsInRole("admin"))
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.Id" type="button"
+                                   class="btn btn-sm btn-outline-danger">Delete</a>
+                            }
+                        }
+                    </div>
+                </div>
+            
         </div>
     }
+</div>
 </div>

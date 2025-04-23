@@ -122,6 +122,12 @@ namespace MoviesApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(movieVM.Image == null)
+                {
+                    ModelState.AddModelError("Image", "Please upload a photo");
+                    return View(movieVM);
+                }
+                
                 var result = await _photoService.AddPhotoAsync(movieVM.Image);
                 var movie = new Movie
                 {
@@ -131,8 +137,9 @@ namespace MoviesApp.Controllers
                     Age = movieVM.Age,
                     PictUrl = result.Url.ToString()
                 };
-
+                
                 _movieRepos.Add(movie);
+
                 return RedirectToAction(nameof(Index));
             }
             else

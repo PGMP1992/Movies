@@ -4,35 +4,27 @@
 <h4>Active Users</h4>
 
 <div class="album">
-    <div class="container">
-        <div class="row">
-            @foreach (var item in Model)
-            {
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                         <img class="card-img-top" src="@item.ProfileImageUrl" alt="Photo">
-                        <div class="card-body">
-                            <h5 style="color:cornflowerblue;">@item.UserName</h5>
-                            <hr/>
-                            <h5 class="card-text"><small class="text-body-secondary">@item.City</small>
-                                <p class="card-text"><small class="text-body-secondary">@item.State</small></p>
-                            </h5>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group mt-2">
-                                    @* <a type="btn btn-success" asp-controller="Users" asp-action="Detail" asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-outline-primary">View</a> *@
-                                    @if (User.IsInRole("admin"))
-                                    {
-                                        <a asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary  mx-1">Edit</a>
-                                        <a asp-controller="Users" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
-                                    }
-                                </div>
-                                @*<small class="text-muted">@item.ClubCategory</small>*@
-                            </div>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3">
+                <div class="card mb-4 box-shadow">
+                    <img class="card-img-top" src="@item.ProfileImageUrl" alt="Photo">
+                    <div class="card-body">
+                        <h6 style="color:cornflowerblue;">@item.UserName</h6>
+                        <h6 class="card-text"><small class="text-body-secondary">@item.City</small>
+                            <p class="card-text"><small class="text-body-secondary">@item.State</small></p>
+                        </h6>
+                        <div class="btn-group mt-2">
+                            @if (User.IsInRole("admin"))
+                            {
+                                <a asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary mx-1">Edit</a>
+                                <a asp-controller="Users" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                            }
                         </div>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
 </div>
