@@ -8,6 +8,8 @@ namespace MoviesApp.Repos
     public class MovieRepos : IMovieRepos
     {
         private readonly ApplicationDbContext _context;
+        private const int pageNumber = 1;
+        private const int pageSize = 10;
 
         public MovieRepos(ApplicationDbContext context)
         {
@@ -42,6 +44,8 @@ namespace MoviesApp.Repos
         {
             return await _context.Movies
                 .OrderBy(m=>m.Title)
+                //.Skip(pageNumber * pageSize)
+                //.Take(pageSize)
                 .AsNoTracking()
                 .Include(m => m.Playlists)
                 .ToListAsync();

@@ -12,7 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<IMovieRepos, MovieRepos>();
 builder.Services.AddScoped<IPlaylistRepos, PlaylistRepos>();
-builder.Services.AddScoped<IDashboardRepos, DashboardRepos>();
 builder.Services.AddScoped<IUsersRepos, UsersRepos>();
 builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interface
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));

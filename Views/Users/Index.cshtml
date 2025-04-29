@@ -18,6 +18,7 @@
                         <div class="btn-group mt-2">
                             @if (User.IsInRole("admin"))
                             {
+                                <a asp-controller="Users" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">View</a>
                                 <a asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary mx-1">Edit</a>
                                 <a asp-controller="Users" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
                             }

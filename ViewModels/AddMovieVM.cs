@@ -1,6 +1,4 @@
-﻿using MoviesApp.Models;
-
-namespace MoviesApp.ViewModels
+﻿namespace MoviesApp.ViewModels
 {
     public class AddMovieVM
     {

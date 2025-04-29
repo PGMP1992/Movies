@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MoviesApp.Data;
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.ViewModels;
@@ -14,8 +15,11 @@ namespace MoviesApp.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAcessor;
 
-        public UsersController(IUsersRepos usersRepos, IPhotoService photoService,
-            UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
+        public UsersController(
+            IUsersRepos usersRepos
+            , IPhotoService photoService
+            , UserManager<AppUser> userManager
+            , IHttpContextAccessor httpContextAccessor)
         {
             _userRepos = usersRepos;
             _photoService = photoService;
@@ -44,25 +48,47 @@ namespace MoviesApp.Controllers
             return View(result);
         }
 
-        //[Authorize]
-        //public async Task<ActionResult> Detail(string id)
-        //{
-        //    var user = await _userRepos.GetUserById(id);
-        //    if (user == null)
-        //    {
-        //        return RedirectToAction("Index", "Users");
-        //    }
+        [Authorize]
+        public async Task<IActionResult> Detail(string? id)
+        {
+            var userId = string.Empty;
+            // Ensure HttpContext and User are not null before accessing them
+            if (id == null)
+            {
+                var httpContext = _httpContextAcessor.HttpContext;
+                var curUserId = httpContext.User.GetUserId();
 
-        //    var usersDetailsVM = new UsersDetailsVM()
-        //    {
-        //        Id = user.Id,
-        //        UserName = user.UserName,
-        //        City = user.City,
-        //        State = user.State,
-        //        ProfileImageUrl = user.ProfileImageryUrl ?? "/img/avatar-male-4.jpg",
-        //    };
-        //    return View(usersDetailsVM);
-        //}
+                if (httpContext == null || httpContext.User == null)
+                {
+                    return BadRequest("Unable to retrieve user information.");
+                }
+
+                if (curUserId == null)
+                {
+                    return BadRequest("User ID is null.");
+                }
+                userId = curUserId;
+            }
+            else
+            {
+                userId = id;
+            }
+                    
+            var user = await _userRepos.GetUserById(userId);
+            var userPlaylists = await _userRepos.GetAllUserPlaylists(userId);
+
+            var userDetailsVM = new UsersDetailsVM()
+            {
+                Playlists = userPlaylists,
+                Id = userId,
+                UserName = user.UserName,
+                City = user.City,
+                State = user.State,
+                ProfileImageUrl = user.ProfileImageryUrl
+            };
+
+            return View(userDetailsVM);
+        }
 
 
         // GET: Movies/EditProfile/5 -----------------------------------------------------------------

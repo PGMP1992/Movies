@@ -6,7 +6,7 @@ namespace MoviesApp.Repos.Interfaces
     {
         Task<List<AppUser>> GetAllUsers();
         Task<AppUser> GetUserById(string id);
-        Task<List<Playlist>> GetAllUserPlaylists();
+        Task<List<Playlist>> GetAllUserPlaylists(string id);
         bool Add(AppUser user);
         bool Update(AppUser user);
         bool Delete(AppUser user);

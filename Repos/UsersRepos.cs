@@ -42,11 +42,11 @@ namespace MoviesApp.Repos
                 .FindAsync(id);
         }
 
-        public async Task<List<Playlist>> GetAllUserPlaylists()
+        public async Task<List<Playlist>> GetAllUserPlaylists(string id)
         {
-            var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
+            //var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
             var userPlaylists = _context.Playlists
-                .Where(r => r.AppUser.Id == curUser)
+                .Where(r => r.AppUser.Id == id)
                 .Include(r => r.Movies);
 
             return userPlaylists.ToList();

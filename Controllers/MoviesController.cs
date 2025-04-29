@@ -15,8 +15,11 @@ namespace MoviesApp.Controllers
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MoviesController(IMovieRepos movieRepos, IPlaylistRepos playlistRepos,
-                IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
+        public MoviesController(IMovieRepos movieRepos
+            , IPlaylistRepos playlistRepos
+            , IPhotoService photoService
+            , IHttpContextAccessor httpContextAccessor
+            )
         {
             _movieRepos = movieRepos;
             _playlistRepos = playlistRepos;
@@ -42,8 +45,6 @@ namespace MoviesApp.Controllers
             return View(movies);
         }
 
-        // -----------------------------Fix This here ---------------------
-        // Add to Playlist 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -115,8 +116,8 @@ namespace MoviesApp.Controllers
             return View(movieVM);
         }
 
-        [Authorize]
         // POST: Movies/Create
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateMovieVM movieVM)
         {
