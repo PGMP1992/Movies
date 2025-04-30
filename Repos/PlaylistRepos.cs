@@ -17,9 +17,9 @@ namespace MoviesApp.Repos
         public async Task<List<Playlist>> GetAll()
         {
             return await _context.Playlists
-                .AsNoTracking()
                 .Include(p => p.AppUser)
                 .Include(p => p.Movies)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -41,20 +41,21 @@ namespace MoviesApp.Repos
 
         public async Task<List<Playlist>> GetByName(string name)
         {
-            return await _context.Playlists.Where(n => n.Name == name)
-                .AsNoTracking()
+            return await _context.Playlists
+                .Where(n => n.Name == name)
                 .Include(p => p.AppUser)
                 .Include(p => p.Movies)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<List<Playlist>> GetAllByUserName(string appUser)
+        public async Task<List<Playlist>> GetAllByUser(string appUser)
         {
             return await _context.Playlists
-                .AsNoTracking()
                 .Where(a => a.AppUserId == appUser)
                 .Include(p => p.AppUser)
                 .Include(p => p.Movies)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -78,6 +79,7 @@ namespace MoviesApp.Repos
 
         public bool Update(Playlist playlist)
         {
+            playlist.UpdateLastModified();
             _context.Update(playlist);
             return Save();
         }

@@ -39,7 +39,7 @@ namespace MoviesApp.Controllers
             else
             {
                 var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-                IEnumerable<Playlist> playlists = await _playlistRepos.GetAllByUserName(curUserId);
+                IEnumerable<Playlist> playlists = await _playlistRepos.GetAllByUser(curUserId);
                 list = playlists;
                 if (list.Count() == 0)
                 {
@@ -73,7 +73,7 @@ namespace MoviesApp.Controllers
 
         public async Task<IActionResult> RemoveMovie(int playlistId, int movieId)
         {
-            var movie = await _movieRepos.GetByIdAsync(movieId);
+            var movie = await _movieRepos.GetById(movieId);
             var playlist = await _playlistRepos.GetByIdAsync(playlistId);
             
             if ( playlist != null)

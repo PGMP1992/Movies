@@ -30,6 +30,8 @@ namespace MoviesApp.ViewModels
         [MaxLength(300)]
         [Display(Name = "Picture URL")]
         public IFormFile? Image { get; set; }
+
+        public bool Active { get; set; } = true;
     }
 }
 

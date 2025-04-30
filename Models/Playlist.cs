@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MoviesApp.Models
 {
-    public class Playlist
+    public class Playlist : EntityBase
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(50)]
         public string Name { get; set; } = "";

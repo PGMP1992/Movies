@@ -32,7 +32,8 @@
                     <img src="./images/default.png"
                          class="card-img-top"
                          alt="Default product image"
-                         style="max-height: 200px; object-fit: cover;" loading="lazy" />
+                         style="max-height: 200px; object-fit: cover;" 
+                         loading="lazy" />
                 }
             </div>
 
@@ -50,14 +51,17 @@
                         <dt class="col-sm-3">Minimum Age:</dt>
                         <dd class="col-sm-8">@Model.Age</dd>
                     </dl>
+                    <dl class="row">
+                        <dt class="col-sm-3">Active:</dt>
+                        <dd class="col-sm-8">@Model.Active</dd>
+                    </dl>
 
                     @if (User.Identity.IsAuthenticated)
                     {
-                        if (ViewData.Any())
+                        if (ViewBag.playlistName != null)
                         {
                             <hr />
                             <div class="form-group">
-
                                 <label asp-for="@Model.PlaylistId" class="control-label h6">Playlists:</label>
                                 <select asp-for="@Model.PlaylistId" class="form-control" asp-items="ViewBag.playlistName">
                                 </select>

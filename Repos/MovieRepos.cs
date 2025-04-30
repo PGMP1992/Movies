@@ -16,6 +16,48 @@ namespace MoviesApp.Repos
             _context = context;
         }
 
+        public async Task<List<Movie>> GetAll(bool active)
+        {
+            if(active)
+            {
+                return await _context.Movies
+                    .Where(m => m.Active == true)
+                    .OrderBy(m => m.Title)
+                    .Include(m => m.Playlists)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _context.Movies
+                    .OrderBy(m => m.Title)
+                    .Include(m => m.Playlists)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+        }
+
+        public async Task<Movie> GetById(int? id)
+        {
+            return await _context.Movies
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
+        public async Task<Movie> GetByIdNoTracking(int? id)
+        {
+            return await _context.Movies
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
+        public async Task<List<Movie>> GetByName(string name)
+        {
+            return await _context.Movies
+                .Where(m => m.Title!.Contains(name) && m.Active == true)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public bool Add(Movie movie)
         {
             _context.Add(movie);
@@ -36,52 +78,9 @@ namespace MoviesApp.Repos
 
         public bool Update(Movie movie)
         {
+            movie.UpdateLastModified();
             _context.Update(movie);
             return Save();
-        }
-
-        public async Task<List<Movie>> GetAll()
-        {
-            return await _context.Movies
-                .OrderBy(m=>m.Title)
-                //.Skip(pageNumber * pageSize)
-                //.Take(pageSize)
-                .AsNoTracking()
-                .Include(m => m.Playlists)
-                .ToListAsync();
-        }
-
-        public async Task<Movie> GetByIdAsync(int? id)
-        {
-            return await _context.Movies
-                .FirstOrDefaultAsync(i => i.Id == id);
-        }
-
-        public async Task<Movie> GetByIdAsyncNoTracking(int? id)
-        {
-            return await _context.Movies
-                .AsNoTracking()
-                .FirstOrDefaultAsync(i => i.Id == id);
-        }
-
-        public async Task<List<Movie>> GetByAge(int age)
-        {
-            return await _context.Movies
-                .Where(a => a.Age == age).ToListAsync();
-        }
-
-        public async Task<List<Movie>> GetByGenre(string genre)
-        {
-            return await _context.Movies
-                .Where(g => g.Genre == genre).ToListAsync();
-        }
-
-        public async Task<List<Movie>> GetByName(string name)
-        {
-            return await _context.Movies
-                .AsNoTracking()
-                .Where(m => m.Title!.Contains(name))
-                .ToListAsync();
         }
 
         public bool MovieExists(int id)

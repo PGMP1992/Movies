@@ -22,26 +22,26 @@ namespace MoviesApp.Controllers
 
         public async Task<IActionResult> Index() // Using IPInfo to get locations IP 
         {
-            var ipInfo = new IPInfo();
+            //var ipInfo = new IPInfo();
             var homeVM = new HomeVM();
             try
             {
-                string url = "https://ipinfo.io?be339e669dc21b"; //IPInfo.IO My Private Token
-                using (var httpClient = new HttpClient())
-                {
-                    var response = await httpClient.GetStringAsync(url);
-                    ipInfo = JsonConvert.DeserializeObject<IPInfo>(response);
-                }
+                //string url = "https://ipinfo.io?be339e669dc21b"; //IPInfo.IO My Private Token
+                //using (var httpClient = new HttpClient())
+                //{
+                //    var response = await httpClient.GetStringAsync(url);
+                //    ipInfo = JsonConvert.DeserializeObject<IPInfo>(response);
+                //}
 
-                RegionInfo myRI1 = new RegionInfo(ipInfo.Country);
-                ipInfo.Country = myRI1.EnglishName;
-                homeVM.City = ipInfo.City;
-                homeVM.State = ipInfo.Region;
+                //RegionInfo myRI1 = new RegionInfo(ipInfo.Country);
+                //ipInfo.Country = myRI1.EnglishName;
+                //homeVM.City = ipInfo.City;
+                //homeVM.State = ipInfo.Region;
 
-                if (homeVM.State != null)
-                {
+                //if (homeVM.State != null)
+                //{
                     homeVM.Users = await _usersRepos.GetAllUsers();
-                }
+                //}
                 return View(homeVM);
             }
             catch

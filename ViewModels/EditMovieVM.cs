@@ -27,6 +27,8 @@ namespace MoviesApp.ViewModels
         public string? PictUrl { get; set; }
 
         public IFormFile? Image { get; set; }
+
+        public bool Active { get; set; }
     }
 }
 

@@ -30,7 +30,13 @@ namespace MoviesApp.Controllers
         // GET: Movies
         public async Task<IActionResult> Index(string search)
         {
-            var movies = await _movieRepos.GetAll();
+            var movies = await _movieRepos.GetAll(true); // Get only active movies
+
+            if (User.IsInRole("admin"))
+            {
+                movies = await _movieRepos.GetAll(false); // Get all movies 
+            }
+            
             ViewBag.Message = "";
 
             if (!String.IsNullOrEmpty(search))
@@ -52,18 +58,27 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Message = "";
 
             if (User.Identity.IsAuthenticated)
             {
                 var user = _httpContextAccessor.HttpContext.User.GetUserId();
-
-                ViewData["playlistName"] = new SelectList(
-                    await _playlistRepos.GetAllByUserName(user)
-                        .ConfigureAwait(false), "Id", "Name");
+                var playlists = await _playlistRepos.GetAllByUser(user).ConfigureAwait(false);
                 
-            }
-
-            var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
+                if (playlists.Count > 0)
+                {
+                    ViewData["playlistName"] = new SelectList(
+                        await _playlistRepos.GetAllByUser(user)
+                            .ConfigureAwait(false), "Id", "Name");
+                }
+                else
+                {
+                    ViewBag.playlistName = null;
+                    ViewBag.Message = "You have no Playlists. Please create one.";
+                }
+            }    
+            
+            var movie = await _movieRepos.GetByIdNoTracking(id);
 
             if (movie == null)
             {
@@ -78,28 +93,35 @@ namespace MoviesApp.Controllers
                 Genre = movie.Genre,
                 Age = movie.Age,
                 PictUrl = movie.PictUrl,
+                Active = movie.Active
             };
 
             return View(movieVM);
         }
 
-        //[Authorize]
-        // POST: Movies/AddMovie/5
+        // POST: Movies/Details/5
+        // Add Movie to Playlists 
         [HttpPost]
         public async Task<IActionResult> Details(AddMovieVM movieVM)
         {
-            if (!ModelState.IsValid)
+            if (! ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Failed to Add Movie");
                 return View("Details", movieVM);
             }
 
-            var movie = await _movieRepos.GetByIdAsync(movieVM.Id);
+            var movie = await _movieRepos.GetById(movieVM.Id);
+            if(movie == null)
+            {
+                ModelState.AddModelError("", "Movie not found");
+                return View("Details", movieVM);
+            }
+        
             var playlist = await _playlistRepos.GetByIdAsync(movieVM.PlaylistId);
 
             if (playlist != null) //Check if No Playlists
             {
-                if (!playlist.Movies.Contains(movie))
+                if (! playlist.Movies.Contains(movie))
                 {
                     playlist.Movies.Add(movie);
                     _playlistRepos.Update(playlist);
@@ -136,7 +158,8 @@ namespace MoviesApp.Controllers
                     Description = movieVM.Description,
                     Genre = movieVM.Genre,
                     Age = movieVM.Age,
-                    PictUrl = result.Url.ToString()
+                    PictUrl = result.Url.ToString(),
+                    Active = true
                 };
                 
                 _movieRepos.Add(movie);
@@ -154,21 +177,22 @@ namespace MoviesApp.Controllers
         // GET: Movies/Edit/5 ------------------------------------------------------
         public async Task<IActionResult> Edit(int? id)
         {
-            var movie = await _movieRepos.GetByIdAsync(id);
+            var movie = await _movieRepos.GetById(id);
 
             if (movie == null)
             {
                 return NotFound();
             }
 
-            var movieVM = new EditMovieVM()
+            var movieVM = new EditMovieVM
             {
                 Id = movie.Id,
                 Title = movie.Title,
                 Description = movie.Description,
                 Genre = movie.Genre,
                 Age = movie.Age,
-                PictUrl = movie.PictUrl
+                PictUrl = movie.PictUrl,
+                Active = movie.Active
             };
             return View(movieVM);
         }
@@ -184,7 +208,7 @@ namespace MoviesApp.Controllers
                 return View("Edit", movieVM);
             }
 
-            var movie = await _movieRepos.GetByIdAsyncNoTracking(id);
+            var movie = await _movieRepos.GetByIdNoTracking(id);
 
             if (movieVM.Image != null)
             {
@@ -212,8 +236,15 @@ namespace MoviesApp.Controllers
                 Description = movieVM.Description,
                 Genre = movieVM.Genre,
                 Age = movieVM.Age,
-                PictUrl = movieVM.PictUrl
+                PictUrl = movieVM.PictUrl,
+                Active = movieVM.Active,
             };
+            
+            // Just change Active status if Admin user.
+            if (! User.IsInRole("admin"))
+            {
+                editMovie.Active = true;
+            }
 
             _movieRepos.Update(editMovie);
 
@@ -229,7 +260,7 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var movie = await _movieRepos.GetByIdAsync(id);
+            var movie = await _movieRepos.GetById(id);
             if (movie == null)
             {
                 return NotFound();
@@ -242,7 +273,7 @@ namespace MoviesApp.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _movieRepos.GetByIdAsync(id);
+            var movie = await _movieRepos.GetById(id);
             if (movie != null)
             {
                 _movieRepos.Delete(movie);

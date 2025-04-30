@@ -9,5 +9,6 @@
         public int Age { get; set; }
         public string PictUrl { get; set; } = "";
         public int PlaylistId { get; set; }
+        public bool Active { get; set; }
     }
 }

@@ -2,10 +2,8 @@
 
 namespace MoviesApp.Models
 {
-    public class Movie
+    public class Movie :EntityBase
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(100)]
         public string Title { get; set; } = "";
@@ -22,6 +20,8 @@ namespace MoviesApp.Models
         [Range(1, 18)]
         [Display(Name = "Minimun Age")]
         public int Age { get; set; }
+
+        public bool Active { get; set; }
 
         [MaxLength(500)]
         [Display(Name = "Picture URL")]

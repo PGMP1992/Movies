@@ -8,7 +8,7 @@ namespace MoviesApp.Repos.Interfaces
         Task<Playlist> GetByIdAsync(int? id);
         Playlist GetById(int id);
         Task<List<Playlist>> GetByName(string name);
-        Task<List<Playlist>> GetAllByUserName(string userName);
+        Task<List<Playlist>> GetAllByUser(string userName);
 
         bool Add(Playlist playlist);
         bool Update(Playlist playlist);
