@@ -16,7 +16,7 @@ namespace MoviesApp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // // Added to enable Identity - Not sure if that is a bug 
+            // Added to enable Identity - Not sure if that is a bug 
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Playlist>()

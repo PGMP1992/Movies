@@ -125,6 +125,11 @@ namespace MoviesApp.Controllers
                 {
                     playlist.Movies.Add(movie);
                     _playlistRepos.Update(playlist);
+                    TempData["success"] = "Movie added to Playlist";
+                }
+                else
+                {
+                    TempData["error"] = "Movie is already in Playlist";
                 }
             }
             return RedirectToAction(nameof(Details));
@@ -163,6 +168,7 @@ namespace MoviesApp.Controllers
                 };
                 
                 _movieRepos.Add(movie);
+                TempData["success"] = "Movie created";
 
                 return RedirectToAction(nameof(Index));
             }
@@ -247,6 +253,7 @@ namespace MoviesApp.Controllers
             }
 
             _movieRepos.Update(editMovie);
+            TempData["success"] = "Movie details updated";
 
             return RedirectToAction(nameof(Index));
         }
@@ -277,6 +284,7 @@ namespace MoviesApp.Controllers
             if (movie != null)
             {
                 _movieRepos.Delete(movie);
+                TempData["success"] = "Movie deleted";
             }
             return RedirectToAction(nameof(Index));
         }

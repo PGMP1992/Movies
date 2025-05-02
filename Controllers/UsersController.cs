@@ -158,6 +158,7 @@ namespace MoviesApp.Controllers
             user.State = editVM.State;
 
             await _userManager.UpdateAsync(user);
+            TempData["success"] = "User info updated";
 
             return RedirectToAction(nameof(Index));
         }
@@ -192,6 +193,7 @@ namespace MoviesApp.Controllers
                 return View("Error");
             }
             _userRepos.Delete(user);
+            TempData["success"] = "User deleted";
             return RedirectToAction(nameof(Index));
         }
     }

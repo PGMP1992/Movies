@@ -80,6 +80,7 @@ namespace MoviesApp.Controllers
             {
                 playlist.Movies.Remove(movie);
                 _playlistRepos.Update(playlist);
+                TempData["success"] = "Movie removed from Playlist";
             }
 
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
@@ -112,6 +113,7 @@ namespace MoviesApp.Controllers
             {
                 playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
                 _playlistRepos.Add(playlist);
+                TempData["success"] = "Playlist created";
                 return RedirectToAction(nameof(Index));
             }
             return View(playlist);
@@ -149,6 +151,7 @@ namespace MoviesApp.Controllers
                 {
                     playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
                     _playlistRepos.Update(playlist);
+                    TempData["success"] = "Playlist updated";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -191,6 +194,7 @@ namespace MoviesApp.Controllers
             if (playlist != null)
             {
                 _playlistRepos.Delete(playlist);
+                TempData["success"] = "Playlist deleted";
             }
 
             return RedirectToAction(nameof(Index));
