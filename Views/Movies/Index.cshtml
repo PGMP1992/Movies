@@ -1,9 +1,5 @@
 ﻿@model IEnumerable<Movie>
 
-@{
-    ViewData["Title"] = "Index";
-}
-
 <h3>Movies</h3>
 
 @if (User.Identity.IsAuthenticated) @*&& User.IsInRole("admin")) *@
@@ -13,74 +9,71 @@
 
 <p class="text-danger"><b>@ViewBag.Message</b> </p>
 
-<div class="album">
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-md-3">
-                <div class="card mb-4 box-shadow p-2">
-                    <div class="row">
-                        @if (item.PictUrl != null)
-                        {
-                            // if image not found put default.png instead
-                            <img src="@(item.PictUrl ?? "/images/default.png")"
+<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 p-2">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card h-100 border-0">
+                <div class="row">
+                    @if (item.PictUrl != null)
+                    {
+                        // if image not found put default.png instead
+                        <img src="@(item.PictUrl ?? "/images/default.png")"
                             class="card-img-top product-image"
                             alt="@(string.IsNullOrWhiteSpace(item.Title) ? "Product image" : item.Title + " image")"
-                            loading="lazy"
+                            loading="lazy" decoding="async"
                             onerror="this.onerror=null; this.src='/images/default.png';" />
-                        }
-                        else
-                        {
-                            <img src="/images/default.png"
+                    }
+                    else
+                    {
+                        <img src="/images/default.png"
                             class="card-img-top"
                             alt="Default product image"
-                            style="max-height: 200px; object-fit: cover;" loading="lazy" />
-                        }
-                    </div>
-                    <div class="col-md-8">
-                        <h5 class="card-title">@item.Title</h5>
-                        <h6 class="text-body-primary">@item.Genre</h6>
-                        <p class="text-body-secondary">Minimum Age: @item.Age</p>
+                            style="max-height: 200px; object-fit: cover;" 
+                            loading="lazy" decoding="async" />
+                    }
+                </div>
+                <div class="px-2">
+                    <p class="h5"><b>@item.Title</b></p>
+                    <p class="h6">@item.Genre</p>
+                    @* <p class="text-body-secondary">Age: <b>@item.Age Years</b></p> *@
+                    @if (User.IsInRole("admin"))
+                    {
+                        <p class="h6">Active: <input type="checkbox" id="myCheck" checked="@item.Active" disabled /></p>
+                    }
+                </div>
+
+                <div class="card-footer border-0">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                            Add
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                            Edit
+                        </a>
+                           
                         @if (User.IsInRole("admin"))
                         {
-                            <p class="text-body-secondary">Active:
-                                <input type="checkbox" id="myCheck" checked="@item.Active" disabled />
-                            </p>
-                        }
-                    </div>
-
-                    <div class="card-footer border-0">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                           <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
-                                Add
-                            </a>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
-                               Edit
-                           </a>
-                           
-                           @if (User.IsInRole("admin"))
-                            {
-                                @* <form method="post" asp-action="Delete" asp-route-id="@item.Id" id="deleteform" onsubmit="DeleteProduct()">
-                                    <input asp-for="@item.Id" hidden />
-                                    <button type="submit" class="btn btn-sm btn-outline-danger mt-1">Delete</button>
-                                </form> *@
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" id="deleteform">
-                                   Delete
-                                </a>
-                            }
-                        } 
-                        else
-                        {
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
-                                View
+                            @* <form method="post" asp-action="Delete" asp-route-id="@item.Id" id="deleteform" onsubmit="DeleteProduct()">
+                                <input asp-for="@item.Id" hidden />
+                                <button type="submit" class="btn btn-sm btn-outline-danger mt-1">Delete</button>
+                            </form> *@
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" id="deleteform">
+                                Delete
                             </a>
                         }
-                    </div>
+                    } 
+                    else
+                    {
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+                    }
                 </div>
             </div>
-        }
-    </div>
+        </div>
+    }
 </div>
 
 @section Scripts {
