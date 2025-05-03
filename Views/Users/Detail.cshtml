@@ -1,10 +1,14 @@
 ﻿@model MoviesApp.ViewModels.UsersDetailsVM
 
-<h4>Profile</h4>
-<div class="card mb-3" style="max-width: 100%">
-    <div class=" row g-0">
+<h3>Profile</h3>
+<h5 class="text-secondary">@Model.UserName</h5>
+
+<div class="card">
+    <div class="row g-0">
         <div class="col-md-4">
-            <img src="@Model.ProfileImageUrl" class="img-fluid rounded-start w-100" alt="Image">
+            <img src="@Model.ProfileImageUrl" class="img-fluid rounded-start w-100" alt="Image"
+                 loading="lazy" decoding="async"
+                 onerror="this.onerror=null; this.src='/images/default.png';" />
         </div>
         <div class="col-md-8">
             <div class="card-body">
@@ -14,7 +18,7 @@
 
                 @if (Model.Playlists.Any())
                 {
-                    <div class="album py-4">
+                    <div class="album py-2">
                         <div class="container">
                             <h6>Playlists</h6>
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">

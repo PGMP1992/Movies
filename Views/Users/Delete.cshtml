@@ -6,12 +6,19 @@
 <div class="card mb-3">
     <div class=" row g-0">
         <div class="col-md-4">
-            <img src="@Model.ProfileImageUrl" class="img-fluid rounded-start" width="100%" height="auto" alt="@Model.Image">
+            <img src="@Model.ProfileImageUrl" class="img-fluid rounded-start w-100" alt="@Model.Image"
+                 loading="lazy" decoding="async"
+                 onerror="this.onerror=null; this.src='/images/default.png';" />
         </div>
         <div class="col-md-8">
             <div class="card-body">
                 <div class="row">
-                    <h6>User: @Model.UserName</h6>
+                    <div class="col-2">
+                        <h6>User:</h6> 
+                    </div>
+                    <div class="col-6">
+                        <h6 class="text-secondary">@Model.UserName</h6>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-2">

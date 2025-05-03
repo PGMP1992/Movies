@@ -57,7 +57,7 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var playlist = await _playlistRepos.GetByIdAsync(id);
+            var playlist = await _playlistRepos.GetByIdNoTracking(id);
 
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
@@ -74,7 +74,7 @@ namespace MoviesApp.Controllers
         public async Task<IActionResult> RemoveMovie(int playlistId, int movieId)
         {
             var movie = await _movieRepos.GetById(movieId);
-            var playlist = await _playlistRepos.GetByIdAsync(playlistId);
+            var playlist = await _playlistRepos.GetById(playlistId);
             
             if ( playlist != null)
             {
@@ -127,7 +127,7 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var playlist = await _playlistRepos.GetByIdAsync(id);
+            var playlist = await _playlistRepos.GetByIdNoTracking(id);
             if (playlist == null)
             {
                 return NotFound();
@@ -177,7 +177,7 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var playlist = await _playlistRepos.GetByIdAsync(id);
+            var playlist = await _playlistRepos.GetByIdNoTracking(id);
             if (playlist == null)
             {
                 return NotFound();
@@ -190,7 +190,7 @@ namespace MoviesApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var playlist = await _playlistRepos.GetByIdAsync(id);
+            var playlist = await _playlistRepos.GetByIdNoTracking(id);
             if (playlist != null)
             {
                 _playlistRepos.Delete(playlist);

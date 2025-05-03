@@ -30,7 +30,7 @@ namespace MoviesApp.Controllers
         [HttpGet("Users")]
         public async Task<IActionResult> Index()
         {
-            var users = await _userRepos.GetAllUsers();
+            var users = await _userRepos.GetAll();
             List<UsersVM> result = new List<UsersVM>();
 
             foreach (var user in users)
@@ -74,8 +74,8 @@ namespace MoviesApp.Controllers
                 userId = id;
             }
                     
-            var user = await _userRepos.GetUserById(userId);
-            var userPlaylists = await _userRepos.GetAllUserPlaylists(userId);
+            var user = await _userRepos.GetById(userId);
+            var userPlaylists = await _userRepos.GetAllPlaylists(userId);
 
             var userDetailsVM = new UsersDetailsVM()
             {
@@ -97,7 +97,7 @@ namespace MoviesApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            var user = await _userRepos.GetUserById(id);
+            var user = await _userRepos.GetById(id);
             if (user == null)
             {
                 return View("Error");
@@ -124,7 +124,7 @@ namespace MoviesApp.Controllers
                 return View("Edit", editVM);
             }
 
-            var user = await _userRepos.GetUserById(id);
+            var user = await _userRepos.GetById(id);
 
             if (user == null)
             {
@@ -166,7 +166,7 @@ namespace MoviesApp.Controllers
         [Authorize]
         public async Task<IActionResult> Delete (string id)
         {
-            var user = await _userRepos.GetUserById(id);
+            var user = await _userRepos.GetById(id);
             if (user == null)
             {
                 return View("Error");
@@ -187,7 +187,7 @@ namespace MoviesApp.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirm(string id)
         {
-            var user = await _userRepos.GetUserById(id);
+            var user = await _userRepos.GetById(id);
             if (user == null)
             {
                 return View("Error");

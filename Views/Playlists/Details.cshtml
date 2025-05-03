@@ -2,64 +2,62 @@
 
 <h3>Playlist</h3>
 
-<div class="card p-3">
-    <div class=" row g-0">
-        <div class="col">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-2">
-                        <h6>Name:</h6>
-                    </div>
-                    <div class="col-6">
-                        <b>@Model.Playlist.Name</b>
-                    </div>
-                </div>
-                @if(User.IsInRole("admin"))
-                {
-                    <div class="row">
-                        <div class="col-2">
-                            <h6>User:</h6>
-                        </div>
-                        <div class="col-6">
-                            <b>@Model.AppUser.UserName</b>
-                        </div>
-                    </div>
-                }
-                <hr/>
-                @if (Model.Playlist.Movies.Any())
-                {
-                <h6>Movies</h6>
-                <div class=container>
-                    <table class="table table-responsive">
-                        <tr>
-                            <th>Title</th>
-                            <th>Genre</th>
-                            <th>Age</th>
-                            <th></th>
-                        </tr>
-                        @foreach( Movie item in Model.Playlist.Movies)
-                        {
-                            <tr>
-                                <td>@item.Title</td>
-                                <td>@item.Genre</td>
-                                <td>@item.Age</td>
-                                <td>
-                                    <a asp-controller="Playlists"
-                                        asp-action="RemoveMovie" 
-                                        asp-route-playlistId= "@Model.Playlist.Id"
-                                        asp-route-movieId="@item.Id" 
-                                            type="button" class="btn btn-sm btn-outline-danger">Delete
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </table>
-                </div>
-                }
-            </div>
+<div class="card p-4">
+    <div class="row">
+        <div class="col-2">
+            <h6>Name:</h6>
+        </div>
+        <div class="col-6">
+            <h6 class="text-secondary">@Model.Playlist.Name</h6>
         </div>
     </div>
-    <div class="d-flex justify-content-between align-items-center">
+        
+    @if(User.IsInRole("admin"))
+    {
+        <div class="row">
+            <div class="col-2">
+                <h6>User:</h6>
+            </div>
+            <div class="col-6">
+                <h6 class="text-secondary">@Model.AppUser.UserName</H6>
+            </div>
+        </div>
+    }
+    @if (Model.Playlist.Movies.Any())
+    {
+        <div class="border border-1 p-3 mt-2">
+            <h6>Movies</h6>
+            <table class="table table-responsive">
+                <tr>
+                    <th>Title</th>
+                    <th>Genre</th>
+                    <th>Age</th>
+                    <th></th>
+                </tr>
+                @foreach( Movie item in Model.Playlist.Movies)
+                {
+                    <tr>
+                        <td class="text-secondary">@item.Title</td>
+                        <td class ="text-secondary">@item.Genre</td>
+                            <td class="text-secondary">@item.Age</td>
+                        <td>
+                            <a asp-controller="Playlists"
+                                asp-action="RemoveMovie" 
+                                asp-route-playlistId= "@Model.Playlist.Id"
+                                asp-route-movieId="@item.Id" 
+                                type="button" class="btn btn-sm btn-outline-danger">Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+    else
+    {
+        <h6 class="text-danger mt-3">There are no movies in this playlist.</h6>
+    }
+    <div class="d-flex justify-content-between align-items-center mt-3">
         <div class="btn-group">
             @if (User.Identity.IsAuthenticated)
             {
@@ -69,4 +67,7 @@
             <a asp-action="Index" asp-route-id="@Model.Playlist.Id" type="button" class="btn btn-sm btn-outline-dark  mx-1">Back</a>
         </div>
     </div>
+
 </div>
+
+    

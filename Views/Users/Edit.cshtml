@@ -1,11 +1,16 @@
 ﻿@model MoviesApp.ViewModels.EditUserVM
 
-<h4>Edit</h4>
+<h3>User</h3>
+<h5>Edit</h5>
 
 <div class="card mb-3" style="max-width: 100%">
     <div class=" row g-0">
         <div class="col-md-4">
-            <img src="@Model.ProfileImageUrl" class="img-fluid rounded-start w-100" alt="@Model.UserName">
+            <img src="@Model.ProfileImageUrl" 
+            class="img-fluid rounded-start w-100" 
+            alt="@Model.UserName"
+            loading="lazy" decoding="async"
+            onerror="this.onerror=null; this.src='/images/default.png';" />
         </div>
         <div class="col-md-8">
             <div class="card-body">

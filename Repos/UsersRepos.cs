@@ -28,7 +28,7 @@ namespace MoviesApp.Repos
             return Save();
         }
 
-        public async Task<List<AppUser>> GetAllUsers()
+        public async Task<List<AppUser>> GetAll()
         {
             return await _context.Users
                 .AsNoTracking()
@@ -36,16 +36,17 @@ namespace MoviesApp.Repos
                 .ToListAsync();
         }
 
-        public async Task<AppUser> GetUserById(string id)
+        public async Task<AppUser> GetById(string id)
         {
             return await _context.Users
                 .FindAsync(id);
         }
 
-        public async Task<List<Playlist>> GetAllUserPlaylists(string id)
+        public async Task<List<Playlist>> GetAllPlaylists(string id)
         {
             //var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
             var userPlaylists = _context.Playlists
+                .AsNoTracking()
                 .Where(r => r.AppUser.Id == id)
                 .Include(r => r.Movies);
 

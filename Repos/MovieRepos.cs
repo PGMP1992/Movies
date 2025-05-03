@@ -21,18 +21,18 @@ namespace MoviesApp.Repos
             if(active)
             {
                 return await _context.Movies
+                    .AsNoTracking()
                     .Where(m => m.Active == true)
                     .OrderBy(m => m.Title)
                     .Include(m => m.Playlists)
-                    .AsNoTracking()
                     .ToListAsync();
             }
             else
             {
                 return await _context.Movies
+                    .AsNoTracking()
                     .OrderBy(m => m.Title)
                     .Include(m => m.Playlists)
-                    .AsNoTracking()
                     .ToListAsync();
             }
         }
@@ -53,8 +53,8 @@ namespace MoviesApp.Repos
         public async Task<List<Movie>> GetByName(string name)
         {
             return await _context.Movies
-                .Where(m => m.Title!.Contains(name) && m.Active == true)
                 .AsNoTracking()
+                .Where(m => m.Title!.Contains(name) && m.Active == true)
                 .ToListAsync();
         }
 
@@ -85,7 +85,9 @@ namespace MoviesApp.Repos
 
         public bool MovieExists(int id)
         {
-            return _context.Movies.Any(e => e.Id == id);
+            return _context.Movies
+                .AsNoTracking()
+                .Any(e => e.Id == id);
         }
     }
 }

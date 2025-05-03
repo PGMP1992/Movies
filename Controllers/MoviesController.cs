@@ -117,7 +117,8 @@ namespace MoviesApp.Controllers
                 return View("Details", movieVM);
             }
         
-            var playlist = await _playlistRepos.GetByIdAsync(movieVM.PlaylistId);
+            // Has to use GetByIdNoTracking
+            var playlist = await _playlistRepos.GetById(movieVM.PlaylistId);
 
             if (playlist != null) //Check if No Playlists
             {

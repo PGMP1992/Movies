@@ -40,7 +40,7 @@ namespace MoviesApp.Controllers
 
                 //if (homeVM.State != null)
                 //{
-                    homeVM.Users = await _usersRepos.GetAllUsers();
+                    homeVM.Users = await _usersRepos.GetAll();
                 //}
                 return View(homeVM);
             }
