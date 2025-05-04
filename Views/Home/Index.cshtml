@@ -21,10 +21,21 @@
                 {
                     <div class="col-md-3">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top" 
-                                src="@item.ProfileImageryUrl" alt="Photo"
-                                 loading="lazy" decoding="async"
-                                 onerror="this.onerror=null; this.src='/images/default.png';" />
+                            @if (@item.ProfileImageryUrl != null)
+                            {
+                                <img class="card-img-top"
+                                     src="@item.ProfileImageryUrl"
+                                     alt="Photo"
+                                     loading="lazy" decoding="async"
+                                     onerror="this.onerror=null; this.src='/images/default.png';" />
+                            }
+                            else
+                            {
+                                <img class="card-img-top"
+                                     src="/images/default.png"
+                                     alt="Photo"
+                                     loading="lazy" decoding="async" />
+                            }
 
                             <div class="card-body">
                                 <h5>@item.UserName</h5>

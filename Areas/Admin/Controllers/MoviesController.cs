@@ -8,7 +8,7 @@ using Movies.Utility;
 using MoviesApp.Data;
 
 
-namespace MoviesApp.Controllers
+namespace MoviesApp.Areas.Admin.Controllers
 {
     public class MoviesController : Controller
     {
@@ -41,7 +41,7 @@ namespace MoviesApp.Controllers
 
             ViewBag.Message = "";
 
-            if (!String.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(search))
             {
                 var movies1 = await _movieRepos.GetByName(search);
                 if (movies1.Count > 0)
