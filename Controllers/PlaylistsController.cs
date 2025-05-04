@@ -6,7 +6,7 @@ using Movies.Models;
 using Movies.Models.ViewModels;
 using MoviesApp.Data;
 
-namespace MoviesApp.Areas.Admin.Controllers
+namespace MoviesApp.Controllers
 {
     [Authorize]
     public class PlaylistsController : Controller

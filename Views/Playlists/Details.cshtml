@@ -1,4 +1,5 @@
-﻿@model Movies.Models.ViewModels.PlaylistMoviesVM
+﻿@using Movies.Models.ViewModels
+@model PlaylistMoviesVM
 
 <h3>Playlist</h3>
 
@@ -24,7 +25,7 @@
                 <th>Age</th>
                 <th></th>
             </tr>
-            @foreach( Movie item in Model.Playlist.Movies)
+            @foreach( var item in Model.Playlist.Movies)
             {
                 <tr>
                     <td class="text-secondary">@item.Title</td>

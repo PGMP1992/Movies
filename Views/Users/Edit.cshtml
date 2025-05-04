@@ -1,4 +1,5 @@
-﻿@model EditUserVM
+﻿@using Movies.Models.ViewModels
+@model EditUserVM
 
 <h3>User</h3>
 <h5>Edit</h5>
@@ -6,11 +7,21 @@
 <div class="card mb-3" style="max-width: 100%">
     <div class=" row g-0">
         <div class="col-md-4">
-            <img src="@Model.ProfileImageUrl" 
-            class="img-fluid rounded-start w-100" 
-            alt="@Model.UserName"
-            loading="lazy" decoding="async"
-            onerror="this.onerror=null; this.src='/images/default.png';" />
+            @if (@Model.ProfileImageUrl != null)
+            {
+                <img class="card-img-top"
+                     src="@Model.ProfileImageUrl"
+                     alt="Photo"
+                     loading="lazy" decoding="async"
+                     onerror="this.onerror=null; this.src='/images/default.png';" />
+            }
+            else
+            {
+                <img class="card-img-top"
+                     src="/images/default.png"
+                     alt="Photo"
+                     loading="lazy" decoding="async" />
+            }
         </div>
         <div class="col-md-8">
             <div class="card-body">

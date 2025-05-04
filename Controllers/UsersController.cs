@@ -7,7 +7,7 @@ using Movies.Models.ViewModels;
 using Movies.Utility;
 using MoviesApp.Data;
 
-namespace MoviesApp.Areas.Admin.Controllers
+namespace MoviesApp.Controllers
 {
     public class UsersController : Controller
     {

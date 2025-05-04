@@ -1,13 +1,26 @@
-﻿@model EditUserVM
+﻿@using Movies.Models.ViewModels
+@model EditUserVM
 
 <h5>Are you sure you want to delete this User?</h5>
 
 <div class="card mb-3">
     <div class=" row g-0">
         <div class="col-md-4">
-            <img src="@Model.ProfileImageUrl" class="img-fluid rounded-start w-100" alt="@Model.Image"
-                 loading="lazy" decoding="async"
-                 onerror="this.onerror=null; this.src='/images/default.png';" />
+            @if (@Model.ProfileImageUrl != null)
+            {
+                <img class="card-img-top"
+                     src="@Model.ProfileImageUrl"
+                     alt="Photo"
+                     loading="lazy" decoding="async"
+                     onerror="this.onerror=null; this.src='/images/default.png';" />
+            }
+            else
+            {
+                <img class="card-img-top"
+                     src="/images/default.png"
+                     alt="Photo"
+                     loading="lazy" decoding="async" />
+            }
         </div>
         <div class="col-md-8">
             <div class="card-body">

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Movies.Models.Playlist>
+﻿@using Movies.Models
+@model IEnumerable<Playlist>
 
 <h3>Playlists</h3>
 <p class="text-danger">@ViewBag.Message </p>
@@ -10,37 +11,37 @@
     </p>
 }
 
-    <div class="container">
-        <div class="row g-0">
-            @foreach (var item in Model)
-            {
-                <div class="card mb-2 mx-1" style="max-width: 500px;">
-                    <div class="row g-0">
-                        <div class="col-md-12">
-                            <div class="card-body">
-                                <span><h5>Name: <b class="text-secondary">@item.Name</b></h5></span>
-                                <p class="h6 text=secondary">@item.Movies.Count Movies </p>
-                                @if (User.IsInRole("admin"))
-                                {
-                                    <span><h6>User: <b class="text-secondary">@item.AppUser.Email</b></h6></span>
-                                }
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <a asp-action="Details" asp-route-id="@item.Id"
-                                           class="btn btn-sm btn-outline-primary">View</a>
-                                        @if (User.Identity.IsAuthenticated)
-                                        {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" type="button"
-                                                class="btn btn-sm btn-outline-primary mx-1">Edit</a>
-                                            <a asp-action="Delete" asp-route-id="@item.Id" type="button"
-                                                class="btn btn-sm btn-outline-danger">Delete</a>
-                                        }
-                                    </div>
+<div class="container">
+    <div class="row g-0">
+        @foreach (var item in Model)
+        {
+            <div class="card mb-2 mx-1" style="max-width: 500px;">
+                <div class="row g-0">
+                    <div class="col-md-12">
+                        <div class="card-body">
+                            <span><h5>Name: <b class="text-secondary">@item.Name</b></h5></span>
+                            <p class="h6 text=secondary">@item.Movies.Count Movies </p>
+                            @if (User.IsInRole("admin"))
+                            {
+                                <span><h6>User: <b class="text-secondary">@item.AppUser.Email</b></h6></span>
+                            }
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a asp-action="Details" asp-route-id="@item.Id"
+                                        class="btn btn-sm btn-outline-primary">View</a>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" type="button"
+                                            class="btn btn-sm btn-outline-primary mx-1">Edit</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" type="button"
+                                            class="btn btn-sm btn-outline-danger">Delete</a>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
+</div>
