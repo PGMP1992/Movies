@@ -1,6 +1,6 @@
 ﻿﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<AppUser> SignInManager
-@inject UserManager<AppUser> UserManager
+@inject SignInManager<Movies.Models.AppUser> SignInManager
+@inject UserManager<Movies.Models.AppUser> UserManager
 
 @{
     var currentUser = await UserManager.GetUserAsync(User);
