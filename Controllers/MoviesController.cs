@@ -7,7 +7,6 @@ using Movies.Models.ViewModels;
 using Movies.Utility;
 using MoviesApp.Data;
 
-
 namespace MoviesApp.Controllers
 {
     public class MoviesController : Controller
@@ -160,6 +159,7 @@ namespace MoviesApp.Controllers
                 }
 
                 var result = await _photoService.AddPhotoAsync(movieVM.Image);
+                
                 var movie = new Movie
                 {
                     Title = movieVM.Title,
@@ -170,7 +170,7 @@ namespace MoviesApp.Controllers
                     Active = true
                 };
 
-                _movieRepos.Add(movie);
+                await _movieRepos.Add(movie);
                 TempData["success"] = "Movie created";
 
                 return RedirectToAction(nameof(Index));

@@ -91,9 +91,7 @@ namespace MoviesApp.Controllers
             return View(userDetailsVM);
         }
 
-
         // GET: Movies/EditProfile/5 -----------------------------------------------------------------
-
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(string id)

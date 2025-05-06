@@ -1,18 +1,23 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using MovieAPI.Services;
 using Movies.DataSource.Data;
 using Movies.DataSource.Repos;
 using Movies.DataSource.Repos.Interfaces;
 using Movies.Models;
 using Movies.Utility;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+//builder.Services.AddOpenApi();
 
 // Add services to the container.
 builder.Services.AddScoped<IMovieRepos, MovieRepos>();
 builder.Services.AddScoped<IPlaylistRepos, PlaylistRepos>();
 builder.Services.AddScoped<IUsersRepos, UsersRepos>();
 builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interface
+builder.Services.AddScoped<IMovieService, MovieService>(); // Cloudinary Interface
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -33,6 +38,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    //app.MapOpenApi();
+    //app.MapScalarApiReference();
 }
 else
 {
@@ -48,11 +55,16 @@ app.UseRouting();
 
 app.UseAuthentication(); // Has to be before authorization. 
 app.UseAuthorization();
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+
+//app.MapControllerRoute(
+//            name: "areas",
+//            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+//          );
 
 //creating Roles - OK
 using (var scope = app.Services.CreateScope())
