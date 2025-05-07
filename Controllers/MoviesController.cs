@@ -32,16 +32,16 @@ namespace MoviesApp.Controllers
         // GET: Movies
         public async Task<IActionResult> Index(string search)
         {
-            var movies = await _movieRepos.GetAll(true); // Get only active movies
+            var movies = await _movieRepos.GetAllActive(); 
 
             if (User.IsInRole("admin"))
             {
-                movies = await _movieRepos.GetAll(false); // Get all movies 
+                movies = await _movieRepos.GetAll(); 
             }
 
             ViewBag.Message = "";
 
-            if (!string.IsNullOrEmpty(search))
+            if ( !string.IsNullOrEmpty(search))
             {
                 var movies1 = await _movieRepos.GetByName(search);
                 if (movies1.Count > 0)
@@ -95,7 +95,8 @@ namespace MoviesApp.Controllers
                 Genre = movie.Genre,
                 Age = movie.Age,
                 PictUrl = movie.PictUrl,
-                Active = movie.Active
+                Active = movie.Active,
+                LastModified = movie.LastModified
             };
 
             return View(movieVM);
