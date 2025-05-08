@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Movies.DataS\Movies.DataSource.csproj" />
-    <ProjectReference Include="..\Movies.Model\Movies.Model.csproj" />
+    <ProjectReference Include="..\Movies.Model\Movies.Models.csproj" />
     <ProjectReference Include="..\Movies.Utils\Movies.Utils.csproj" />
   </ItemGroup>
 

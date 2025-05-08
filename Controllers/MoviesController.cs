@@ -1,55 +1,88 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using CloudinaryDotNet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Movies.DataSource.Repos.Interfaces;
 using Movies.Models;
+using MoviesApp.DTOs;
 using Movies.Models.ViewModels;
 using Movies.Utility;
 using MoviesApp.Data;
+using Newtonsoft.Json;
+using MoviesApp.Services;
 
+//MoviesApp 
 namespace MoviesApp.Controllers
 {
     public class MoviesController : Controller
     {
+        Uri baseAddress = new Uri("https://localhost:7231/api");
+        //Uri baseAddress = new Uri("https://localhost:44300/api"); 
+        //Uri baseAddress = new Uri("https://localhost:5059/api");
+
+        private readonly HttpClient _client;
+        private readonly IMovieService _movieService;
+
         private readonly IMovieRepos _movieRepos;
         private readonly IPlaylistRepos _playlistRepos;
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MoviesController(IMovieRepos movieRepos
+        public MoviesController(
+              IMovieRepos movieRepos
             , IPlaylistRepos playlistRepos
             , IPhotoService photoService
-            , IHttpContextAccessor httpContextAccessor
+            , IHttpContextAccessor httpContextAccessor,
+
+            IMovieService movieService
             )
         {
             _movieRepos = movieRepos;
             _playlistRepos = playlistRepos;
             _photoService = photoService;
             _httpContextAccessor = httpContextAccessor;
+
+            _movieService = movieService;
+            _client = new HttpClient();
+            _client.BaseAddress = baseAddress;
         }
 
-        // GET: Movies
+        // Updated methods to properly use 'await' for asynchronous calls.
+
         public async Task<IActionResult> Index(string search)
         {
-            var movies = await _movieRepos.GetAll(true); // Get only active movies
-
-            if (User.IsInRole("admin"))
-            {
-                movies = await _movieRepos.GetAll(false); // Get all movies 
-            }
-
             ViewBag.Message = "";
+            IEnumerable<MovieDto> movieList = await _movieService.GetAll();
+            
+            //HttpResponseMessage response;
 
-            if (!string.IsNullOrEmpty(search))
-            {
-                var movies1 = await _movieRepos.GetByName(search);
-                if (movies1.Count > 0)
-                {
-                    return View(movies1);
-                }
-                ViewBag.Message = "There are not movies with that Name.";
-            }
-            return View(movies);
+            //if (!string.IsNullOrEmpty(search))
+            //{
+            //    response = await _client.GetAsync($"{_client.BaseAddress}/movies/GetByName({search})");
+            //    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            //    {
+            //        response = await _client.GetAsync(_client.BaseAddress + "/movies/GetAll");
+            //        ViewBag.Message = "There are no movies with that Name!";
+            //    }
+            //}
+            //else
+            //{
+            //    response = await _client.GetAsync(_client.BaseAddress + "/movies/GetAll");
+            //}
+
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    string data = await response.Content.ReadAsStringAsync();
+            //    movieList = JsonConvert.DeserializeObject<List<MovieDto>>(data);
+            //}
+            //else
+            //{
+            //    ModelState.AddModelError("", "Failed to load movies");
+            //    return View("Index", movieList);
+            //}
+
+            return View(movieList);
         }
 
         // GET: Movies/Details/5
@@ -146,7 +179,6 @@ namespace MoviesApp.Controllers
         }
 
         // POST: Movies/Create
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateMovieVM movieVM)
         {
@@ -159,7 +191,7 @@ namespace MoviesApp.Controllers
                 }
 
                 var result = await _photoService.AddPhotoAsync(movieVM.Image);
-                
+
                 var movie = new Movie
                 {
                     Title = movieVM.Title,
@@ -170,24 +202,32 @@ namespace MoviesApp.Controllers
                     Active = true
                 };
 
-                await _movieRepos.Add(movie);
-                TempData["success"] = "Movie created";
-
-                return RedirectToAction(nameof(Index));
+                //await _movieRepos.Add(movie);
+                var response = await _client.PostAsJsonAsync(_client.BaseAddress + "/movies/Post", movie);
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["success"] = "Movie created";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Failed to create movie");
+                }
             }
             else
             {
-                ModelState.AddModelError("", "Photo Upload Failed. ");
+                ModelState.AddModelError("", "Photo Upload Failed.");
             }
             return View(movieVM);
         }
 
         [Authorize]
         // GET: Movies/Edit/5 ------------------------------------------------------
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var movie = await _movieRepos.GetById(id);
-
+            //var movie = await _movieRepos.GetById(id);
+            MovieDto movie = await _movieService.Get(id);
+                       
             if (movie == null)
             {
                 return NotFound();
@@ -211,13 +251,30 @@ namespace MoviesApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditMovieVM movieVM)
         {
+                      
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Failed to Edit Movie");
                 return View("Edit", movieVM);
             }
 
-            var movie = await _movieRepos.GetByIdNoTracking(id);
+            var movie = new MovieDto();
+
+            //var movie = await _movieRepos.GetByIdNoTracking(id);
+            
+            var response = await _client.GetAsync(_client.BaseAddress + $"/movies/Get{id}");
+            if (! response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", "Failed to Update Movie");
+                TempData["error"] = "Movie could not be updated!";
+                return RedirectToAction(nameof(Index));
+            }
+            
+            if (response.IsSuccessStatusCode)
+            {
+                string data = await response.Content.ReadAsStringAsync();
+                movie = JsonConvert.DeserializeObject<MovieDto>(data);
+            }
 
             if (movieVM.Image != null)
             {
@@ -255,7 +312,19 @@ namespace MoviesApp.Controllers
                 editMovie.Active = true;
             }
 
-            _movieRepos.Update(editMovie);
+            //await _movieRepos.Update(editMovie);
+            
+            response = await _client.PutAsJsonAsync(_client.BaseAddress + "/movies/Update", editMovie);
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["success"] = "Movie Updated!";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                ModelState.AddModelError("", "Failed to Update Movie");
+                TempData["error"] = "Movie could not be updated!";
+            }
             TempData["success"] = "Movie details updated";
 
             return RedirectToAction(nameof(Index));

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoviesApp", "MoviesApp.cspr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movies.DataSource", "..\Movies.DataS\Movies.DataSource.csproj", "{B19C47E2-ADF7-451F-9E01-1B6780C8C613}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movies.Model", "..\Movies.Model\Movies.Model.csproj", "{0EC3DBD6-E93A-4ED5-B38D-3623A2603E6A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movies.Models", "..\Movies.Model\Movies.Models.csproj", "{0EC3DBD6-E93A-4ED5-B38D-3623A2603E6A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movies.Utils", "..\Movies.Utils\Movies.Utils.csproj", "{24C2CB58-AA6E-4D23-93B4-93331A452AE0}"
 EndProject

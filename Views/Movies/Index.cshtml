@@ -1,5 +1,5 @@
-﻿@using Movies.Models
-@model IEnumerable<Movie>
+﻿@using MoviesApp.DTOs
+@model IEnumerable<MovieDto>
 
 <h3>Movies</h3>
 
@@ -48,7 +48,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
-                            Add
+                            View
                         </a>
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
                             Edit

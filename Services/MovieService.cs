@@ -1,89 +1,83 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Movies.DataSource.Data;
-using MoviesApp.DTOs;
+﻿using MoviesApp.DTOs;
+using Newtonsoft.Json;
 
-namespace MovieAPI.Services
+namespace MoviesApp.Services
 {
     public class MovieService : IMovieService
     {
-        //private readonly ApplicationDbContext _dbContext;
-        //private readonly ILogger<MovieService> _logger;
+        Uri baseAddress = new Uri("https://localhost:7231/api");
+        private readonly HttpClient _httpClient;
+        private IConfiguration _configuration;
+        private string BaseServerUrl;
+        
+        public MovieService(HttpClient httpClient, IConfiguration configuration)
+        {
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = baseAddress;
+            _configuration =configuration;
+            //BaseServerUrl = _configuration.GetSection("BaseServerUrl").Value;
+            BaseServerUrl = _configuration.GetSection("BaseServerUrl").Value;
+        }
 
-        //public MovieService(ApplicationDbContext dbContext, ILogger<MovieService> logger)
-        //{
-        //    _dbContext = dbContext;
-        //    _logger = logger;
-        //}
+        public async Task<IEnumerable<MovieDto>> GetAll()
+        {
+            //var response = await _httpClient.GetAsync("/api/movies/GetAll");
+            var response = await _httpClient.GetAsync(_httpClient.BaseAddress + "/movies/GetAll");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var movies = JsonConvert.DeserializeObject<IEnumerable<MovieDto>>(content);
+                //foreach(var prod in products)
+                //{
+                //    prod.ImageUrl=BaseServerUrl+prod.ImageUrl;
+                //}
+                return movies;
+            }
 
+            return new List<MovieDto>();
+        }
+        
+        public async Task<MovieDto> Get(int id)
+        {
+            var response = await _httpClient.GetAsync($"/api/movie/{id}");
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                string data = await response.Content.ReadAsStringAsync();
+                var movie = JsonConvert.DeserializeObject<MovieDto>(data);
+                //product.ImageUrl=BaseServerUrl+product.ImageUrl;
+                return movie;
+            }
+            else
+            {
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDTO>(content);
+                throw new Exception(errorModel.ErrorMessage);
+            }
+        }
 
-        //public async Task<MovieDTO> Create(CreateMovieDto command)
-        //{
-        //    var movie = Movie.Create(command.Title, command.Genre, command.ReleaseDate, command.Rating);
+        public async Task<MovieDto> Add(MovieDto movie)
+        {
+            throw new NotImplementedException();
+        }
 
-        //    await _dbContext.Movies.AddAsync(movie);
-        //    await _dbContext.SaveChangesAsync();
+        public Task<bool> Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
 
-        //    return new MovieDTO(
-        //       movie.Id,
-        //       movie.Title,
-        //       movie.Genre,
-        //       movie.ReleaseDate,
-        //       movie.Rating
-        //    );
-        //}
+        public async Task<IEnumerable<MovieDto>> GetAllActive()
+        {
+            throw new NotImplementedException();
+        }
 
-        //public async Task<IEnumerable<MovieDTO>> GetAll()
-        //{
-        //    return await _dbContext.Movies
-        //        .AsNoTracking()
-        //        .Select(movie => new MovieDTO(
-        //            movie.Id,
-        //            movie.Title,
-        //            movie.Genre,
-        //            movie.ReleaseDate,
-        //            movie.Rating
-        //        ))
-        //        .ToListAsync();
-        //}
+        public async Task<MovieDto> GetByName(string name)
+        {
+            throw new NotImplementedException();
+        }
 
-        ////public async Task<MovieDto?> GetById(Guid id)
-        //public async Task<MovieDTO?> GetById(int id)
-        //{
-        //    var movie = await _dbContext.Movies
-        //                           .AsNoTracking()
-        //                           .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (movie == null)
-        //        return null;
-
-        //    return new MovieDTO(
-        //        movie.Id,
-        //        movie.Title,
-        //        movie.Genre,
-        //        movie.ReleaseDate,
-        //        movie.Rating
-        //    );
-        //}
-
-        ////public async Task Update(Guid id, UpdateMovieDto command)
-        //public async Task Update(int id, UpdateMovieDto command)
-        //{
-        //    var movieToUpdate = await _dbContext.Movies.FindAsync(id);
-        //    if (movieToUpdate is null)
-        //        throw new ArgumentNullException($"Invalid Movie Id.");
-
-        //    movieToUpdate.Update(command.Title, command.Genre, command.ReleaseDate, command.Rating);
-        //    await _dbContext.SaveChangesAsync();
-        //}
-
-        ////public async Task Delete(Guid id)
-        //public async Task Delete(int id)
-        //{
-        //    var movieToDelete = await _dbContext.Movies.FindAsync(id);
-        //    if (movieToDelete != null)
-        //    {
-        //        _dbContext.Movies.Remove(movieToDelete);
-        //        await _dbContext.SaveChangesAsync();
-        //    }
-        //}
+        public async Task<MovieDto> Update(MovieDto movie)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,14 +1,16 @@
-﻿namespace MovieAPI.Services
+﻿using MoviesApp.DTOs;
+
+namespace MoviesApp.Services
 {
     public interface IMovieService
     {
-        //Task<MovieDto> Create(CreateMovieDto command);
-        ////Task<MovieDto?> GetById(Guid id);
-        //Task<MovieDto?> GetById(int id);
-        //Task<IEnumerable<MovieDto>> GetAll();
-        ////Task Update(Guid id, UpdateMovieDto command);
-        ////Task Delete(Guid id);
-        //Task Update(int id, UpdateMovieDto command);
-        //Task Delete(int id);
+        Task<MovieDto> Get(int id);
+        Task<IEnumerable<MovieDto>> GetAll();
+        Task<IEnumerable<MovieDto>> GetAllActive();
+        Task<MovieDto> GetByName(string name);
+        Task<MovieDto> Add(MovieDto movie);
+        Task<MovieDto> Update(MovieDto movie);
+        Task<bool> Delete(int id);
+
     }
 }
