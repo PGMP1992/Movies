@@ -5,6 +5,8 @@ using Movies.DataSource.Repos.Interfaces;
 using Movies.Models;
 using Movies.Models.ViewModels;
 using MoviesApp.Data;
+using MoviesApp.DTOs;
+using MoviesApp.Services;
 
 namespace MoviesApp.Controllers
 {
@@ -15,32 +17,43 @@ namespace MoviesApp.Controllers
         private readonly IMovieRepos _movieRepos;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
+        private readonly IMovieService _movieService;
+        private readonly IPlaylistService _playlistService;
+
         public PlaylistsController(IPlaylistRepos playlistRepos
             , IMovieRepos movieRepos
             , IHttpContextAccessor httpContextAccessor
+            , IMovieService movieService
+            , IPlaylistService playlistService
         )
         {
             _playlistRepos = playlistRepos;
-            _movieRepos = movieRepos;
+            //_movieRepos = movieRepos;
             _httpContextAccessor = httpContextAccessor;
+
+            _movieService = movieService;
+            _playlistService = playlistService;
         }
 
         // GET: Playlists ---------------------------------------------------
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Playlist> list;
+            IEnumerable<PlaylistDto> list;
 
             if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
             {
-                IEnumerable<Playlist> playlists = await _playlistRepos.GetAll();
+                //IEnumerable<Playlist> playlists = await _playlistRepos.GetAll();
+                IEnumerable<PlaylistDto> playlists = await _playlistService.GetAll();
                 list = playlists;
                 ViewBag.Message = "";
             }
             else
             {
                 var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-                IEnumerable<Playlist> playlists = await _playlistRepos.GetAllByUser(curUserId);
+                //IEnumerable<Playlist> playlists = await _playlistRepos.GetAllByUser(curUserId);
+                IEnumerable<PlaylistDto> playlists = await _playlistService.GetAllByUser(curUserId);
                 list = playlists;
+                
                 if (list.Count() == 0)
                 {
                     ViewBag.Message = "There are no Playlists in your account.";
@@ -74,6 +87,7 @@ namespace MoviesApp.Controllers
         public async Task<IActionResult> RemoveMovie(int playlistId, int movieId)
         {
             var movie = await _movieRepos.GetById(movieId);
+            //var movie = await _movieService.Get(movieId);
             var playlist = await _playlistRepos.GetById(playlistId);
 
             if (playlist != null)
@@ -99,7 +113,9 @@ namespace MoviesApp.Controllers
         public IActionResult Create()
         {
             var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-            var playlist = new Playlist { AppUserId = curUserId };
+            var playlist = new PlaylistDto { 
+                AppUserId = curUserId 
+            };
 
             return View(playlist);
         }

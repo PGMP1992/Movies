@@ -17,7 +17,9 @@ builder.Services.AddScoped<IMovieRepos, MovieRepos>();
 builder.Services.AddScoped<IPlaylistRepos, PlaylistRepos>();
 builder.Services.AddScoped<IUsersRepos, UsersRepos>();
 builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interface
-builder.Services.AddHttpClient<IMovieService, MovieService>(); 
+//API Services
+builder.Services.AddHttpClient<IMovieService, MovieService>();
+builder.Services.AddHttpClient<IPlaylistService, PlaylistService>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

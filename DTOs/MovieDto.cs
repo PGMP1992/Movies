@@ -29,15 +29,7 @@ namespace MoviesApp.DTOs
         [Display(Name = "Picture URL")]
         public string? PictUrl { get; set; } = "";
 
-        //public record MovieDto(
-        //     int Id
-        //    ,string Title
-        //    ,string Description
-        //    ,string Genre
-        //    ,int Age
-        //    ,bool Active
-        //    ,string? PictUrl
-        //    ,DateTime Created,
-        //    DateTime LastModified);
+        public DateTime Created { get; set; }
+        public DateTime LastModified { get; set; }
     }
 }

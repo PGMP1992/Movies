@@ -18,8 +18,6 @@ namespace MoviesApp.Controllers
 {
     public class MoviesController : Controller
     {
-        //Uri baseAddress = new Uri("https://localhost:7231/api");
-        //private readonly HttpClient _client;
         private readonly IMovieService _movieService;
 
         private readonly IMovieRepos _movieRepos;
@@ -42,11 +40,7 @@ namespace MoviesApp.Controllers
             _httpContextAccessor = httpContextAccessor;
 
             _movieService = movieService;
-            //_client = new HttpClient();
-            //_client.BaseAddress = baseAddress;
         }
-
-        // Updated methods to properly use 'await' for asynchronous calls.
 
         public async Task<IActionResult> Index(string search)
         {
@@ -94,7 +88,7 @@ namespace MoviesApp.Controllers
                 else
                 {
                     ViewBag.playlistName = null;
-                    ViewBag.Message = "You have no Playlists. Please create one.";
+                    ViewBag.Message = "You have no Playlists to add Movies. Please create one.";
                 }
             }
 
@@ -121,7 +115,7 @@ namespace MoviesApp.Controllers
         }
 
         // POST: Movies/Details/5
-        // Add Movie to Playlists 
+        // View Movie Details and Add Movie to Playlists 
         [HttpPost]
         public async Task<IActionResult> Details(AddMovieVM movieVM)
         {
@@ -131,8 +125,8 @@ namespace MoviesApp.Controllers
                 return View("Details", movieVM);
             }
 
-            //var movie = await _movieRepos.GetById(movieVM.Id);
-            var movie = await _movieService.Get(movieVM.Id);
+            var movie = await _movieRepos.GetById(movieVM.Id);
+            //var movie = await _movieService.Get(movieVM.Id);
             
             if (movie == null)
             {
