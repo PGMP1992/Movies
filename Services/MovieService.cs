@@ -1,4 +1,7 @@
-﻿using MoviesApp.DTOs;
+﻿using Azure;
+using Movies.Models;
+using Movies.Models.ViewModels;
+using MoviesApp.DTOs;
 using Newtonsoft.Json;
 
 namespace MoviesApp.Services
@@ -16,7 +19,6 @@ namespace MoviesApp.Services
             _httpClient.BaseAddress = baseAddress;
             _configuration =configuration;
             //BaseServerUrl = _configuration.GetSection("BaseServerUrl").Value;
-            BaseServerUrl = _configuration.GetSection("BaseServerUrl").Value;
         }
 
         public async Task<IEnumerable<MovieDto>> GetAll()
@@ -33,19 +35,67 @@ namespace MoviesApp.Services
                 //}
                 return movies;
             }
+            return new List<MovieDto>();
+        }
+
+        public async Task<IEnumerable<MovieDto>> GetAllActive()
+        {
+            var response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"/movies/GetAllActive");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var movies = JsonConvert.DeserializeObject<IEnumerable<MovieDto>>(content);
+                //foreach(var prod in products)
+                //{
+                //    prod.ImageUrl=BaseServerUrl+prod.ImageUrl;
+                //}
+                return movies;
+            }
+            return new List<MovieDto>();
+        }
+
+        public async Task<IEnumerable<MovieDto>> GetByName(string name)
+        {
+            var response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"/movies/GetByName/{name}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var movies = JsonConvert.DeserializeObject<IEnumerable<MovieDto>>(content);
+                //foreach(var prod in products)
+                //{
+                //    prod.ImageUrl=BaseServerUrl+prod.ImageUrl;
+                //}
+                return movies;
+            }
 
             return new List<MovieDto>();
         }
-        
+
         public async Task<MovieDto> Get(int id)
         {
-            var response = await _httpClient.GetAsync($"/api/movie/{id}");
+            var response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"/movies/Get/{id}");
+
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                string data = await response.Content.ReadAsStringAsync();
-                var movie = JsonConvert.DeserializeObject<MovieDto>(data);
-                //product.ImageUrl=BaseServerUrl+product.ImageUrl;
+                var movie = JsonConvert.DeserializeObject<MovieDto>(content);
+                return movie;
+            }
+            else
+            {
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDTO>(content);
+                throw new Exception(errorModel.ErrorMessage);
+            }
+        }
+
+        public async Task<MovieDto> Update(MovieDto movie)
+        {
+            var response = await _httpClient.PutAsJsonAsync(_httpClient.BaseAddress + "/movies/Update", movie);
+
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                movie = JsonConvert.DeserializeObject<MovieDto>(content);
                 return movie;
             }
             else
@@ -57,27 +107,37 @@ namespace MoviesApp.Services
 
         public async Task<MovieDto> Add(MovieDto movie)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PostAsJsonAsync(_httpClient.BaseAddress + "/movies/Post", movie);
+
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                movie = JsonConvert.DeserializeObject<MovieDto>(content);
+                return movie;
+            }
+            else
+            {
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDTO>(content);
+                throw new Exception(errorModel.ErrorMessage);
+            }
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
-        }
+            var response = await _httpClient.DeleteAsync(_httpClient.BaseAddress + $"/movies/Delete/{id}");
 
-        public async Task<IEnumerable<MovieDto>> GetAllActive()
-        {
-            throw new NotImplementedException();
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                //movie = JsonConvert.DeserializeObject<MovieDto>(content);
+                return true;
+            }
+            else
+            {
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDTO>(content);
+                throw new Exception(errorModel.ErrorMessage);
+            }
         }
-
-        public async Task<MovieDto> GetByName(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<MovieDto> Update(MovieDto movie)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

@@ -11,17 +11,15 @@ using Movies.Utility;
 using MoviesApp.Data;
 using Newtonsoft.Json;
 using MoviesApp.Services;
+using Movies.DataSource.Repos;
 
 //MoviesApp 
 namespace MoviesApp.Controllers
 {
     public class MoviesController : Controller
     {
-        Uri baseAddress = new Uri("https://localhost:7231/api");
-        //Uri baseAddress = new Uri("https://localhost:44300/api"); 
-        //Uri baseAddress = new Uri("https://localhost:5059/api");
-
-        private readonly HttpClient _client;
+        //Uri baseAddress = new Uri("https://localhost:7231/api");
+        //private readonly HttpClient _client;
         private readonly IMovieService _movieService;
 
         private readonly IMovieRepos _movieRepos;
@@ -30,10 +28,10 @@ namespace MoviesApp.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MoviesController(
-              IMovieRepos movieRepos
-            , IPlaylistRepos playlistRepos
-            , IPhotoService photoService
-            , IHttpContextAccessor httpContextAccessor,
+             IMovieRepos movieRepos,
+             IPlaylistRepos playlistRepos
+            ,IPhotoService photoService
+            ,IHttpContextAccessor httpContextAccessor,
 
             IMovieService movieService
             )
@@ -44,8 +42,8 @@ namespace MoviesApp.Controllers
             _httpContextAccessor = httpContextAccessor;
 
             _movieService = movieService;
-            _client = new HttpClient();
-            _client.BaseAddress = baseAddress;
+            //_client = new HttpClient();
+            //_client.BaseAddress = baseAddress;
         }
 
         // Updated methods to properly use 'await' for asynchronous calls.
@@ -53,40 +51,28 @@ namespace MoviesApp.Controllers
         public async Task<IActionResult> Index(string search)
         {
             ViewBag.Message = "";
-            IEnumerable<MovieDto> movieList = await _movieService.GetAll();
-            
-            //HttpResponseMessage response;
+            IEnumerable<MovieDto> movieList;
 
-            //if (!string.IsNullOrEmpty(search))
-            //{
-            //    response = await _client.GetAsync($"{_client.BaseAddress}/movies/GetByName({search})");
-            //    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            //    {
-            //        response = await _client.GetAsync(_client.BaseAddress + "/movies/GetAll");
-            //        ViewBag.Message = "There are no movies with that Name!";
-            //    }
-            //}
-            //else
-            //{
-            //    response = await _client.GetAsync(_client.BaseAddress + "/movies/GetAll");
-            //}
+            if (!string.IsNullOrEmpty(search))
+            {
+                movieList = await _movieService.GetByName(search);
+                
+                if (movieList.Count() == 0)
+                {
+                    movieList = await _movieService.GetAll();
+                    ViewBag.Message = "There are no movies with that Name!";
+                }
+            }
+            else
+            {
+                movieList = await _movieService.GetAll();
+            }
 
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    string data = await response.Content.ReadAsStringAsync();
-            //    movieList = JsonConvert.DeserializeObject<List<MovieDto>>(data);
-            //}
-            //else
-            //{
-            //    ModelState.AddModelError("", "Failed to load movies");
-            //    return View("Index", movieList);
-            //}
-
-            return View(movieList);
+            return View("Index", movieList);
         }
 
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
@@ -112,7 +98,8 @@ namespace MoviesApp.Controllers
                 }
             }
 
-            var movie = await _movieRepos.GetByIdNoTracking(id);
+            //var movie = await _movieRepos.GetByIdNoTracking(id);
+            var movie = await _movieService.Get(id);
 
             if (movie == null)
             {
@@ -144,7 +131,9 @@ namespace MoviesApp.Controllers
                 return View("Details", movieVM);
             }
 
-            var movie = await _movieRepos.GetById(movieVM.Id);
+            //var movie = await _movieRepos.GetById(movieVM.Id);
+            var movie = await _movieService.Get(movieVM.Id);
+            
             if (movie == null)
             {
                 ModelState.AddModelError("", "Movie not found");
@@ -192,7 +181,7 @@ namespace MoviesApp.Controllers
 
                 var result = await _photoService.AddPhotoAsync(movieVM.Image);
 
-                var movie = new Movie
+                var movie = new MovieDto
                 {
                     Title = movieVM.Title,
                     Description = movieVM.Description,
@@ -203,16 +192,9 @@ namespace MoviesApp.Controllers
                 };
 
                 //await _movieRepos.Add(movie);
-                var response = await _client.PostAsJsonAsync(_client.BaseAddress + "/movies/Post", movie);
-                if (response.IsSuccessStatusCode)
-                {
-                    TempData["success"] = "Movie created";
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Failed to create movie");
-                }
+                await _movieService.Add(movie);
+                TempData["success"] = "Movie " + movie.Title + " created!";
+                return RedirectToAction(nameof(Index));
             }
             else
             {
@@ -258,23 +240,8 @@ namespace MoviesApp.Controllers
                 return View("Edit", movieVM);
             }
 
-            var movie = new MovieDto();
-
             //var movie = await _movieRepos.GetByIdNoTracking(id);
-            
-            var response = await _client.GetAsync(_client.BaseAddress + $"/movies/Get{id}");
-            if (! response.IsSuccessStatusCode)
-            {
-                ModelState.AddModelError("", "Failed to Update Movie");
-                TempData["error"] = "Movie could not be updated!";
-                return RedirectToAction(nameof(Index));
-            }
-            
-            if (response.IsSuccessStatusCode)
-            {
-                string data = await response.Content.ReadAsStringAsync();
-                movie = JsonConvert.DeserializeObject<MovieDto>(data);
-            }
+            var movie = await _movieService.Get(id);
 
             if (movieVM.Image != null)
             {
@@ -295,7 +262,7 @@ namespace MoviesApp.Controllers
                 movieVM.PictUrl = movie.PictUrl;
             }
 
-            var editMovie = new Movie
+            var editMovie = new MovieDto
             {
                 Id = id,
                 Title = movieVM.Title,
@@ -313,18 +280,7 @@ namespace MoviesApp.Controllers
             }
 
             //await _movieRepos.Update(editMovie);
-            
-            response = await _client.PutAsJsonAsync(_client.BaseAddress + "/movies/Update", editMovie);
-            if (response.IsSuccessStatusCode)
-            {
-                TempData["success"] = "Movie Updated!";
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                ModelState.AddModelError("", "Failed to Update Movie");
-                TempData["error"] = "Movie could not be updated!";
-            }
+            await _movieService.Update(editMovie);
             TempData["success"] = "Movie details updated";
 
             return RedirectToAction(nameof(Index));
@@ -332,14 +288,15 @@ namespace MoviesApp.Controllers
 
         [Authorize]
         // GET: Movies/Delete/5 --------------------------------------------------------
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var movie = await _movieRepos.GetById(id);
+            //var movie = await _movieRepos.GetById(id);
+            var movie = await _movieService.Get(id);
             if (movie == null)
             {
                 return NotFound();
@@ -352,11 +309,13 @@ namespace MoviesApp.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _movieRepos.GetById(id);
+            //var movie = await _movieRepos.GetById(id);
+            var movie = await _movieService.Get(id);
             if (movie != null)
             {
-                _movieRepos.Delete(movie);
-                TempData["success"] = "Movie deleted";
+                //_movieRepos.Delete(movie);
+                await _movieService.Delete(id);
+                TempData["success"] = "Movie " + movie.Title +  " deleted!";
             }
             return RedirectToAction(nameof(Index));
         }

@@ -7,7 +7,7 @@ namespace MoviesApp.Services
         Task<MovieDto> Get(int id);
         Task<IEnumerable<MovieDto>> GetAll();
         Task<IEnumerable<MovieDto>> GetAllActive();
-        Task<MovieDto> GetByName(string name);
+        Task<IEnumerable<MovieDto>> GetByName(string name);
         Task<MovieDto> Add(MovieDto movie);
         Task<MovieDto> Update(MovieDto movie);
         Task<bool> Delete(int id);
