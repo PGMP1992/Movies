@@ -1,5 +1,4 @@
-﻿@using Movies.Models.ViewModels
-@model EditUserVM
+﻿@model MoviesApp.ViewModels.EditUserVM
 
 <h3>User</h3>
 <h5>Edit</h5>
@@ -7,7 +6,7 @@
 <div class="card mb-3" style="max-width: 100%">
     <div class=" row g-0">
         <div class="col-md-4">
-            @if (@Model.ProfileImageUrl != null)
+            @if (Model.ProfileImageUrl != null)
             {
                 <img class="card-img-top"
                      src="@Model.ProfileImageUrl"

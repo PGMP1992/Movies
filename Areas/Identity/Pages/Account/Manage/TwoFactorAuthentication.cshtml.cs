@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Movies.Models;
+using MoviesApp.Models;
 
 namespace MoviesApp.Areas.Identity.Pages.Account.Manage
 {

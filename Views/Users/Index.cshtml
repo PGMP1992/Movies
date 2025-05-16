@@ -1,4 +1,4 @@
-﻿@using Movies.Models.ViewModels
+﻿@using MoviesApp.ViewModels
 @model List<UsersVM>
 
 <h3>Active Users</h3>
@@ -9,13 +9,12 @@
         {
             <div class="col-md-3">
                 <div class="card mb-4 box-shadow">
-                    @if (@item.ProfileImageUrl != null)
-                    {
-                        <img class="card-img-top"
-                             src="@item.ProfileImageUrl"
-                             alt="Photo"
-                             loading="lazy" decoding="async"
-                             onerror="this.onerror=null; this.src='/images/default.png';" />
+                    @if(@item.ProfileImageUrl != null ) {
+                        <img class="card-img-top" 
+                        src="@item.ProfileImageUrl"
+                        alt="Photo" 
+                        loading="lazy" decoding="async"
+                        onerror="this.onerror=null; this.src='/images/default.png';" />
                     }
                     else
                     {
@@ -24,7 +23,6 @@
                              alt="Photo"
                              loading="lazy" decoding="async" />
                     }
-
                     <div class="card-body">
                         <h5>@item.UserName</h5>
                         <h6 class="text-secondary">@item.City</h6>

@@ -9,6 +9,7 @@
 	  <stdoutLogEnabled>true</stdoutLogEnabled>
   </PropertyGroup>
 
+  
   <ItemGroup>
     <PackageReference Include="CloudinaryDotNet" Version="1.27.5" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.4" />
@@ -24,10 +25,5 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Movies.DataS\Movies.DataSource.csproj" />
-    <ProjectReference Include="..\Movies.Model\Movies.Model.csproj" />
-    <ProjectReference Include="..\Movies.Utils\Movies.Utils.csproj" />
-  </ItemGroup>
-
+  
 </Project>

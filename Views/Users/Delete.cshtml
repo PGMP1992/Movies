@@ -1,4 +1,4 @@
-﻿@using Movies.Models.ViewModels
+﻿@using MoviesApp.ViewModels
 @model EditUserVM
 
 <h5>Are you sure you want to delete this User?</h5>
@@ -6,7 +6,7 @@
 <div class="card mb-3">
     <div class=" row g-0">
         <div class="col-md-4">
-            @if (@Model.ProfileImageUrl != null)
+            @if (Model.ProfileImageUrl != null)
             {
                 <img class="card-img-top"
                      src="@Model.ProfileImageUrl"

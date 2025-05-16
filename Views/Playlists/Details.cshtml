@@ -1,47 +1,57 @@
-﻿@using Movies.Models.ViewModels
-@model PlaylistMoviesVM
+﻿@model MoviesApp.ViewModels.PlaylistMoviesVM
 
 <h3>Playlist</h3>
 
 <div class="card p-4">
     <div class="row">
-        <span><h6>Name: <b class="text-secondary">@Model.Playlist.Name</b></h6></span>
+        <div class="col-2">
+            <h6>Name:</h6>
+        </div>
+        <div class="col-6">
+            <h6 class="text-secondary">@Model.Playlist.Name</h6>
+        </div>
     </div>
         
     @if(User.IsInRole("admin"))
     {
         <div class="row">
-            <span><h6>User: <b class="text-secondary">@Model.AppUser.UserName</b></h6></span>
+            <div class="col-2">
+                <h6>User:</h6>
+            </div>
+            <div class="col-6">
+                <h6 class="text-secondary">@Model.AppUser.UserName</H6>
+            </div>
         </div>
     }
     @if (Model.Playlist.Movies.Any())
     {
-        <hr />
-        <h6>Movies</h6>
-        <table class="table table-responsive">
-            <tr>
-                <th>Title</th>
-                <th>Genre</th>
-                <th>Age</th>
-                <th></th>
-            </tr>
-            @foreach( var item in Model.Playlist.Movies)
-            {
+        <div class="border border-1 p-3 mt-2">
+            <h6>Movies</h6>
+            <table class="table table-responsive">
                 <tr>
-                    <td class="text-secondary">@item.Title</td>
-                    <td class ="text-secondary">@item.Genre</td>
-                        <td class="text-secondary">@item.Age</td>
-                    <td>
-                        <a asp-controller="Playlists"
-                            asp-action="RemoveMovie" 
-                            asp-route-playlistId= "@Model.Playlist.Id"
-                            asp-route-movieId="@item.Id" 
-                            type="button" class="btn btn-sm btn-outline-danger">Delete
-                        </a>
-                    </td>
+                    <th>Title</th>
+                    <th>Genre</th>
+                    <th>Age</th>
+                    <th></th>
                 </tr>
-            }
-        </table>
+                @foreach( Movie item in Model.Playlist.Movies)
+                {
+                    <tr>
+                        <td class="text-secondary">@item.Title</td>
+                        <td class ="text-secondary">@item.Genre</td>
+                            <td class="text-secondary">@item.Age</td>
+                        <td>
+                            <a asp-controller="Playlists"
+                                asp-action="RemoveMovie" 
+                                asp-route-playlistId= "@Model.Playlist.Id"
+                                asp-route-movieId="@item.Id" 
+                                type="button" class="btn btn-sm btn-outline-danger">Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
     }
     else
     {

@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Movies.DataSource.Repos.Interfaces;
-using Movies.Models;
-using Movies.Models.ViewModels;
-using Movies.Utility;
 using MoviesApp.Data;
+using MoviesApp.Models;
+using MoviesApp.Repos.Interfaces;
+using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers
 {
@@ -74,7 +73,7 @@ namespace MoviesApp.Controllers
             {
                 userId = id;
             }
-
+                    
             var user = await _userRepos.GetById(userId);
             var userPlaylists = await _userRepos.GetAllPlaylists(userId);
 
@@ -165,7 +164,7 @@ namespace MoviesApp.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete (string id)
         {
             var user = await _userRepos.GetById(id);
             if (user == null)

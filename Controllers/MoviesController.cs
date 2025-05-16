@@ -1,28 +1,31 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Movies.DataSource.Repos.Interfaces;
-using Movies.Models;
-using Movies.Models.ViewModels;
-using Movies.Utility;
 using MoviesApp.Data;
-
+using MoviesApp.DTOs;
+using MoviesApp.Models;
+using MoviesApp.Repos.Interfaces;
+using MoviesApp.Services;
+using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers
 {
     public class MoviesController : Controller
     {
+        //private readonly IMovieService _movieService;
         private readonly IMovieRepos _movieRepos;
         private readonly IPlaylistRepos _playlistRepos;
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MoviesController(IMovieRepos movieRepos
+            //, IMovieService movieService
             , IPlaylistRepos playlistRepos
             , IPhotoService photoService
             , IHttpContextAccessor httpContextAccessor
             )
         {
+            //_movieService = movieService;
             _movieRepos = movieRepos;
             _playlistRepos = playlistRepos;
             _photoService = photoService;
@@ -32,25 +35,25 @@ namespace MoviesApp.Controllers
         // GET: Movies
         public async Task<IActionResult> Index(string search)
         {
-            var movies = await _movieRepos.GetAll(true); // Get only active movies
-
-            if (User.IsInRole("admin"))
-            {
-                movies = await _movieRepos.GetAll(false); // Get all movies 
-            }
-
             ViewBag.Message = "";
+            IEnumerable<Movie> movieList;
 
             if (!string.IsNullOrEmpty(search))
             {
-                var movies1 = await _movieRepos.GetByName(search);
-                if (movies1.Count > 0)
+                movieList = await _movieRepos.GetByName(search);
+
+                if (movieList.Count() == 0)
                 {
-                    return View(movies1);
+                    movieList = await _movieRepos.GetAll();
+                    ViewBag.Message = "There are no movies with that Name!";
                 }
-                ViewBag.Message = "There are not movies with that Name.";
             }
-            return View(movies);
+            else
+            {
+                movieList = await _movieRepos.GetAll();
+            }
+
+            return View("Index", movieList);
         }
 
         // GET: Movies/Details/5
@@ -66,7 +69,7 @@ namespace MoviesApp.Controllers
             {
                 var user = _httpContextAccessor.HttpContext.User.GetUserId();
                 var playlists = await _playlistRepos.GetAllByUser(user).ConfigureAwait(false);
-
+                
                 if (playlists.Count > 0)
                 {
                     ViewData["playlistName"] = new SelectList(
@@ -78,8 +81,8 @@ namespace MoviesApp.Controllers
                     ViewBag.playlistName = null;
                     ViewBag.Message = "You have no Playlists. Please create one.";
                 }
-            }
-
+            }    
+            
             var movie = await _movieRepos.GetByIdNoTracking(id);
 
             if (movie == null)
@@ -106,25 +109,25 @@ namespace MoviesApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Details(AddMovieVM movieVM)
         {
-            if (!ModelState.IsValid)
+            if (! ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Failed to Add Movie");
                 return View("Details", movieVM);
             }
 
             var movie = await _movieRepos.GetById(movieVM.Id);
-            if (movie == null)
+            if(movie == null)
             {
                 ModelState.AddModelError("", "Movie not found");
                 return View("Details", movieVM);
             }
-
+        
             // Has to use GetByIdNoTracking
             var playlist = await _playlistRepos.GetById(movieVM.PlaylistId);
 
             if (playlist != null) //Check if No Playlists
             {
-                if (!playlist.Movies.Contains(movie))
+                if (! playlist.Movies.Contains(movie))
                 {
                     playlist.Movies.Add(movie);
                     _playlistRepos.Update(playlist);
@@ -153,12 +156,12 @@ namespace MoviesApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (movieVM.Image == null)
+                if(movieVM.Image == null)
                 {
                     ModelState.AddModelError("Image", "Please upload a photo");
                     return View(movieVM);
                 }
-
+                
                 var result = await _photoService.AddPhotoAsync(movieVM.Image);
                 var movie = new Movie
                 {
@@ -169,7 +172,8 @@ namespace MoviesApp.Controllers
                     PictUrl = result.Url.ToString(),
                     Active = true
                 };
-
+                
+                //_movieRepos.Add(movie);
                 _movieRepos.Add(movie);
                 TempData["success"] = "Movie created";
 
@@ -184,9 +188,10 @@ namespace MoviesApp.Controllers
 
         [Authorize]
         // GET: Movies/Edit/5 ------------------------------------------------------
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             var movie = await _movieRepos.GetById(id);
+            //MovieDto movie = await _movieService.Get(id);
 
             if (movie == null)
             {
@@ -218,6 +223,7 @@ namespace MoviesApp.Controllers
             }
 
             var movie = await _movieRepos.GetByIdNoTracking(id);
+            //var movie = await _movieService.Get(id);
 
             if (movieVM.Image != null)
             {
@@ -248,14 +254,15 @@ namespace MoviesApp.Controllers
                 PictUrl = movieVM.PictUrl,
                 Active = movieVM.Active,
             };
-
+            
             // Just change Active status if Admin user.
-            if (!User.IsInRole("admin"))
+            if (! User.IsInRole("admin"))
             {
                 editMovie.Active = true;
             }
 
             _movieRepos.Update(editMovie);
+            //_movieService.Update(editMovie);
             TempData["success"] = "Movie details updated";
 
             return RedirectToAction(nameof(Index));
@@ -263,7 +270,7 @@ namespace MoviesApp.Controllers
 
         [Authorize]
         // GET: Movies/Delete/5 --------------------------------------------------------
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {
@@ -271,6 +278,7 @@ namespace MoviesApp.Controllers
             }
 
             var movie = await _movieRepos.GetById(id);
+            //var movie = await _movieService.Get(id);
             if (movie == null)
             {
                 return NotFound();
@@ -284,9 +292,11 @@ namespace MoviesApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var movie = await _movieRepos.GetById(id);
+            //var movie = await _movieService.Get(id);
             if (movie != null)
             {
                 _movieRepos.Delete(movie);
+                //_movieService.Delete(id);
                 TempData["success"] = "Movie deleted";
             }
             return RedirectToAction(nameof(Index));

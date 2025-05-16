@@ -1,19 +1,25 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Movies.DataSource.Data;
-using Movies.DataSource.Repos;
-using Movies.DataSource.Repos.Interfaces;
-using Movies.Models;
-using Movies.Utility;
+using MoviesApp.Data;
+using MoviesApp.Helpers;
+using MoviesApp.Models;
+using MoviesApp.Repos;
+using MoviesApp.Repos.Interfaces;
+using MoviesApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 builder.Services.AddScoped<IMovieRepos, MovieRepos>();
 builder.Services.AddScoped<IPlaylistRepos, PlaylistRepos>();
 builder.Services.AddScoped<IUsersRepos, UsersRepos>();
+
 builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interface
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+
+//API Services
+builder.Services.AddHttpClient<IMovieService, MovieService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

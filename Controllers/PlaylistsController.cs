@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Movies.DataSource.Repos.Interfaces;
-using Movies.Models;
-using Movies.Models.ViewModels;
 using MoviesApp.Data;
+using MoviesApp.Models;
+using MoviesApp.Repos.Interfaces;
+using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers
 {
@@ -15,7 +15,7 @@ namespace MoviesApp.Controllers
         private readonly IMovieRepos _movieRepos;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PlaylistsController(IPlaylistRepos playlistRepos
+        public PlaylistsController( IPlaylistRepos playlistRepos
             , IMovieRepos movieRepos
             , IHttpContextAccessor httpContextAccessor
         )
@@ -75,8 +75,8 @@ namespace MoviesApp.Controllers
         {
             var movie = await _movieRepos.GetById(movieId);
             var playlist = await _playlistRepos.GetById(playlistId);
-
-            if (playlist != null)
+            
+            if ( playlist != null)
             {
                 playlist.Movies.Remove(movie);
                 _playlistRepos.Update(playlist);
@@ -92,7 +92,7 @@ namespace MoviesApp.Controllers
                 Movies = playlist.Movies
             };
 
-            return View("Details", newVm);
+            return View("Details", newVm );
         }
 
         // GET: Playlists/Create -------------------------------------------
