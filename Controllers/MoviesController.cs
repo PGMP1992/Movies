@@ -19,13 +19,13 @@ namespace MoviesApp.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MoviesController(IMovieRepos movieRepos
-            //, IMovieService movieService
+        //    , IMovieService movieService
             , IPlaylistRepos playlistRepos
             , IPhotoService photoService
             , IHttpContextAccessor httpContextAccessor
             )
         {
-            //_movieService = movieService;
+         //   _movieService = movieService;
             _movieRepos = movieRepos;
             _playlistRepos = playlistRepos;
             _photoService = photoService;
@@ -40,16 +40,19 @@ namespace MoviesApp.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                movieList = await _movieRepos.GetByName(search);
+                movieList = await _movieRepos.GetByName(search).ConfigureAwait(false);
+                //movieList = await _movieService.GetByName(search);
 
                 if (movieList.Count() == 0)
                 {
+                    //movieList = await _movieService.GetAll();
                     movieList = await _movieRepos.GetAll();
                     ViewBag.Message = "There are no movies with that Name!";
                 }
             }
             else
             {
+                //movieList = await _movieService.GetAll();
                 movieList = await _movieRepos.GetAll();
             }
 
@@ -173,8 +176,8 @@ namespace MoviesApp.Controllers
                     Active = true
                 };
                 
-                //_movieRepos.Add(movie);
                 _movieRepos.Add(movie);
+                //_movieService.Add(movie);
                 TempData["success"] = "Movie created";
 
                 return RedirectToAction(nameof(Index));

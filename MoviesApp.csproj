@@ -8,7 +8,6 @@
 	  <ServerGarbageCollection>false</ServerGarbageCollection>
 	  <stdoutLogEnabled>true</stdoutLogEnabled>
   </PropertyGroup>
-
   
   <ItemGroup>
     <PackageReference Include="CloudinaryDotNet" Version="1.27.5" />
@@ -24,6 +23,5 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
   </ItemGroup>
-
   
 </Project>

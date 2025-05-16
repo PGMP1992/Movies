@@ -73,10 +73,6 @@ namespace MoviesApp.Repos
                 .AsNoTracking()
                 .Any(e => e.Id == id);
         }
-
-        void IMovieRepos.Delete(Task<Movie> movie)
-        {
-            throw new NotImplementedException();
-        }
+               
     }
 }

@@ -14,6 +14,5 @@ namespace MoviesApp.Repos.Interfaces
         bool Delete(Movie movie);
         bool Save();
         bool MovieExists(int id);
-        void Delete(Task<Movie> movie);
     }
 }
