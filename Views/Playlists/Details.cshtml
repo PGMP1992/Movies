@@ -4,29 +4,19 @@
 
 <div class="card p-4">
     <div class="row">
-        <div class="col-2">
-            <h6>Name:</h6>
-        </div>
-        <div class="col-6">
-            <h6 class="text-secondary">@Model.Playlist.Name</h6>
-        </div>
+        <h5>Name: @Model.Playlist.Name</h5>
     </div>
         
     @if(User.IsInRole("admin"))
     {
         <div class="row">
-            <div class="col-2">
-                <h6>User:</h6>
-            </div>
-            <div class="col-6">
-                <h6 class="text-secondary">@Model.AppUser.UserName</H6>
-            </div>
+            <h5>User: @Model.AppUser.UserName</h5>
         </div>
     }
     @if (Model.Playlist.Movies.Any())
     {
-        <div class="border border-1 p-3 mt-2">
-            <h6>Movies</h6>
+        <hr />    
+        <h5>Movies</h5>
             <table class="table table-responsive">
                 <tr>
                     <th>Title</th>
@@ -51,7 +41,6 @@
                     </tr>
                 }
             </table>
-        </div>
     }
     else
     {
