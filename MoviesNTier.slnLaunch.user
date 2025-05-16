@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "MoviesApp\\MoviesApp.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Movies.API\\Movies.API.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

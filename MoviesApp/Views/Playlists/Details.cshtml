@@ -4,23 +4,13 @@
 
 <div class="card p-4">
     <div class="row">
-        <div class="col-2">
-            <h6>Name:</h6>
-        </div>
-        <div class="col-6">
-            <h6 class="text-secondary">@Model.Playlist.Name</h6>
-        </div>
+        <span>Name: <b>@Model.Playlist.Name</b></span>
     </div>
         
     @if(User.IsInRole("admin"))
     {
         <div class="row">
-            <div class="col-2">
-                <h6>User:</h6>
-            </div>
-            <div class="col-6">
-                <h6 class="text-secondary">@Model.AppUser.UserName</H6>
-            </div>
+            <span>User: <b>@Model.AppUser.UserName</b></span>
         </div>
     }
     @if (Model.Playlist.Movies.Any())
