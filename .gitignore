@@ -5,3 +5,5 @@
 /.vs/Movies/v17
 /.vs
 /obj
+/Movies.API/bin/Debug/net9.0
+/Movies.API/obj
