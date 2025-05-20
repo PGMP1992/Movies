@@ -4,7 +4,8 @@ namespace MoviesApp.Services
 {
     public interface IMovieService
     {
-        Task<MovieDto> Get(int id);
+        Task<MovieDto> GetById(int id);
+        Task<MovieDto> GetByIdNoTracking(int id);
         Task<IEnumerable<MovieDto>> GetAll();
         Task<IEnumerable<MovieDto>> GetAllActive();
         Task<IEnumerable<MovieDto>> GetByName(string name);

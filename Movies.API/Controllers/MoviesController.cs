@@ -17,7 +17,7 @@ namespace Movies.API.Controllers
 
         // GET: MoviesController
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             var movies = await _movieRepos.GetAll();
             if (movies == null || !movies.Any())
@@ -41,14 +41,14 @@ namespace Movies.API.Controllers
 
         // GET: MoviesController/Details/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var movie = await _movieRepos.GetById(id);
             if (movie == null)
             {
                 return NotFound("Movie doesn't exist!");
             }
-            return Ok(movie);
+            return Ok(movie.ToMovieDto());
         }
 
         // GET: MoviesController/Details/5
@@ -60,7 +60,7 @@ namespace Movies.API.Controllers
             {
                 return NotFound("Movie doesn't exist!");
             }
-            return Ok(movie);
+            return Ok(movie.ToMovieDto());
         }
 
         [HttpGet("{search}")]
@@ -76,26 +76,33 @@ namespace Movies.API.Controllers
 
         // POST: MoviesController/Create
         [HttpPost]
-        public async Task<IActionResult> Create(Movie movie)
+        public async Task<IActionResult> Post(Movie movie)
         {
             var newMovie = _movieRepos.Add(movie);
             if (newMovie == false)
             {
                 return BadRequest("Could not create Movie");
             }
-            return CreatedAtAction(nameof(Get), new { id = movie.Id }, movie);
+            return CreatedAtAction(nameof(GetById), new { id = movie.Id }, movie);
         }
 
         // PUT: MoviesController/Edit/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, Movie movie)
+        [HttpPut]
+        public async Task<IActionResult> Put(Movie movie)
         {
-            if (id != movie.Id)
+            if (movie is null)
             {
                 return NotFound("Movie doesn't exist!");
             }
+            
+            var existingMovie = await _movieRepos.GetByIdNoTracking(movie.Id);
+            if (existingMovie is null)
+            {
+                return NotFound("Movie doesn't exist!");
+            }
+
             _movieRepos.Update(movie);
-            return NoContent();
+            return Ok(movie);
         }
 
         // DELETE: MoviesController/Delete/5
@@ -111,5 +118,4 @@ namespace Movies.API.Controllers
             return Ok(deleted);
         }
     }
-
 }
