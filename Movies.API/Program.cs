@@ -18,7 +18,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+//Controllers
 builder.Services.AddTransient<IMovieRepos, MovieRepos>();
+builder.Services.AddTransient<IPlaylistRepos, PlaylistRepos>();
 
 var app = builder.Build();
 

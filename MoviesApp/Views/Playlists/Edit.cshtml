@@ -1,4 +1,4 @@
-﻿@model MoviesApp.Models.Playlist
+﻿@model PlaylistDto
 
 <h3>Playlist</h3>
 
@@ -9,7 +9,7 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            @* <input type="hidden" id="AppUSerId" name="UserName" asp-for="AppUserId" /> *@
+            @* <input type="hidden" id="AppUserId" name="UserName" asp-for="AppUserId" /> *@
 
             <div class="form-group">
                 <label asp-for="Name" class="form-text"></label>

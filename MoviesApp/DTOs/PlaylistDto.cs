@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using MoviesApp.DTOs;
+using MoviesApp.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MoviesApp.Models
+namespace MoviesApp.DTOs
 {
-    public class Playlist
+    public class PlaylistDto
     {
         public int Id { get; set; }
 
@@ -14,21 +14,12 @@ namespace MoviesApp.Models
         public string Name { get; set; } = "";
 
         public string AppUserId { get; set; } = "";
+
         [ForeignKey("AppUserId")]
         [ValidateNever]
         public AppUser? AppUser { get; set; }
 
         [ValidateNever]
         public List<Movie>? Movies { get; set; }
-
-        public PlaylistDto ToPlaylistDto()
-        {
-            return new PlaylistDto
-            {
-                Id = this.Id,
-                Name = this.Name,
-                AppUserId = this.AppUserId
-            };
-        }
     }
 }

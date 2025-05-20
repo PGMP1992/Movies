@@ -6,14 +6,9 @@ namespace Movies.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class MoviesController : ControllerBase
+    public class MoviesController(IMovieRepos _movieRepos) : ControllerBase
     {
-        private readonly IMovieRepos _movieRepos;
-
-        public MoviesController(IMovieRepos movieRepos)
-        {
-            _movieRepos = movieRepos;
-        }
+        //private readonly IMovieRepos _movieRepos = movieRepos;
 
         // GET: MoviesController
         [HttpGet]

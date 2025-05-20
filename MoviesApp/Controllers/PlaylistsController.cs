@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
-using MoviesApp.Models;
+using MoviesApp.DTOs;
 using MoviesApp.Repos.Interfaces;
+using MoviesApp.Services;
 using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers
@@ -11,35 +12,41 @@ namespace MoviesApp.Controllers
     [Authorize]
     public class PlaylistsController : Controller
     {
+        private readonly IPlaylistService _playlistService;
+
         private readonly IPlaylistRepos _playlistRepos;
         private readonly IMovieRepos _movieRepos;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PlaylistsController( IPlaylistRepos playlistRepos
+        public PlaylistsController(IPlaylistRepos playlistRepos
             , IMovieRepos movieRepos
             , IHttpContextAccessor httpContextAccessor
+            , IPlaylistService playlistService
         )
         {
             _playlistRepos = playlistRepos;
             _movieRepos = movieRepos;
             _httpContextAccessor = httpContextAccessor;
+            _playlistService = playlistService;
         }
 
         // GET: Playlists ---------------------------------------------------
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Playlist> list;
+            IEnumerable<PlaylistDto> list;
 
             if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
             {
-                IEnumerable<Playlist> playlists = await _playlistRepos.GetAll();
+                //IEnumerable<Playlist> playlists = await _playlistRepos.GetAll();
+                IEnumerable<PlaylistDto> playlists = await _playlistService.GetAll();
                 list = playlists;
                 ViewBag.Message = "";
             }
             else
             {
                 var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-                IEnumerable<Playlist> playlists = await _playlistRepos.GetAllByUser(curUserId);
+                //IEnumerable<Playlist> playlists = await _playlistRepos.GetAllByUser(curUserId);
+                IEnumerable<PlaylistDto> playlists = await _playlistService.GetAllByUser(curUserId);
                 list = playlists;
                 if (list.Count() == 0)
                 {
@@ -50,7 +57,7 @@ namespace MoviesApp.Controllers
         }
 
         // GET: Playlists/Details/5 -------------------------------------------
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
@@ -58,6 +65,7 @@ namespace MoviesApp.Controllers
             }
 
             var playlist = await _playlistRepos.GetByIdNoTracking(id);
+            //var playlist = await _playlistService.GetByIdNoTracking(id);
 
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
@@ -75,8 +83,8 @@ namespace MoviesApp.Controllers
         {
             var movie = await _movieRepos.GetById(movieId);
             var playlist = await _playlistRepos.GetById(playlistId);
-            
-            if ( playlist != null)
+
+            if (playlist != null)
             {
                 playlist.Movies.Remove(movie);
                 _playlistRepos.Update(playlist);
@@ -92,14 +100,14 @@ namespace MoviesApp.Controllers
                 Movies = playlist.Movies
             };
 
-            return View("Details", newVm );
+            return View("Details", newVm);
         }
 
         // GET: Playlists/Create -------------------------------------------
         public IActionResult Create()
         {
             var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-            var playlist = new Playlist { AppUserId = curUserId };
+            var playlist = new PlaylistDto { AppUserId = curUserId };
 
             return View(playlist);
         }
@@ -107,12 +115,13 @@ namespace MoviesApp.Controllers
         // POST: Playlists/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Playlist playlist)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description")] PlaylistDto playlist)
         {
             if (ModelState.IsValid)
             {
                 playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-                _playlistRepos.Add(playlist);
+                //_playlistRepos.Add(playlist);
+                await _playlistService.Add(playlist);
                 TempData["success"] = "Playlist created";
                 return RedirectToAction(nameof(Index));
             }
@@ -120,14 +129,15 @@ namespace MoviesApp.Controllers
         }
 
         // GET: Playlists/Edit/5 ------------------------------------------------
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var playlist = await _playlistRepos.GetByIdNoTracking(id);
+            //var playlist = await _playlistRepos.GetByIdNoTracking(id);
+            var playlist = await _playlistService.GetByIdNoTracking(id);
             if (playlist == null)
             {
                 return NotFound();
@@ -138,7 +148,7 @@ namespace MoviesApp.Controllers
         // POST: Playlists/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Playlist playlist)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] PlaylistDto playlist)
         {
             if (id != playlist.Id)
             {
@@ -150,7 +160,8 @@ namespace MoviesApp.Controllers
                 try
                 {
                     playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-                    _playlistRepos.Update(playlist);
+                    //_playlistRepos.Update(playlist);
+                    await _playlistService.Update(playlist);
                     TempData["success"] = "Playlist updated";
                 }
                 catch (DbUpdateConcurrencyException)
@@ -170,14 +181,15 @@ namespace MoviesApp.Controllers
         }
 
         // GET: Playlists/Delete/5 ------------------------------------------------
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var playlist = await _playlistRepos.GetByIdNoTracking(id);
+            //var playlist = await _playlistRepos.GetByIdNoTracking(id);
+            var playlist = await _playlistService.GetByIdNoTracking(id);
             if (playlist == null)
             {
                 return NotFound();
@@ -190,10 +202,12 @@ namespace MoviesApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var playlist = await _playlistRepos.GetByIdNoTracking(id);
+            //var playlist = await _playlistRepos.GetByIdNoTracking(id);
+            var playlist = await _playlistService.GetByIdNoTracking(id);
             if (playlist != null)
             {
-                _playlistRepos.Delete(playlist);
+                //_playlistRepos.Delete(playlist);
+                await _playlistService.Delete(playlist.Id);
                 TempData["success"] = "Playlist deleted";
             }
 
@@ -204,6 +218,7 @@ namespace MoviesApp.Controllers
         private bool PlaylistExists(int id)
         {
             return _playlistRepos.PlaylistExists(id);
+            //return _playlistService.PlaylistExists(id);
         }
     }
 }
