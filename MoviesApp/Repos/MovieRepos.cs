@@ -22,6 +22,15 @@ namespace MoviesApp.Repos
                 .ToListAsync();
         }
 
+        public async Task<List<Movie>> GetAllActive()
+        {
+            return await _context.Movies
+                .AsNoTracking()
+                .OrderBy(m => m.Title)
+                .Where(m => m.Active == true)
+                .ToListAsync();
+        }
+
         public async Task<Movie> GetById(int? id)
         {
             return await _context.Movies

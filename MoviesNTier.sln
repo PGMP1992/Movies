@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoviesApp", "MoviesApp\MoviesApp.csproj", "{7E532720-0870-2942-A4E3-EE97CDE6AE47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movies.API", "Movies.API\Movies.API.csproj", "{909671CD-8973-45AD-891D-F5F9A111E5A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7E532720-0870-2942-A4E3-EE97CDE6AE47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E532720-0870-2942-A4E3-EE97CDE6AE47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E532720-0870-2942-A4E3-EE97CDE6AE47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{909671CD-8973-45AD-891D-F5F9A111E5A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{909671CD-8973-45AD-891D-F5F9A111E5A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{909671CD-8973-45AD-891D-F5F9A111E5A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{909671CD-8973-45AD-891D-F5F9A111E5A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

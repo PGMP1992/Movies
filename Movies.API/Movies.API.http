@@ -1,0 +1,38 @@
+@Movies.API_HostAddress = http://localhost:5130
+
+GET {{Movies.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+GET {{Movies.API_HostAddress}}/get/
+Accept: application/json
+
+### 
+GET {{Movies.API_HostAddress}}/get/1
+Accept: application/json
+
+###
+DELETE {{Movies.API_HostAddress}}/delete/1
+Accept: application/json
+
+###
+PUT {{Movies.API_HostAddress}}/put/1
+Content-Type: application/json
+{
+  "id": 1,
+  "title": "Updated Movie Title",
+  "description": "Updated Movie Description",
+  "genre": "Updated Genre",
+}
+###
+
+POST {{Movies.API_HostAddress}}/post/
+Content-Type: application/json
+{
+  "id": 2,
+  "title": "New Movie Title",
+  "description": "New Movie Description",
+  "releaseDate": "2023-10-01T00:00:00Z"
+}
+###
+

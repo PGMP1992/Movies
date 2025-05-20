@@ -12,20 +12,20 @@ namespace MoviesApp.Controllers
 {
     public class MoviesController : Controller
     {
-        //private readonly IMovieService _movieService;
+        private readonly IMovieService _movieService;
         private readonly IMovieRepos _movieRepos;
         private readonly IPlaylistRepos _playlistRepos;
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MoviesController(IMovieRepos movieRepos
-        //    , IMovieService movieService
+            , IMovieService movieService
             , IPlaylistRepos playlistRepos
             , IPhotoService photoService
             , IHttpContextAccessor httpContextAccessor
             )
         {
-         //   _movieService = movieService;
+            _movieService = movieService;
             _movieRepos = movieRepos;
             _playlistRepos = playlistRepos;
             _photoService = photoService;
@@ -36,24 +36,24 @@ namespace MoviesApp.Controllers
         public async Task<IActionResult> Index(string search)
         {
             ViewBag.Message = "";
-            IEnumerable<Movie> movieList;
+            IEnumerable<MovieDto> movieList;
 
             if (!string.IsNullOrEmpty(search))
             {
-                movieList = await _movieRepos.GetByName(search).ConfigureAwait(false);
-                //movieList = await _movieService.GetByName(search);
+                //movieList = await _movieRepos.GetByName(search).ConfigureAwait(false);
+                movieList = await _movieService.GetByName(search);
 
                 if (movieList.Count() == 0)
                 {
-                    //movieList = await _movieService.GetAll();
-                    movieList = await _movieRepos.GetAll();
+                    movieList = await _movieService.GetAll();
+                    //movieList = await _movieRepos.GetAll();
                     ViewBag.Message = "There are no movies with that Name!";
                 }
             }
             else
             {
-                //movieList = await _movieService.GetAll();
-                movieList = await _movieRepos.GetAll();
+                movieList = await _movieService.GetAll();
+                //movieList = await _movieRepos.GetAll();
             }
 
             return View("Index", movieList);
@@ -166,7 +166,7 @@ namespace MoviesApp.Controllers
                 }
                 
                 var result = await _photoService.AddPhotoAsync(movieVM.Image);
-                var movie = new Movie
+                var movie = new MovieDto
                 {
                     Title = movieVM.Title,
                     Description = movieVM.Description,
@@ -176,8 +176,8 @@ namespace MoviesApp.Controllers
                     Active = true
                 };
                 
-                _movieRepos.Add(movie);
-                //_movieService.Add(movie);
+                //_movieRepos.Add(movie);
+                _movieService.Add(movie);
                 TempData["success"] = "Movie created";
 
                 return RedirectToAction(nameof(Index));
@@ -247,7 +247,7 @@ namespace MoviesApp.Controllers
                 movieVM.PictUrl = movie.PictUrl;
             }
 
-            var editMovie = new Movie
+            var editMovie = new MovieDto
             {
                 Id = id,
                 Title = movieVM.Title,
@@ -264,8 +264,8 @@ namespace MoviesApp.Controllers
                 editMovie.Active = true;
             }
 
-            _movieRepos.Update(editMovie);
-            //_movieService.Update(editMovie);
+            //_movieRepos.Update(editMovie);
+            _movieService.Update(editMovie);
             TempData["success"] = "Movie details updated";
 
             return RedirectToAction(nameof(Index));
@@ -280,8 +280,8 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var movie = await _movieRepos.GetById(id);
-            //var movie = await _movieService.Get(id);
+            //var movie = await _movieRepos.GetById(id);
+            var movie = await _movieService.Get(id);
             if (movie == null)
             {
                 return NotFound();
@@ -294,12 +294,12 @@ namespace MoviesApp.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _movieRepos.GetById(id);
-            //var movie = await _movieService.Get(id);
+            //var movie = await _movieRepos.GetById(id);
+            var movie = await _movieService.Get(id);
             if (movie != null)
             {
-                _movieRepos.Delete(movie);
-                //_movieService.Delete(id);
+                //_movieRepos.Delete(movie);
+                _movieService.Delete(id);
                 TempData["success"] = "Movie deleted";
             }
             return RedirectToAction(nameof(Index));

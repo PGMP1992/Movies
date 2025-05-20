@@ -16,7 +16,7 @@ namespace MoviesApp.Services
             _httpClient = httpClient;
             _configuration = configuration;
             BaseServerUrl = _configuration.GetSection("BaseServerUrl").Value;
-            _httpClient.BaseAddress = new Uri(BaseServerUrl);
+            //_httpClient.BaseAddress = new Uri(BaseServerUrl);
         }
 
         public async Task<IEnumerable<MovieDto>> GetAll()
