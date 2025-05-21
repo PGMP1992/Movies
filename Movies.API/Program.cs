@@ -21,6 +21,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //Controllers
 builder.Services.AddTransient<IMovieRepos, MovieRepos>();
 builder.Services.AddTransient<IPlaylistRepos, PlaylistRepos>();
+builder.Services.AddTransient<IPlaylistMovieRepos, PlaylistMovieRepos>();
 
 var app = builder.Build();
 

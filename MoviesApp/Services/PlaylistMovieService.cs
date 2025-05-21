@@ -3,13 +3,13 @@ using Newtonsoft.Json;
 
 namespace MoviesApp.Services
 {
-    public class PlaylistService : IPlaylistService
+    public class PlaylistMovieService : IPlaylistMovieService
     {
         private readonly HttpClient _httpClient;
         private IConfiguration _configuration;
         private readonly string BaseServerUrl;
 
-        public PlaylistService(HttpClient httpClient, IConfiguration configuration)
+        public PlaylistMovieService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _configuration = configuration;
@@ -17,42 +17,42 @@ namespace MoviesApp.Services
             _httpClient.BaseAddress = new Uri(BaseServerUrl);
         }
 
-        public async Task<IEnumerable<PlaylistDto>> GetAll()
+        public async Task<IEnumerable<PlaylistMovieDto>> GetAll()
         {
-            var response = await _httpClient.GetAsync("/api/playlists/GetAll");
+            var response = await _httpClient.GetAsync("/api/playlistMovies/GetAll");
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var Playlists = JsonConvert.DeserializeObject<IEnumerable<PlaylistDto>>(content);
-                return Playlists ?? new List<PlaylistDto>();
+                var Playlists = JsonConvert.DeserializeObject<IEnumerable<PlaylistMovieDto>>(content);
+                return Playlists ?? new List<PlaylistMovieDto>();
             }
 
-            return new List<PlaylistDto>();
+            return new List<PlaylistMovieDto>();
         }
 
-        public async Task<IEnumerable<PlaylistDto>> GetAllByUser(string user)
+        public async Task<IEnumerable<PlaylistMovieDto>> GetAllByUser(string user)
         {
-            var response = await _httpClient.GetAsync($"/api/playlists/GetAllByUser/{user}");
+            var response = await _httpClient.GetAsync($"/api/playlistMovies/GetAllByUser/{user}");
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var playlists = JsonConvert.DeserializeObject<IEnumerable<PlaylistDto>>(content);
-                return playlists ?? new List<PlaylistDto>();
+                var playlists = JsonConvert.DeserializeObject<IEnumerable<PlaylistMovieDto>>(content);
+                return playlists ?? new List<PlaylistMovieDto>();
             }
 
-            return new List<PlaylistDto>();
+            return new List<PlaylistMovieDto>();
         }
 
-        public async Task<PlaylistDto> GetById(int id)
+        public async Task<PlaylistMovieDto> GetById(int id)
         {
-            var response = await _httpClient.GetAsync($"/api/playlists/GetById/{id}");
+            var response = await _httpClient.GetAsync($"/api/playlistMovies/GetById/{id}");
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                var playlist = JsonConvert.DeserializeObject<PlaylistDto>(content);
-                return playlist ?? new PlaylistDto();
+                var playlist = JsonConvert.DeserializeObject<PlaylistMovieDto>(content);
+                return playlist ?? new PlaylistMovieDto();
             }
             else
             {
@@ -61,14 +61,14 @@ namespace MoviesApp.Services
             }
         }
 
-        public async Task<PlaylistDto> GetByIdNoTracking(int id)
+        public async Task<PlaylistMovieDto> GetByIdNoTracking(int id)
         {
-            var response = await _httpClient.GetAsync($"/api/playlists/GetByIdNoTracking/{id}");
+            var response = await _httpClient.GetAsync($"/api/playlistMovies/GetByIdNoTracking/{id}");
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                var playlist = JsonConvert.DeserializeObject<PlaylistDto>(content);
-                return playlist ?? new PlaylistDto();
+                var playlist = JsonConvert.DeserializeObject<PlaylistMovieDto>(content);
+                return playlist ?? new PlaylistMovieDto();
             }
             else
             {
@@ -77,14 +77,14 @@ namespace MoviesApp.Services
             }
         }
 
-        public async Task<PlaylistDto> Add(PlaylistDto obj)
+        public async Task<PlaylistMovieDto> Add(PlaylistMovieDto obj)
         {
-            var response = await _httpClient.PostAsJsonAsync("/api/playlists/post", obj);
+            var response = await _httpClient.PostAsJsonAsync("/api/playlistMovies/post", obj);
 
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                var playlistResponse = JsonConvert.DeserializeObject<PlaylistDto>(content);
+                var playlistResponse = JsonConvert.DeserializeObject<PlaylistMovieDto>(content);
                 return playlistResponse;
             }
             else
@@ -94,13 +94,13 @@ namespace MoviesApp.Services
             }
         }
 
-        public async Task<PlaylistDto> Update(PlaylistDto obj)
+        public async Task<PlaylistMovieDto> Update(PlaylistMovieDto obj)
         {
-            var response = await _httpClient.PutAsJsonAsync("/api/playlists/put/", obj);
+            var response = await _httpClient.PutAsJsonAsync("/api/playlistMovies/put/", obj);
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                var playlistResponse = JsonConvert.DeserializeObject<PlaylistDto>(content);
+                var playlistResponse = JsonConvert.DeserializeObject<PlaylistMovieDto>(content);
                 return playlistResponse;
             }
             else
@@ -112,7 +112,7 @@ namespace MoviesApp.Services
 
         public async Task<bool> Delete(int id)
         {
-            var response = await _httpClient.DeleteAsync($"/api/playlists/delete/{id}");
+            var response = await _httpClient.DeleteAsync($"/api/playlistMovies/delete/{id}");
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {

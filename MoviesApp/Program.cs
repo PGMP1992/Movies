@@ -21,8 +21,10 @@ builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(
 //API Services
 builder.Services.AddHttpClient<IMovieService, MovieService>();
 builder.Services.AddHttpClient<IPlaylistService, PlaylistService>();
+builder.Services.AddHttpClient<IPlaylistMovieService, PlaylistMovieService>();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+        ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

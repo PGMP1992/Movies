@@ -6,15 +6,13 @@ namespace Movies.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class MoviesController(IMovieRepos _movieRepos) : ControllerBase
+    public class MoviesController(IMovieRepos _repos) : ControllerBase
     {
-        //private readonly IMovieRepos _movieRepos = movieRepos;
-
         // GET: MoviesController
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var movies = await _movieRepos.GetAll();
+            var movies = await _repos.GetAll();
             if (movies == null || !movies.Any())
             {
                 return NotFound("No Movies available");
@@ -26,7 +24,7 @@ namespace Movies.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllActive()
         {
-            var movies = await _movieRepos.GetAllActive();
+            var movies = await _repos.GetAllActive();
             if (movies == null || !movies.Any())
             {
                 return NotFound("No Movies available");
@@ -38,7 +36,7 @@ namespace Movies.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var movie = await _movieRepos.GetById(id);
+            var movie = await _repos.GetById(id);
             if (movie == null)
             {
                 return NotFound("Movie doesn't exist!");
@@ -50,7 +48,7 @@ namespace Movies.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdNoTracking(int id)
         {
-            var movie = await _movieRepos.GetByIdNoTracking(id);
+            var movie = await _repos.GetByIdNoTracking(id);
             if (movie == null)
             {
                 return NotFound("Movie doesn't exist!");
@@ -61,7 +59,7 @@ namespace Movies.API.Controllers
         [HttpGet("{search}")]
         public async Task<IActionResult> GetByName(string search)
         {
-            var movie = await _movieRepos.GetByName(search);
+            var movie = await _repos.GetByName(search);
             if (movie == null)
             {
                 return NotFound("There are no Movies within that search!");
@@ -72,7 +70,7 @@ namespace Movies.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Movie movie)
         {
-            var newMovie = _movieRepos.Add(movie);
+            var newMovie = _repos.Add(movie);
             if (newMovie == false)
             {
                 return BadRequest("Could not create Movie");
@@ -89,13 +87,13 @@ namespace Movies.API.Controllers
                 return NotFound("Movie doesn't exist!");
             }
             
-            var dbMovie = await _movieRepos.GetByIdNoTracking(movie.Id);
+            var dbMovie = await _repos.GetByIdNoTracking(movie.Id);
             if (dbMovie is null)
             {
                 return NotFound("Movie doesn't exist!");
             }
 
-            _movieRepos.Update(movie);
+            _repos.Update(movie);
             return Ok(movie.ToDto());
         }
 
@@ -103,12 +101,12 @@ namespace Movies.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var movie = await _movieRepos.GetById(id);
+            var movie = await _repos.GetById(id);
             if (movie is null)
             {
                 return NotFound("Movie doesn't exist!");
             }
-            var deleted = _movieRepos.Delete(movie);
+            var deleted = _repos.Delete(movie);
             return Ok(deleted);
         }
     }

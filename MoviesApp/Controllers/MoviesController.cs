@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MoviesApp.Data;
 using MoviesApp.DTOs;
+using MoviesApp.Repos;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.Services;
 using MoviesApp.ViewModels;
@@ -12,21 +13,26 @@ namespace MoviesApp.Controllers
     public class MoviesController : Controller
     {
         private readonly IMovieService _movieService;
-        private readonly IMovieRepos _movieRepos;
-        private readonly IPlaylistRepos _playlistRepos;
+        private readonly IPlaylistService _playlistService;
+
+        //private readonly IMovieRepos _movieRepos;
+        //private readonly IPlaylistRepos _playlistRepos;
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MoviesController(IMovieRepos movieRepos
-            , IMovieService movieService
-            , IPlaylistRepos playlistRepos
+        public MoviesController(
+             IMovieService movieService
+            , IPlaylistService playlistService
+            //, IMovieRepos movieRepos
+            //, IPlaylistRepos playlistRepos
             , IPhotoService photoService
             , IHttpContextAccessor httpContextAccessor
             )
         {
             _movieService = movieService;
-            _movieRepos = movieRepos;
-            _playlistRepos = playlistRepos;
+            _playlistService = playlistService;
+            //_movieRepos = movieRepos;
+            //_playlistRepos = playlistRepos;
             _photoService = photoService;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -59,7 +65,7 @@ namespace MoviesApp.Controllers
         }
 
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
@@ -70,13 +76,14 @@ namespace MoviesApp.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var user = _httpContextAccessor.HttpContext.User.GetUserId();
-                var playlists = await _playlistRepos.GetAllByUser(user).ConfigureAwait(false);
+                //var playlists = await _playlistRepos.GetAllByUser(user).ConfigureAwait(false);
+                var playlists = await _playlistService.GetAllByUser(user).ConfigureAwait(false);
 
-                if (playlists.Count > 0)
+                if (playlists.Any())
                 {
                     ViewData["playlistName"] = new SelectList(
-                        await _playlistRepos.GetAllByUser(user)
-                            .ConfigureAwait(false), "Id", "Name");
+                    //await _playlistRepos.GetAllByUser(user).ConfigureAwait(false), "Id", "Name");
+                    await _playlistService.GetAllByUser(user).ConfigureAwait(false), "Id", "Name");
                 }
                 else
                 {
@@ -85,7 +92,8 @@ namespace MoviesApp.Controllers
                 }
             }
 
-            var movie = await _movieRepos.GetByIdNoTracking(id);
+            //var movie = await _movieRepos.GetByIdNoTracking(id);
+            var movie = await _movieService.GetByIdNoTracking(id);
 
             if (movie == null)
             {
@@ -117,7 +125,8 @@ namespace MoviesApp.Controllers
                 return View("Details", movieVM);
             }
 
-            var movie = await _movieRepos.GetById(movieVM.Id);
+            //var movie = await _movieRepos.GetById(movieVM.Id);
+            var movie = await _movieService.GetById(movieVM.Id);
             if (movie == null)
             {
                 ModelState.AddModelError("", "Movie not found");
@@ -125,21 +134,22 @@ namespace MoviesApp.Controllers
             }
 
             // Has to use GetByIdNoTracking
-            var playlist = await _playlistRepos.GetById(movieVM.PlaylistId);
+            //var playlist = await _playlistRepos.GetById(movieVM.PlaylistId);
+            var playlist = await _playlistService.GetById(movieVM.PlaylistId);
 
-            if (playlist != null) //Check if No Playlists
-            {
-                //if (!playlist.Movies.Contains(movie))
-                //{
-                //    playlist.Movies.Add(movie);
-                //    _playlistRepos.Update(playlist);
-                //    TempData["success"] = "Movie added to Playlist";
-                //}
-                //else
-                //{
-                //    TempData["error"] = "Movie is already in Playlist";
-                //}
-            }
+            //if (playlist != null) //Check if No Playlists
+            //{
+            //    if (!playlist.Movies.Contains(movie))
+            //    {
+            //        playlist.Movies.Add(movie);
+            //        _playlistRepos.Update(playlist);
+            //        TempData["success"] = "Movie added to Playlist";
+            //    }
+            //    else
+            //    {
+            //        TempData["error"] = "Movie is already in Playlist";
+            //    }
+            //}
             return RedirectToAction(nameof(Details));
         }
 
