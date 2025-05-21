@@ -129,16 +129,16 @@ namespace MoviesApp.Controllers
 
             if (playlist != null) //Check if No Playlists
             {
-                if (!playlist.Movies.Contains(movie))
-                {
-                    playlist.Movies.Add(movie);
-                    _playlistRepos.Update(playlist);
-                    TempData["success"] = "Movie added to Playlist";
-                }
-                else
-                {
-                    TempData["error"] = "Movie is already in Playlist";
-                }
+                //if (!playlist.Movies.Contains(movie))
+                //{
+                //    playlist.Movies.Add(movie);
+                //    _playlistRepos.Update(playlist);
+                //    TempData["success"] = "Movie added to Playlist";
+                //}
+                //else
+                //{
+                //    TempData["error"] = "Movie is already in Playlist";
+                //}
             }
             return RedirectToAction(nameof(Details));
         }

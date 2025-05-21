@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MoviesApp.Migrations
 {
     /// <inheritdoc />
-    public partial class fixMerge : Migration
+    public partial class PlaylistMovieModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,6 +63,7 @@ namespace MoviesApp.Migrations
                     Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     Genre = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
                     PictUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
@@ -197,24 +198,26 @@ namespace MoviesApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MoviePlaylist",
+                name: "PlaylistMovies",
                 columns: table => new
                 {
-                    MoviesId = table.Column<int>(type: "int", nullable: false),
-                    PlaylistsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PlaylistId = table.Column<int>(type: "int", nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MoviePlaylist", x => new { x.MoviesId, x.PlaylistsId });
+                    table.PrimaryKey("PK_PlaylistMovies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MoviePlaylist_Movies_MoviesId",
-                        column: x => x.MoviesId,
+                        name: "FK_PlaylistMovies_Movies_MovieId",
+                        column: x => x.MovieId,
                         principalTable: "Movies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MoviePlaylist_Playlists_PlaylistsId",
-                        column: x => x.PlaylistsId,
+                        name: "FK_PlaylistMovies_Playlists_PlaylistId",
+                        column: x => x.PlaylistId,
                         principalTable: "Playlists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -260,9 +263,14 @@ namespace MoviesApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MoviePlaylist_PlaylistsId",
-                table: "MoviePlaylist",
-                column: "PlaylistsId");
+                name: "IX_PlaylistMovies_MovieId",
+                table: "PlaylistMovies",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlaylistMovies_PlaylistId",
+                table: "PlaylistMovies",
+                column: "PlaylistId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Playlists_AppUserId",
@@ -289,7 +297,7 @@ namespace MoviesApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "MoviePlaylist");
+                name: "PlaylistMovies");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

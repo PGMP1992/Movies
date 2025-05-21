@@ -1,4 +1,4 @@
-﻿@model MoviesApp.ViewModels.UsersDetailsVM
+﻿@model UsersDetailsVM
 
 <h3>Profile</h3>
 <h5 class="text-secondary">@Model.UserName</h5>
@@ -41,7 +41,7 @@
                                         <div class="card box-shadow">
                                             <div class="card-body">
                                                 <h6 class="card-title">@item.Name</h6>
-                                                <p>@item.Movies.Count Movies</p>
+                                                @* <p>@item.Movies.Count Movies</p> *@
 
                                                 <div class="btn-group">
                                                     <a type="btn btn-sm btn-outline-primary" asp-controller="Playlists" asp-action="Details" asp-route-id="@item.Id"

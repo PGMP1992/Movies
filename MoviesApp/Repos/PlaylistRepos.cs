@@ -60,15 +60,15 @@ namespace MoviesApp.Repos
                 .ToListAsync();
         }
 
-        public bool Add(Playlist playlist)
+        public bool Add(Playlist obj)
         {
-            _context.Add(playlist);
+            _context.Add(obj);
             return Save();
         }
 
-        public bool Delete(Playlist playlist)
+        public bool Delete(Playlist obj)
         {
-            _context.Remove(playlist);
+            _context.Remove(obj);
             return Save();
         }
 
@@ -78,13 +78,13 @@ namespace MoviesApp.Repos
             return saved > 0 ? true : false;
         }
 
-        public bool Update(Playlist playlist)
+        public bool Update(Playlist obj)
         {
-            _context.Update(playlist);
+            _context.Update(obj);
             return Save();
         }
 
-        public bool PlaylistExists(int id)
+        public bool Exists(int id)
         {
             return _context.Playlists
                 .AsNoTracking()

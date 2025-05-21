@@ -43,7 +43,7 @@ namespace Movies.API.Controllers
             {
                 return NotFound("Movie doesn't exist!");
             }
-            return Ok(movie.ToMovieDto());
+            return Ok(movie.ToDto());
         }
 
         // GET: MoviesController/Details/5
@@ -55,7 +55,7 @@ namespace Movies.API.Controllers
             {
                 return NotFound("Movie doesn't exist!");
             }
-            return Ok(movie.ToMovieDto());
+            return Ok(movie.ToDto());
         }
 
         [HttpGet("{search}")]
@@ -69,7 +69,6 @@ namespace Movies.API.Controllers
             return Ok(movie);
         }
 
-        // POST: MoviesController/Create
         [HttpPost]
         public async Task<IActionResult> Post(Movie movie)
         {
@@ -90,14 +89,14 @@ namespace Movies.API.Controllers
                 return NotFound("Movie doesn't exist!");
             }
             
-            var existingMovie = await _movieRepos.GetByIdNoTracking(movie.Id);
-            if (existingMovie is null)
+            var dbMovie = await _movieRepos.GetByIdNoTracking(movie.Id);
+            if (dbMovie is null)
             {
                 return NotFound("Movie doesn't exist!");
             }
 
             _movieRepos.Update(movie);
-            return Ok(movie);
+            return Ok(movie.ToDto());
         }
 
         // DELETE: MoviesController/Delete/5

@@ -10,10 +10,10 @@ namespace MoviesApp.Repos.Interfaces
         Task<Movie> GetByIdNoTracking(int? id);
         Task<List<Movie>> GetByName(string name);
         
-        bool Add(Movie movie);
-        bool Update(Movie movie);
-        bool Delete(Movie movie);
+        bool Add(Movie obj);
+        bool Update(Movie obj);
+        bool Delete(Movie obj);
         bool Save();
-        bool MovieExists(int id);
+        bool Exists(int id);
     }
 }

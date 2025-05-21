@@ -6,48 +6,48 @@ namespace playlists.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class PlaylistsController(IPlaylistRepos _playlistRepos) : ControllerBase
+    public class PlaylistMoviesController(IPlaylistMovieRepos _playlistMovieRepos) : ControllerBase
     {
         //private readonly IPlaylistRepos _playlistRepos = playlistRepos;
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var playlists = await _playlistRepos.GetAll();
-            if (playlists == null || !playlists.Any())
+            var list = await _playlistMovieRepos.GetAll();
+            if (list == null || !list.Any())
             {
                 return NotFound("No playlists available");
             }
-            return Ok(playlists);
+            return Ok(list);
         }
 
         [HttpGet("{user}")]
         public async Task<IActionResult> GetAllByUser(string user)
         {
-            var playlists = await _playlistRepos.GetAllByUser(user);
-            if (playlists == null || !playlists.Any())
+            var list = await _playlistMovieRepos.GetAllByUser(user);
+            if (list == null || !list.Any())
             {
                 return NotFound("No playlists available");
             }
-            return Ok(playlists);
+            return Ok(list);
         }
 
         // GET: playlistsController/Details/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var playlist = await _playlistRepos.GetById(id);
-            if (playlist == null)
+            var list = await _playlistMovieRepos.GetById(id);
+            if (list == null)
             {
                 return NotFound("playlist doesn't exist!");
             }
-            return Ok(playlist.ToDto());
+            return Ok(list.ToDto());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdNoTracking(int id)
         {
-            var playlist = await _playlistRepos.GetByIdNoTracking(id);
+            var playlist = await _playlistMovieRepos.GetByIdNoTracking(id);
             if (playlist == null)
             {
                 return NotFound("playlist doesn't exist!");
@@ -57,45 +57,45 @@ namespace playlists.API.Controllers
 
         // POST: playlistsController/Create
         [HttpPost]
-        public async Task<IActionResult> Post(Playlist playlist)
+        public async Task<IActionResult> Post(PlaylistMovie obj)
         {
-            var newplaylist = _playlistRepos.Add(playlist);
+            var newplaylist = _playlistMovieRepos.Add(obj);
             if (newplaylist == false)
             {
                 return BadRequest("Could not create playlist");
             }
-            return CreatedAtAction(nameof(GetById), new { id = playlist.Id }, playlist);
+            return CreatedAtAction(nameof(GetById), new { id = obj.Id }, obj);
         }
 
         // PUT: playlistsController/Edit/5
         [HttpPut]
-        public async Task<IActionResult> Put(Playlist playlist)
+        public async Task<IActionResult> Put(PlaylistMovie obj)
         {
-            if (playlist is null)
+            if (obj is null)
             {
                 return NotFound("Playlist doesn't exist!");
             }
 
-            var existingplaylist = await _playlistRepos.GetByIdNoTracking(playlist.Id);
-            if (existingplaylist is null)
+            var dbplaylist = await _playlistMovieRepos.GetByIdNoTracking(obj.Id);
+            if (dbplaylist is null)
             {
                 return NotFound("Playlist doesn't exist!");
             }
 
-            _playlistRepos.Update(playlist);
-            return Ok(playlist.ToDto());
+            _playlistMovieRepos.Update(obj);
+            return Ok(obj.ToDto());
         }
 
         // DELETE: playlistsController/Delete/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var playlist = await _playlistRepos.GetById(id);
+            var playlist = await _playlistMovieRepos.GetById(id);
             if (playlist is null)
             {
                 return NotFound("playlist doesn't exist!");
             }
-            var deleted = _playlistRepos.Delete(playlist);
+            var deleted = _playlistMovieRepos.Delete(playlist);
             return Ok(deleted);
         }
     }

@@ -17,17 +17,6 @@ namespace MoviesApp.Repos
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public bool Add(AppUser user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(AppUser user)
-        {
-            _context.Remove(user);
-            return Save();
-        }
-
         public async Task<List<AppUser>> GetAll()
         {
             return await _context.Users
@@ -38,8 +27,7 @@ namespace MoviesApp.Repos
 
         public async Task<AppUser> GetById(string id)
         {
-            return await _context.Users
-                .FindAsync(id);
+            return await _context.Users.FindAsync(id);
         }
 
         public async Task<List<Playlist>> GetAllPlaylists(string id)
@@ -47,8 +35,8 @@ namespace MoviesApp.Repos
             //var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
             var userPlaylists = _context.Playlists
                 .AsNoTracking()
-                .Where(r => r.AppUser.Id == id)
-                .Include(r => r.Movies);
+                .Where(r => r.AppUser.Id == id);
+                //.Include(r => r.Movies);
 
             return userPlaylists.ToList();
         }
@@ -62,6 +50,12 @@ namespace MoviesApp.Repos
         public bool Update(AppUser user)
         {
             _context.Update(user);
+            return Save();
+        }
+
+        public bool Delete(AppUser user)
+        {
+            _context.Remove(user);
             return Save();
         }
     }

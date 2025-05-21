@@ -73,7 +73,7 @@ namespace MoviesApp.Controllers
                 PlaylistId = playlist.Id,
                 AppUser = playlist.AppUser,
                 AppUserId = playlist.AppUserId,
-                Movies = playlist.Movies
+                //Movies = playlist.Movies
             };
 
             return View(newVm);
@@ -84,12 +84,12 @@ namespace MoviesApp.Controllers
             var movie = await _movieRepos.GetById(movieId);
             var playlist = await _playlistRepos.GetById(playlistId);
 
-            if (playlist != null)
-            {
-                playlist.Movies.Remove(movie);
-                _playlistRepos.Update(playlist);
-                TempData["success"] = "Movie removed from Playlist";
-            }
+            //if (playlist != null)
+            //{
+            //    playlist.Movies.Remove(movie);
+            //    _playlistRepos.Update(playlist);
+            //    TempData["success"] = "Movie removed from Playlist";
+            //}
 
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
@@ -97,7 +97,7 @@ namespace MoviesApp.Controllers
                 PlaylistId = playlist.Id,
                 AppUser = playlist.AppUser,
                 AppUserId = playlist.AppUserId,
-                Movies = playlist.Movies
+                //Movies = playlist.Movies
             };
 
             return View("Details", newVm);
@@ -217,7 +217,7 @@ namespace MoviesApp.Controllers
         // -------------------------------------------------------
         private bool PlaylistExists(int id)
         {
-            return _playlistRepos.PlaylistExists(id);
+            return _playlistRepos.Exists(id);
             //return _playlistService.PlaylistExists(id);
         }
     }

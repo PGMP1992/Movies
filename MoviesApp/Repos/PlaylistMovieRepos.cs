@@ -2,63 +2,56 @@
 using MoviesApp.Data;
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
+using MoviesApp.ViewModels;
 
 namespace MoviesApp.Repos
 {
-    public class MovieRepos : IMovieRepos
+    public class PlaylistMovieRepos : IPlaylistMovieRepos
     {
         private readonly ApplicationDbContext _context;
 
-        public MovieRepos(ApplicationDbContext context)
+        public PlaylistMovieRepos(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<List<Movie>> GetAll()
+        public async Task<List<PlaylistMovie>> GetAll()
         {
-            return await _context.Movies
+            return await _context.PlaylistMovies
                 .AsNoTracking()
-                .OrderBy(m => m.Title)
                 .ToListAsync();
         }
 
-        public async Task<List<Movie>> GetAllActive()
+        public async Task<PlaylistMovie> GetById(int? id)
         {
-            return await _context.Movies
-                .AsNoTracking()
-                .OrderBy(m => m.Title)
-                .Where(m => m.Active == true)
-                .ToListAsync();
-        }
-
-        public async Task<Movie> GetById(int? id)
-        {
-            return await _context.Movies
+            return await _context.PlaylistMovies
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task<Movie> GetByIdNoTracking(int? id)
+        public async Task<PlaylistMovie> GetByIdNoTracking(int? id)
         {
-            return await _context.Movies
+            return await _context.PlaylistMovies
                 .AsNoTracking()
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task<List<Movie>> GetByName(string name)
+        public async Task<List<PlaylistMovie>> GetAllByUser(string appUser)
         {
-            return await _context.Movies
+            return await _context.PlaylistMovies
                 .AsNoTracking()
-                .Where(m => m.Title!.Contains(name) && m.Active == true)
+                .Where(a => a.Playlist.AppUserId == appUser)
+                //.Include(p => p.AppUser)
+                //.Include(p => p.Movies)
                 .ToListAsync();
         }
 
-        public bool Add(Movie obj)
+        public bool Add(PlaylistMovie obj)
         {
             _context.Add(obj);
             return Save();
         }
 
-        public bool Delete(Movie obj)
+        public bool Delete(PlaylistMovie obj)
         {
             _context.Remove(obj);
             return Save();
@@ -70,7 +63,7 @@ namespace MoviesApp.Repos
             return saved > 0 ? true : false;
         }
 
-        public bool Update(Movie obj)
+        public bool Update(PlaylistMovie obj)
         {
             _context.Update(obj);
             return Save();
@@ -78,7 +71,7 @@ namespace MoviesApp.Repos
 
         public bool Exists(int id)
         {
-            return _context.Movies
+            return _context.PlaylistMovies
                 .AsNoTracking()
                 .Any(e => e.Id == id);
         }

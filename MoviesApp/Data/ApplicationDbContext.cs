@@ -14,18 +14,21 @@ namespace MoviesApp.Data
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
 
+        // Many to many relationship between Playlist and Movies
+        public DbSet<PlaylistMovie> PlaylistMovies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Added to enable Identity - Not sure if that is a bug 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Playlist>()
-                .HasMany(x => x.Movies)
-                .WithMany(y => y.Playlists);
+            //modelBuilder.Entity<Playlist>()
+            //    .HasMany(x => x.Movies)
+            //    .WithMany(y => y.Playlists);
 
-            modelBuilder.Entity<Movie>()
-                .HasMany(e => e.Playlists)
-                .WithMany(e => e.Movies);
+            //modelBuilder.Entity<Movie>()
+            //    .HasMany(e => e.Playlists)
+            //    .WithMany(e => e.Movies);
         }
     }
 

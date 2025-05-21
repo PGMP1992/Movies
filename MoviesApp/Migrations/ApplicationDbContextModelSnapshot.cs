@@ -159,21 +159,6 @@ namespace MoviesApp.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MoviePlaylist", b =>
-                {
-                    b.Property<int>("MoviesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlaylistsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MoviesId", "PlaylistsId");
-
-                    b.HasIndex("PlaylistsId");
-
-                    b.ToTable("MoviePlaylist");
-                });
-
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -310,6 +295,29 @@ namespace MoviesApp.Migrations
                     b.ToTable("Playlists");
                 });
 
+            modelBuilder.Entity("MoviesApp.Models.PlaylistMovie", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlaylistId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("PlaylistId");
+
+                    b.ToTable("PlaylistMovies");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -361,21 +369,6 @@ namespace MoviesApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MoviePlaylist", b =>
-                {
-                    b.HasOne("MoviesApp.Models.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MoviesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MoviesApp.Models.Playlist", null)
-                        .WithMany()
-                        .HasForeignKey("PlaylistsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
                 {
                     b.HasOne("MoviesApp.Models.AppUser", "AppUser")
@@ -385,6 +378,25 @@ namespace MoviesApp.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("MoviesApp.Models.PlaylistMovie", b =>
+                {
+                    b.HasOne("MoviesApp.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MoviesApp.Models.Playlist", "PLaylist")
+                        .WithMany()
+                        .HasForeignKey("PlaylistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("PLaylist");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>

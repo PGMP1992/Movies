@@ -13,7 +13,7 @@
             <span>User: <b>@Model.AppUser.UserName</b></span>
         </div>
     }
-    @if (Model.Playlist.Movies.Any())
+    @* @if (Model.Playlist.Movies.Any())
     {
         <hr />    
         <h6>Movies</h6>
@@ -45,7 +45,8 @@
     else
     {
         <h6 class="text-danger mt-3">There are no movies in this playlist.</h6>
-    }
+    } *@
+
     <div class="d-flex justify-content-between align-items-center mt-3">
         <div class="btn-group">
             @if (User.Identity.IsAuthenticated)

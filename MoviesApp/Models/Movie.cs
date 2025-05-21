@@ -30,9 +30,9 @@ namespace MoviesApp.Models
         [Display(Name = "Picture URL")]
         public string? PictUrl { get; set; } = "";
 
-        public List<Playlist>? Playlists { get; set; }
+        //public List<Playlist>? Playlists { get; set; }
 
-        public MovieDto ToMovieDto()
+        public MovieDto ToDto()
         {
             return new MovieDto
             {

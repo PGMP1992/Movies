@@ -10,11 +10,11 @@ namespace MoviesApp.Repos.Interfaces
         Task<List<Playlist>> GetByName(string name);
         Task<List<Playlist>> GetAllByUser(string userName);
 
-        bool Add(Playlist playlist);
-        bool Update(Playlist playlist);
-        bool Delete(Playlist playlist);
+        bool Add(Playlist obj);
+        bool Update(Playlist obj);
+        bool Delete(Playlist obj);
         bool Save();
-        bool PlaylistExists(int id);
+        bool Exists(int id);
 
     }
 }

@@ -30,23 +30,6 @@ namespace MoviesApp.DTOs
         [Display(Name = "Picture URL")]
         public string? PictUrl { get; set; } = "";
         
-        public List<Playlist>? Playlists { get; set; }
-
-        public Movie ToMovie()
-        {
-            var movie = new Movie
-            {
-                Id = this.Id,
-                Title = this.Title,
-                Description = this.Description,
-                Genre = this.Genre,
-                Age = this.Age,
-                Active = this.Active,
-                PictUrl = this.PictUrl,
-                Playlists = this.Playlists
-            };
-            return movie;
-
-        }
+        //public List<Playlist>? Playlists { get; set; }
     }
 }

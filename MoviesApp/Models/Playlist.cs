@@ -14,20 +14,23 @@ namespace MoviesApp.Models
         public string Name { get; set; } = "";
 
         public string AppUserId { get; set; } = "";
+        
         [ForeignKey("AppUserId")]
         [ValidateNever]
         public AppUser? AppUser { get; set; }
 
-        [ValidateNever]
-        public List<Movie>? Movies { get; set; }
+        //[ValidateNever]
+        //public List<Movie>? Movies { get; set; }
 
-        public PlaylistDto ToPlaylistDto()
+        public PlaylistDto ToDto()
         {
             return new PlaylistDto
             {
                 Id = this.Id,
                 Name = this.Name,
-                AppUserId = this.AppUserId
+                AppUserId = this.AppUserId,
+                AppUser = this.AppUser,
+                //Movies = this.Movies
             };
         }
     }
