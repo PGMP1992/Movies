@@ -1,4 +1,5 @@
-﻿using MoviesApp.DTOs;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using MoviesApp.DTOs;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,14 +13,14 @@ namespace MoviesApp.Models
         public int PlaylistId { get; set; }
 
         [ForeignKey("PlaylistId")]
-        //[ValidateNever]
+        [ValidateNever]
         public Playlist? Playlist { get; set; }
 
         [Required]
         public int MovieId { get; set; }
 
         [ForeignKey("MovieId")]
-        //[ValidateNever]
+        [ValidateNever]
         public Movie? Movie { get; set; }
 
         public PlaylistMovieDto ToDto()

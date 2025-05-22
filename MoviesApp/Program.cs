@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IMovieRepos, MovieRepos>();
 builder.Services.AddScoped<IPlaylistRepos, PlaylistRepos>();
+builder.Services.AddScoped<IPlaylistMovieRepos, PlaylistMovieRepos>();
 builder.Services.AddScoped<IUsersRepos, UsersRepos>();
 
 builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interface

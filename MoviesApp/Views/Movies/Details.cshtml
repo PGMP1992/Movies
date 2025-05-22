@@ -13,7 +13,6 @@
     <div class="card mb-3">
         <div class=" row g-0">
             <div class="col-md-4">
-                @* <img src="@Model.PictUrl" class="img-fluid rounded-start w-100" alt="@Model.Title"> *@
                 @if (@Model.PictUrl != null)
                 {
                     // if image not found put default.png instead
@@ -37,19 +36,19 @@
                 <div class="card-body">
                     <dl class="row">
                         <dt class="col-sm-3">Description:</dt>
-                        <dd class="col-sm-8">@Model.Description</dd>
+                        <dd class="col-sm-9">@Model.Description</dd>
                     </dl>
                     <dl class="row">
                         <dt class="col-sm-3">Genre: </dt>
-                        <dd class="col-sm-8">@Model.Genre</dd>
+                        <dd class="col-sm-9">@Model.Genre</dd>
                     </dl>
                     <dl class="row">
                         <dt class="col-sm-3">Minimum Age:</dt>
-                        <dd class="col-sm-8">@Model.Age</dd>
+                        <dd class="col-sm-9">@Model.Age</dd>
                     </dl>
                     <dl class="row">
                         <dt class="col-sm-3">Active:</dt>
-                        <dd class="col-sm-8">@Model.Active</dd>
+                        <dd class="col-sm-9">@Model.Active</dd>
                     </dl>
 
                     @if (User.Identity.IsAuthenticated)

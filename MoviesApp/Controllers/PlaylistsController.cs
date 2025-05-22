@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using MoviesApp.DTOs;
+using MoviesApp.Models;
+using MoviesApp.Repos;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.Services;
 using MoviesApp.ViewModels;
@@ -13,21 +15,29 @@ namespace MoviesApp.Controllers
     public class PlaylistsController : Controller
     {
         private readonly IPlaylistService _playlistService;
+        private readonly IMovieService _movieService;
+        private readonly IPlaylistMovieRepos _playlistMovieRepos;
 
-        private readonly IPlaylistRepos _playlistRepos;
-        private readonly IMovieRepos _movieRepos;
+        //private readonly IPlaylistRepos _playlistRepos;
+        //private readonly IMovieRepos _movieRepos;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PlaylistsController(IPlaylistRepos playlistRepos
-            , IMovieRepos movieRepos
+        public PlaylistsController(
+            IPlaylistService playlistService
+            ,IMovieService movieService
+            ,IPlaylistMovieRepos playlistMovieRepos
+            
+            //,IPlaylistRepos playlistRepos
+            //, IMovieRepos movieRepos
             , IHttpContextAccessor httpContextAccessor
-            , IPlaylistService playlistService
         )
         {
-            _playlistRepos = playlistRepos;
-            _movieRepos = movieRepos;
-            _httpContextAccessor = httpContextAccessor;
             _playlistService = playlistService;
+            _movieService = movieService;
+            _playlistMovieRepos = playlistMovieRepos;
+            //_playlistRepos = playlistRepos;
+            //_movieRepos = movieRepos;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: Playlists ---------------------------------------------------
@@ -64,16 +74,13 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var playlist = await _playlistRepos.GetByIdNoTracking(id);
+            //var playlist = await _playlistRepos.GetByIdNoTracking(id);
             //var playlist = await _playlistService.GetByIdNoTracking(id);
 
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
-                Playlist = playlist,
-                PlaylistId = playlist.Id,
-                AppUser = playlist.AppUser,
-                AppUserId = playlist.AppUserId,
-                //Movies = playlist.Movies
+                Playlist = await _playlistService.GetById(id),
+                Playlists = await _playlistMovieRepos.GetByPlaylist(id)
             };
 
             return View(newVm);
@@ -81,23 +88,24 @@ namespace MoviesApp.Controllers
 
         public async Task<IActionResult> RemoveMovie(int playlistId, int movieId)
         {
-            var movie = await _movieRepos.GetById(movieId);
-            var playlist = await _playlistRepos.GetById(playlistId);
+            var checkMovie = new PlaylistMovie
+            {
+                MovieId = movieId,
+                PlaylistId = playlistId
+            };
 
-            //if (playlist != null)
-            //{
-            //    playlist.Movies.Remove(movie);
-            //    _playlistRepos.Update(playlist);
-            //    TempData["success"] = "Movie removed from Playlist";
+            var deleteMovie = _playlistMovieRepos.MovieInPlaylist(checkMovie);
+            
+            //if( deleteMovie ) 
+            //{ 
+            //    _playlistMovieRepos.Delete(deleteMovie);
+            //    TempData["success"] = "Movie deleted from Playlist";
             //}
-
+            
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
-                Playlist = playlist,
-                PlaylistId = playlist.Id,
-                AppUser = playlist.AppUser,
-                AppUserId = playlist.AppUserId,
-                //Movies = playlist.Movies
+                Playlist = await _playlistService.GetById(playlistId),
+                Playlists = await _playlistMovieRepos.GetByPlaylist(playlistId)
             };
 
             return View("Details", newVm);
@@ -157,25 +165,10 @@ namespace MoviesApp.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-                    //_playlistRepos.Update(playlist);
-                    await _playlistService.Update(playlist);
-                    TempData["success"] = "Playlist updated";
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PlaylistExists(playlist.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+                //_playlistRepos.Update(playlist);
+                await _playlistService.Update(playlist);
+                TempData["success"] = "Playlist updated";
             }
             return View(playlist);
         }
@@ -215,10 +208,10 @@ namespace MoviesApp.Controllers
         }
 
         // -------------------------------------------------------
-        private bool PlaylistExists(int id)
-        {
-            return _playlistRepos.Exists(id);
-            //return _playlistService.PlaylistExists(id);
-        }
+        //private bool PlaylistExists(int id)
+        //{
+        //    return _playlistRepos.PlaylistExists(id);
+        //    //return _playlistService.Exists(id);
+        //}
     }
 }

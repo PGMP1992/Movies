@@ -2,7 +2,6 @@
 using MoviesApp.Data;
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
-using MoviesApp.ViewModels;
 
 namespace MoviesApp.Repos
 {
@@ -19,6 +18,8 @@ namespace MoviesApp.Repos
         {
             return await _context.PlaylistMovies
                 .AsNoTracking()
+                .Include(p => p.Playlist)
+                .Include(p => p.Movie)
                 .ToListAsync();
         }
 
@@ -40,9 +41,27 @@ namespace MoviesApp.Repos
             return await _context.PlaylistMovies
                 .AsNoTracking()
                 .Where(a => a.Playlist.AppUserId == appUser)
-                //.Include(p => p.AppUser)
-                //.Include(p => p.Movies)
+                .Include(p => p.Playlist)
+                .Include(p => p.Movie)
                 .ToListAsync();
+        }
+
+        public async Task<List<PlaylistMovie>> GetByPlaylist(int? id)
+        {
+            return await _context.PlaylistMovies
+                .AsNoTracking()
+                .Where(a => a.PlaylistId == id)
+                .Include(p => p.Playlist)
+                .Include(p => p.Movie)
+                .ToListAsync();
+        }
+
+        public bool MovieInPlaylist(PlaylistMovie obj)
+        {
+            var result = _context.PlaylistMovies
+                .Where(a => a.PlaylistId == obj.PlaylistId &&
+                    a.MovieId == obj.MovieId);
+            return result.Any();
         }
 
         public bool Add(PlaylistMovie obj)
@@ -75,6 +94,5 @@ namespace MoviesApp.Repos
                 .AsNoTracking()
                 .Any(e => e.Id == id);
         }
-               
     }
 }

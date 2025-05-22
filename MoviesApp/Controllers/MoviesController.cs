@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MoviesApp.Data;
 using MoviesApp.DTOs;
-using MoviesApp.Repos;
+using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.Services;
 using MoviesApp.ViewModels;
@@ -14,25 +14,27 @@ namespace MoviesApp.Controllers
     {
         private readonly IMovieService _movieService;
         private readonly IPlaylistService _playlistService;
+        //private readonly IPlaylistMovieService _playlistMovieService;
 
-        //private readonly IMovieRepos _movieRepos;
-        //private readonly IPlaylistRepos _playlistRepos;
+        private readonly IPlaylistMovieRepos _playlistMovieRepos;
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MoviesController(
              IMovieService movieService
             , IPlaylistService playlistService
-            //, IMovieRepos movieRepos
-            //, IPlaylistRepos playlistRepos
+            
+            //, IPlaylistMovieService playlistMovieService
+            , IPlaylistMovieRepos playlistMovieRepos
             , IPhotoService photoService
             , IHttpContextAccessor httpContextAccessor
             )
         {
             _movieService = movieService;
             _playlistService = playlistService;
-            //_movieRepos = movieRepos;
-            //_playlistRepos = playlistRepos;
+            
+            //_playlistMovieService = playlistMovieService;
+            _playlistMovieRepos = playlistMovieRepos;
             _photoService = photoService;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -76,13 +78,11 @@ namespace MoviesApp.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var user = _httpContextAccessor.HttpContext.User.GetUserId();
-                //var playlists = await _playlistRepos.GetAllByUser(user).ConfigureAwait(false);
                 var playlists = await _playlistService.GetAllByUser(user).ConfigureAwait(false);
 
                 if (playlists.Any())
                 {
                     ViewData["playlistName"] = new SelectList(
-                    //await _playlistRepos.GetAllByUser(user).ConfigureAwait(false), "Id", "Name");
                     await _playlistService.GetAllByUser(user).ConfigureAwait(false), "Id", "Name");
                 }
                 else
@@ -92,9 +92,7 @@ namespace MoviesApp.Controllers
                 }
             }
 
-            //var movie = await _movieRepos.GetByIdNoTracking(id);
             var movie = await _movieService.GetByIdNoTracking(id);
-
             if (movie == null)
             {
                 return NotFound();
@@ -125,7 +123,6 @@ namespace MoviesApp.Controllers
                 return View("Details", movieVM);
             }
 
-            //var movie = await _movieRepos.GetById(movieVM.Id);
             var movie = await _movieService.GetById(movieVM.Id);
             if (movie == null)
             {
@@ -133,23 +130,22 @@ namespace MoviesApp.Controllers
                 return View("Details", movieVM);
             }
 
-            // Has to use GetByIdNoTracking
-            //var playlist = await _playlistRepos.GetById(movieVM.PlaylistId);
-            var playlist = await _playlistService.GetById(movieVM.PlaylistId);
+            var newMovie = new PlaylistMovie
+            {
+                MovieId = movie.Id,
+                PlaylistId = movieVM.PlaylistId
+            };
 
-            //if (playlist != null) //Check if No Playlists
-            //{
-            //    if (!playlist.Movies.Contains(movie))
-            //    {
-            //        playlist.Movies.Add(movie);
-            //        _playlistRepos.Update(playlist);
-            //        TempData["success"] = "Movie added to Playlist";
-            //    }
-            //    else
-            //    {
-            //        TempData["error"] = "Movie is already in Playlist";
-            //    }
-            //}
+            var movieExist = _playlistMovieRepos.MovieInPlaylist(newMovie);
+            if (movieExist)
+            {
+                TempData["error"] = "Movie is already in Playlist!";
+            }
+            else
+            {
+                _playlistMovieRepos.Add(newMovie);
+                TempData["success"] = "Movie added to Playlist";
+            }
             return RedirectToAction(nameof(Details));
         }
 
@@ -185,7 +181,6 @@ namespace MoviesApp.Controllers
                     Active = true
                 };
 
-                //_movieRepos.Add(movie);
                 await _movieService.Add(movie);
                 TempData["success"] = "Movie created";
 
@@ -202,7 +197,6 @@ namespace MoviesApp.Controllers
         // GET: Movies/Edit/5 ------------------------------------------------------
         public async Task<IActionResult> Edit(int id)
         {
-            //var movie = await _movieRepos.GetById(id);
             MovieDto movie = await _movieService.GetById(id);
 
             if (movie == null)
@@ -234,7 +228,6 @@ namespace MoviesApp.Controllers
                 return View("Edit", movieVM);
             }
 
-            //var movie = await _movieRepos.GetByIdNoTracking(id);
             var movie = await _movieService.GetByIdNoTracking(id);
 
             if (movieVM.Image != null)
@@ -273,7 +266,6 @@ namespace MoviesApp.Controllers
                 editMovie.Active = true;
             }
 
-            //_movieRepos.Update(editMovie);
             await _movieService.Update(editMovie);
             TempData["success"] = "Movie details updated";
 
@@ -289,7 +281,6 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            //var movie = await _movieRepos.GetById(id);
             var movie = await _movieService.GetById(id);
             if (movie == null)
             {
@@ -303,7 +294,6 @@ namespace MoviesApp.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //var movie = await _movieRepos.GetById(id);
             var movie = await _movieService.GetById(id);
             if (movie != null)
             {

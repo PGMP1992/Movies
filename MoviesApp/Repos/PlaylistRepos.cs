@@ -18,7 +18,17 @@ namespace MoviesApp.Repos
         {
             return await _context.Playlists
                 .AsNoTracking()
-                //.Include(p => p.AppUser)
+                .Include(p => p.AppUser)
+                //.Include(p => p.Movie)
+                .ToListAsync();
+        }
+
+        public async Task<List<Playlist>> GetAllByUser(string appUser)
+        {
+            return await _context.Playlists
+                .AsNoTracking()
+                .Where(a => a.AppUserId == appUser)
+                .Include(p => p.AppUser)
                 //.Include(p => p.Movies)
                 .ToListAsync();
         }
@@ -50,15 +60,7 @@ namespace MoviesApp.Repos
                 .ToListAsync();
         }
 
-        public async Task<List<Playlist>> GetAllByUser(string appUser)
-        {
-            return await _context.Playlists
-                .AsNoTracking()
-                .Where(a => a.AppUserId == appUser)
-                //.Include(p => p.AppUser)
-                //.Include(p => p.Movies)
-                .ToListAsync();
-        }
+        
 
         public bool Add(Playlist obj)
         {

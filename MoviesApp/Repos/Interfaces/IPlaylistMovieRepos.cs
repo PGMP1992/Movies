@@ -6,13 +6,17 @@ namespace MoviesApp.Repos.Interfaces
     {
         Task<List<PlaylistMovie>> GetAll();
         Task<PlaylistMovie> GetById(int? id);
+        Task<List<PlaylistMovie>> GetByPlaylist(int? id);
         Task<PlaylistMovie> GetByIdNoTracking(int? id);
+        
         Task<List<PlaylistMovie>> GetAllByUser(string userName);
 
         bool Add(PlaylistMovie obj);
         bool Update(PlaylistMovie obj);
         bool Delete(PlaylistMovie obj);
+        
         bool Save();
         bool Exists(int id);
+        bool MovieInPlaylist(PlaylistMovie obj);
     }
 }

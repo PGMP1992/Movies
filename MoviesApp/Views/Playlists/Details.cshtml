@@ -10,13 +10,13 @@
     @if(User.IsInRole("admin"))
     {
         <div class="row">
-            <span>User: <b>@Model.AppUser.UserName</b></span>
+           @*  <span>User: <b>@Model.Playlist.AppUser.UserName</b></span> *@
         </div>
     }
-    @* @if (Model.Playlist.Movies.Any())
+    @if (Model.Playlists.Any())
     {
         <hr />    
-        <h6>Movies</h6>
+        <h5>Movies</h5>
             <table class="table table-responsive">
                 <tr>
                     <th>Title</th>
@@ -24,18 +24,19 @@
                     <th>Age</th>
                     <th></th>
                 </tr>
-                @foreach( Movie item in Model.Playlist.Movies)
+                @foreach( var item in Model.Playlists)
                 {
                     <tr>
-                        <td class="text-secondary">@item.Title</td>
-                        <td class ="text-secondary">@item.Genre</td>
-                            <td class="text-secondary">@item.Age</td>
+                        <td class="text-secondary">@item.Movie.Title</td>
+                        <td class="text-secondary">@item.Movie.Genre</td>
+                        <td class="text-secondary">@item.Movie.Age</td>
                         <td>
                             <a asp-controller="Playlists"
-                                asp-action="RemoveMovie" 
-                                asp-route-playlistId= "@Model.Playlist.Id"
-                                asp-route-movieId="@item.Id" 
-                                type="button" class="btn btn-sm btn-outline-danger">Delete
+                               asp-action="RemoveMovie"
+                               asp-route-playlistId="@Model.Playlist.Id"
+                               asp-route-movieId="@item.Id"
+                               type="button" class="btn btn-sm btn-outline-danger">
+                                Delete
                             </a>
                         </td>
                     </tr>
@@ -45,7 +46,7 @@
     else
     {
         <h6 class="text-danger mt-3">There are no movies in this playlist.</h6>
-    } *@
+    }
 
     <div class="d-flex justify-content-between align-items-center mt-3">
         <div class="btn-group">

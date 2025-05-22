@@ -2,7 +2,7 @@
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
 
-namespace playlists.API.Controllers
+namespace Movies.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]

@@ -1,13 +1,14 @@
-﻿using MoviesApp.Models;
+﻿using MoviesApp.DTOs;
+using MoviesApp.Models;
 
 namespace MoviesApp.ViewModels
 {
     public class PlaylistMoviesVM
     {
-        public int? PlaylistId {  get; set; } 
-        public Playlist? Playlist { get; set; }
-        public List<Movie>? Movies { get; set;}
-        public string? AppUserId { get; set; }
-        public AppUser? AppUser { get; set; }
+        public PlaylistDto? Playlist {  get; set; } 
+        public List<PlaylistMovie>? Playlists { get; set; }
+        //public List<MovieDto>? Movies { get; set;}
+        //public string? AppUserId { get; set; }
+        //public AppUser? AppUser { get; set; }
     }
 }
