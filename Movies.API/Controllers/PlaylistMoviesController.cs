@@ -30,6 +30,39 @@ namespace Movies.API.Controllers
             return Ok(list);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByPlaylist(int id)
+        {
+            var list = await _repos.GetByPlaylist(id);
+            if (list == null || !list.Any())
+            {
+                return NotFound("No playlists found");
+            }
+            return Ok(list);
+        }
+
+        [HttpGet("{playlistId}/{movieId}")]
+        public async Task<IActionResult> GetByContent(int playlistId, int movieId)
+        {
+            var list = await _repos.GetByContent(playlistId, movieId);
+            if (list == null)
+            {
+                return NotFound("No Movie found in this Playlist");
+            }
+            return Ok(list);
+        }
+
+        [HttpGet("{playlistId}/{movieId}")]
+        public async Task<IActionResult> MovieInPlaylist(int playlistId, int movieId)
+        {
+            var obj = _repos.MovieInPlaylist(playlistId, movieId);
+            if (obj == false)
+            {
+                return NotFound("No playlist available");
+            }
+            return Ok(obj);
+        }
+
         // GET: playlistsController/Details/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -96,5 +129,17 @@ namespace Movies.API.Controllers
             var deleted = _repos.Delete(playlist);
             return Ok(deleted);
         }
+
+        //[HttpGet("{obj}")]
+        //public async Task<IActionResult> MovieInPlaylist(PlaylistMovie obj)
+        //{
+        //    var playlist = _repos.MovieInPlaylist(obj);
+        //    if (playlist is false)
+        //    {
+        //        return NotFound("Movie not in Playlist!");
+        //    }
+            
+        //    return Ok(obj);
+        //}
     }
 }

@@ -14,7 +14,7 @@ namespace MoviesApp.Repos
             _context = context;
         }
 
-        public async Task<List<PlaylistMovie>> GetAll()
+        public async Task<IEnumerable<PlaylistMovie>> GetAll()
         {
             return await _context.PlaylistMovies
                 .AsNoTracking()
@@ -24,7 +24,7 @@ namespace MoviesApp.Repos
                 .ToListAsync();
         }
 
-        public async Task<List<PlaylistMovie>> GetAllByUser(string appUser)
+        public async Task<IEnumerable<PlaylistMovie>> GetAllByUser(string appUser)
         {
             return await _context.PlaylistMovies
                 .AsNoTracking()
@@ -35,7 +35,7 @@ namespace MoviesApp.Repos
                 .ToListAsync();
         }
 
-        public async Task<List<PlaylistMovie>> GetByPlaylist(int? id)
+        public async Task<IEnumerable<PlaylistMovie>> GetByPlaylist(int id)
         {
             return await _context.PlaylistMovies
                 .AsNoTracking()
@@ -58,17 +58,17 @@ namespace MoviesApp.Repos
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
+        public bool MovieInPlaylist(int playlistId, int movieId)
+        {
+            var result = _context.PlaylistMovies
+                .Where(a => a.PlaylistId == playlistId && a.MovieId == movieId);
+            return result.Any();
+        }
+
         public async Task<PlaylistMovie> GetByContent(int playlistId, int movieId)
         {
             return await _context.PlaylistMovies
                 .FirstOrDefaultAsync(a => a.PlaylistId == playlistId && a.MovieId == movieId);
-        }
-
-        public bool MovieInPlaylist(PlaylistMovie obj)
-        {
-            var result = _context.PlaylistMovies
-                .Where(a => a.PlaylistId == obj.PlaylistId && a.MovieId == obj.MovieId);
-            return result.Any();
         }
 
         public bool Add(PlaylistMovie obj)

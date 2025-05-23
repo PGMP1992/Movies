@@ -14,27 +14,26 @@ namespace MoviesApp.Controllers
     {
         private readonly IMovieService _movieService;
         private readonly IPlaylistService _playlistService;
-        //private readonly IPlaylistMovieService _playlistMovieService;
+        private readonly IPlaylistMovieService _playlistMovieService;
 
-        private readonly IPlaylistMovieRepos _playlistMovieRepos;
+        //private readonly IPlaylistMovieRepos _playlistMovieRepos;
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MoviesController(
              IMovieService movieService
             , IPlaylistService playlistService
-            
-            //, IPlaylistMovieService playlistMovieService
-            , IPlaylistMovieRepos playlistMovieRepos
+            , IPlaylistMovieService playlistMovieService
+            //, IPlaylistMovieRepos playlistMovieRepos
             , IPhotoService photoService
             , IHttpContextAccessor httpContextAccessor
             )
         {
             _movieService = movieService;
             _playlistService = playlistService;
+            _playlistMovieService = playlistMovieService;
             
-            //_playlistMovieService = playlistMovieService;
-            _playlistMovieRepos = playlistMovieRepos;
+            //_playlistMovieRepos = playlistMovieRepos;
             _photoService = photoService;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -117,33 +116,36 @@ namespace MoviesApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Details(AddMovieVM movieVM)
         {
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("", "Failed to Add Movie");
-                return View("Details", movieVM);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    ModelState.AddModelError("", "Failed to Add Movie");
+            //    return View("Details", movieVM);
+            //}
 
-            var movie = await _movieService.GetById(movieVM.Id);
-            if (movie == null)
-            {
-                ModelState.AddModelError("", "Movie not found");
-                return View("Details", movieVM);
-            }
+            //var movie = await _movieService.GetById(movieVM.Id);
+            //if (movie == null)
+            //{
+            //    ModelState.AddModelError("", "Movie not found");
+            //    return View("Details", movieVM);
+            //}
 
-            var newMovie = new PlaylistMovie
+            var newMovie = new PlaylistMovieDto
             {
-                MovieId = movie.Id,
+                MovieId = movieVM.Id,
                 PlaylistId = movieVM.PlaylistId
             };
 
-            var movieExist = _playlistMovieRepos.MovieInPlaylist(newMovie);
-            if (movieExist)
+            //var movieExist = _playlistMovieRepos.MovieInPlaylist(newMovie);
+            
+            var movieExist = await _playlistMovieService.MovieInPlaylist(movieVM.PlaylistId, movieVM.Id);
+            if ( movieExist )
             {
                 TempData["error"] = "Movie is already in Playlist!";
             }
             else
             {
-                _playlistMovieRepos.Add(newMovie);
+                //_playlistMovieRepos.Add(newMovie);
+                await _playlistMovieService.Add(newMovie);
                 TempData["success"] = "Movie added to Playlist";
             }
             return RedirectToAction(nameof(Details));

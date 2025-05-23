@@ -14,7 +14,7 @@ namespace MoviesApp.Repos
             _context = context;
         }
 
-        public async Task<List<Movie>> GetAll()
+        public async Task<IEnumerable<Movie>> GetAll()
         {
             return await _context.Movies
                 .AsNoTracking()
@@ -22,7 +22,7 @@ namespace MoviesApp.Repos
                 .ToListAsync();
         }
 
-        public async Task<List<Movie>> GetAllActive()
+        public async Task<IEnumerable<Movie>> GetAllActive()
         {
             return await _context.Movies
                 .AsNoTracking()
@@ -44,7 +44,7 @@ namespace MoviesApp.Repos
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task<List<Movie>> GetByName(string name)
+        public async Task<IEnumerable<Movie>> GetByName(string name)
         {
             return await _context.Movies
                 .AsNoTracking()

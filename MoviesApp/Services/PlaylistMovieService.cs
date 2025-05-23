@@ -1,4 +1,5 @@
 ﻿using MoviesApp.DTOs;
+using MoviesApp.Models;
 using Newtonsoft.Json;
 
 namespace MoviesApp.Services
@@ -124,5 +125,52 @@ namespace MoviesApp.Services
                 throw new Exception(errorModel.ErrorMessage);
             }
         }
+
+        public async Task<IEnumerable<PlaylistMovieDto>> GetByPlaylist(int id)
+        {
+            var response = await _httpClient.GetAsync($"/api/playlistMovies/GetByPlaylist/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var Playlists = JsonConvert.DeserializeObject<IEnumerable<PlaylistMovieDto>>(content);
+                return Playlists ?? new List<PlaylistMovieDto>();
+            }
+
+            return new List<PlaylistMovieDto>();
+        }
+
+        public async Task<PlaylistMovieDto?> GetByContent(int playlistId, int movieId)
+        {
+            var response = await _httpClient.GetAsync($"/api/playlistMovies/GetByContent/{playlistId}/{movieId}");
+
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var playlistResponse = JsonConvert.DeserializeObject<PlaylistMovieDto>(content);
+                return playlistResponse;
+            }
+            else
+            {
+                var errorModel = JsonConvert.DeserializeObject<ErrorModel>(content);
+                return null;
+                //throw new Exception(errorModel.ErrorMessage);
+            }
+        }
+
+        public async Task<bool> MovieInPlaylist(int playlistId, int movieId)
+        {
+            var response = await _httpClient.GetAsync($"/api/playlistMovies/MovieInPlaylist/{playlistId}/{movieId}");
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }

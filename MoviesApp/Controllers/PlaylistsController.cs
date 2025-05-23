@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Data;
 using MoviesApp.DTOs;
-using MoviesApp.Models;
-using MoviesApp.Repos.Interfaces;
 using MoviesApp.Services;
 using MoviesApp.ViewModels;
 
@@ -14,27 +12,31 @@ namespace MoviesApp.Controllers
     {
         private readonly IPlaylistService _playlistService;
         private readonly IMovieService _movieService;
-        private readonly IPlaylistMovieRepos _playlistMovieRepos;
+        private readonly IPlaylistMovieService _playlistMovieService;
 
         //private readonly IPlaylistRepos _playlistRepos;
         //private readonly IMovieRepos _movieRepos;
+        //private readonly IPlaylistMovieRepos _playlistMovieRepos;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public PlaylistsController(
             IPlaylistService playlistService
             , IMovieService movieService
-            , IPlaylistMovieRepos playlistMovieRepos
+            , IPlaylistMovieService playlistMovieService
 
             //,IPlaylistRepos playlistRepos
             //, IMovieRepos movieRepos
+            //, IPlaylistMovieRepos playlistMovieRepos
             , IHttpContextAccessor httpContextAccessor
         )
         {
             _playlistService = playlistService;
             _movieService = movieService;
-            _playlistMovieRepos = playlistMovieRepos;
+            _playlistMovieService = playlistMovieService;
+
             //_playlistRepos = playlistRepos;
             //_movieRepos = movieRepos;
+            //_playlistMovieRepos = playlistMovieRepos;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -72,13 +74,11 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            //var playlist = await _playlistRepos.GetByIdNoTracking(id);
-            //var playlist = await _playlistService.GetByIdNoTracking(id);
-
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
                 Playlist = await _playlistService.GetById(id),
-                Playlists = await _playlistMovieRepos.GetByPlaylist(id)
+                //Playlists = await _playlistMovieRepos.GetByPlaylist(id)
+                Playlists = await _playlistMovieService.GetByPlaylist(id)
             };
 
             return View(newVm);
@@ -86,18 +86,21 @@ namespace MoviesApp.Controllers
 
         public async Task<IActionResult> RemoveMovie(int playlistId, int movieId)
         {
-            var obj = await _playlistMovieRepos.GetByContent(playlistId, movieId);
-            
+            //var obj = await _playlistMovieRepos.GetByContent(playlistId, movieId);
+            var obj = await _playlistMovieService.GetByContent(playlistId, movieId);
+
             if (obj != null)
             {
-                _playlistMovieRepos.Delete(obj);
+                //_playlistMovieRepos.Delete(obj);
+                await _playlistMovieService.Delete(obj.Id);
                 TempData["success"] = "Movie deleted from Playlist";
             }
 
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
                 Playlist = await _playlistService.GetById(playlistId),
-                Playlists = await _playlistMovieRepos.GetByPlaylist(playlistId)
+                //Playlists = await _playlistMovieRepos.GetByPlaylist(playlistId)
+                Playlists = await _playlistMovieService.GetByPlaylist(playlistId)
             };
 
             return View("Details", newVm);

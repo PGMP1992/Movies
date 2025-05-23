@@ -4,11 +4,10 @@ namespace MoviesApp.Repos.Interfaces
 {
     public interface IPlaylistMovieRepos
     {
-        Task<List<PlaylistMovie>> GetAll();
-        Task<List<PlaylistMovie>> GetByPlaylist(int? id);
-        Task<List<PlaylistMovie>> GetAllByUser(string userName);
-        Task<PlaylistMovie> GetByContent(int playlistId, int movieId);
-
+        Task<IEnumerable<PlaylistMovie>> GetAll();
+        Task<IEnumerable<PlaylistMovie>> GetByPlaylist(int id);
+        Task<IEnumerable<PlaylistMovie>> GetAllByUser(string userName);
+        
         Task<PlaylistMovie> GetById(int? id);
         Task<PlaylistMovie> GetByIdNoTracking(int? id);
                 
@@ -18,6 +17,7 @@ namespace MoviesApp.Repos.Interfaces
         
         bool Save();
         bool Exists(int id);
-        bool MovieInPlaylist(PlaylistMovie obj);
+        bool MovieInPlaylist(int playlistId, int movieId);
+        Task<PlaylistMovie> GetByContent(int playlistId, int movieId);
     }
 }
