@@ -183,7 +183,7 @@ namespace Movies.API.Controllers
                 //return NotFound("Movie doesn't exist!");
                 return BadRequest(new ErrorModel()
                 {
-                    ErrorMessage = "Invalid Movie entry!",
+                    ErrorMessage = "Invalid Movie Id!",
                     StatusCode = StatusCodes.Status400BadRequest
                 });
             }

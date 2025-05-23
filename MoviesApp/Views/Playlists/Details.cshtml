@@ -10,7 +10,7 @@
     @if(User.IsInRole("admin"))
     {
         <div class="row">
-           @*  <span>User: <b>@Model.Playlist.AppUser.UserName</b></span> *@
+            <span>User: <b>@Model.Playlist.AppUser.UserName</b></span>
         </div>
     }
     @if (Model.Playlists.Any())
@@ -34,7 +34,7 @@
                             <a asp-controller="Playlists"
                                asp-action="RemoveMovie"
                                asp-route-playlistId="@Model.Playlist.Id"
-                               asp-route-movieId="@item.Id"
+                               asp-route-movieId="@item.Movie.Id"
                                type="button" class="btn btn-sm btn-outline-danger">
                                 Delete
                             </a>

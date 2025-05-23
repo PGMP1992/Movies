@@ -20,9 +20,31 @@ namespace MoviesApp.Repos
                 .AsNoTracking()
                 .Include(p => p.Playlist)
                 .Include(p => p.Movie)
+                .OrderBy(p => p.Movie.Title)
                 .ToListAsync();
         }
 
+        public async Task<List<PlaylistMovie>> GetAllByUser(string appUser)
+        {
+            return await _context.PlaylistMovies
+                .AsNoTracking()
+                .Where(a => a.Playlist.AppUserId == appUser)
+                .Include(p => p.Playlist)
+                .Include(p => p.Movie)
+                        .OrderBy(p => p.Movie.Title)
+                .ToListAsync();
+        }
+
+        public async Task<List<PlaylistMovie>> GetByPlaylist(int? id)
+        {
+            return await _context.PlaylistMovies
+                .AsNoTracking()
+                .Where(a => a.PlaylistId == id)
+                .Include(p => p.Playlist)
+                .Include(p => p.Movie)
+                .OrderBy(p => p.Movie.Title)
+                .ToListAsync();
+        }
         public async Task<PlaylistMovie> GetById(int? id)
         {
             return await _context.PlaylistMovies
@@ -36,31 +58,16 @@ namespace MoviesApp.Repos
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task<List<PlaylistMovie>> GetAllByUser(string appUser)
+        public async Task<PlaylistMovie> GetByContent(int playlistId, int movieId)
         {
             return await _context.PlaylistMovies
-                .AsNoTracking()
-                .Where(a => a.Playlist.AppUserId == appUser)
-                .Include(p => p.Playlist)
-                .Include(p => p.Movie)
-                .ToListAsync();
-        }
-
-        public async Task<List<PlaylistMovie>> GetByPlaylist(int? id)
-        {
-            return await _context.PlaylistMovies
-                .AsNoTracking()
-                .Where(a => a.PlaylistId == id)
-                .Include(p => p.Playlist)
-                .Include(p => p.Movie)
-                .ToListAsync();
+                .FirstOrDefaultAsync(a => a.PlaylistId == playlistId && a.MovieId == movieId);
         }
 
         public bool MovieInPlaylist(PlaylistMovie obj)
         {
             var result = _context.PlaylistMovies
-                .Where(a => a.PlaylistId == obj.PlaylistId &&
-                    a.MovieId == obj.MovieId);
+                .Where(a => a.PlaylistId == obj.PlaylistId && a.MovieId == obj.MovieId);
             return result.Any();
         }
 

@@ -86,19 +86,13 @@ namespace MoviesApp.Controllers
 
         public async Task<IActionResult> RemoveMovie(int playlistId, int movieId)
         {
-            var checkMovie = new PlaylistMovie
+            var obj = await _playlistMovieRepos.GetByContent(playlistId, movieId);
+            
+            if (obj != null)
             {
-                MovieId = movieId,
-                PlaylistId = playlistId
-            };
-
-            var deleteMovie = _playlistMovieRepos.MovieInPlaylist(checkMovie);
-
-            //if( deleteMovie ) 
-            //{ 
-            //    _playlistMovieRepos.Delete(deleteMovie);
-            //    TempData["success"] = "Movie deleted from Playlist";
-            //}
+                _playlistMovieRepos.Delete(obj);
+                TempData["success"] = "Movie deleted from Playlist";
+            }
 
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
