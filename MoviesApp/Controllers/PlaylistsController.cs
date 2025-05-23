@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using MoviesApp.DTOs;
 using MoviesApp.Models;
-using MoviesApp.Repos;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.Services;
 using MoviesApp.ViewModels;
@@ -24,9 +22,9 @@ namespace MoviesApp.Controllers
 
         public PlaylistsController(
             IPlaylistService playlistService
-            ,IMovieService movieService
-            ,IPlaylistMovieRepos playlistMovieRepos
-            
+            , IMovieService movieService
+            , IPlaylistMovieRepos playlistMovieRepos
+
             //,IPlaylistRepos playlistRepos
             //, IMovieRepos movieRepos
             , IHttpContextAccessor httpContextAccessor
@@ -95,13 +93,13 @@ namespace MoviesApp.Controllers
             };
 
             var deleteMovie = _playlistMovieRepos.MovieInPlaylist(checkMovie);
-            
+
             //if( deleteMovie ) 
             //{ 
             //    _playlistMovieRepos.Delete(deleteMovie);
             //    TempData["success"] = "Movie deleted from Playlist";
             //}
-            
+
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
                 Playlist = await _playlistService.GetById(playlistId),
@@ -123,11 +121,11 @@ namespace MoviesApp.Controllers
         // POST: Playlists/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] PlaylistDto playlist)
+        public async Task<IActionResult> Create([Bind("Id,Name,AppUserId")] PlaylistDto playlist)
         {
             if (ModelState.IsValid)
             {
-                playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+                //playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
                 //_playlistRepos.Add(playlist);
                 await _playlistService.Add(playlist);
                 TempData["success"] = "Playlist created";
@@ -156,7 +154,7 @@ namespace MoviesApp.Controllers
         // POST: Playlists/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] PlaylistDto playlist)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name, AppUserId")] PlaylistDto playlist)
         {
             if (id != playlist.Id)
             {
@@ -165,10 +163,11 @@ namespace MoviesApp.Controllers
 
             if (ModelState.IsValid)
             {
-                playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+                //playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
                 //_playlistRepos.Update(playlist);
                 await _playlistService.Update(playlist);
                 TempData["success"] = "Playlist updated";
+                return RedirectToAction(nameof(Index));
             }
             return View(playlist);
         }

@@ -30,13 +30,14 @@ namespace MoviesApp.Repos
                 .Where(a => a.AppUserId == appUser)
                 .Include(p => p.AppUser)
                 //.Include(p => p.Movies)
+                .OrderBy(a => a.Name)
                 .ToListAsync();
         }
 
         public async Task<Playlist> GetById(int? id)
         {
             return await _context.Playlists
-                //.Include(p => p.AppUser)
+                .Include(p => p.AppUser)
                 //.Include(p => p.Movies)
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
@@ -45,7 +46,7 @@ namespace MoviesApp.Repos
         {
             return _context.Playlists
                 .AsNoTracking()
-                //.Include(p => p.AppUser)
+                .Include(p => p.AppUser)
                 //.Include(p => p.Movies)
                 .FirstOrDefault(m => m.Id == id);
         }
@@ -55,12 +56,11 @@ namespace MoviesApp.Repos
             return await _context.Playlists
                 .AsNoTracking()
                 .Where(n => n.Name == name)
-                //.Include(p => p.AppUser)
+                .Include(u => u.AppUser)
                 //.Include(p => p.Movies)
+                .OrderBy(n => n.Name)
                 .ToListAsync();
         }
-
-        
 
         public bool Add(Playlist obj)
         {
