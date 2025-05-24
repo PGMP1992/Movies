@@ -3,7 +3,7 @@
 <h2>Versions - Github Repository</h2>
 <ul>
   <li><b>master</b>      - Original version using MVC and Deployed to https://movies.pgmp.se</li>
-  <li><b>API-Version</b> - Added API, Scalar</li>
+  <li><b>API-Version</b> - Added API, Scalar, JWT and Authorization missing</li>
 </ul>
 
 <h2>Introduction </h2>
