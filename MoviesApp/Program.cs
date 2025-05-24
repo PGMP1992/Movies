@@ -18,10 +18,8 @@ builder.Services.AddScoped<IUsersRepos, UsersRepos>();
 builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interface
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
-//API Services
-builder.Services.AddHttpClient<IMovieService, MovieService>();
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

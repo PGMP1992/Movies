@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MoviesApp.Data;
-using MoviesApp.DTOs;
 using MoviesApp.Models;
 using MoviesApp.Repos.Interfaces;
-using MoviesApp.Services;
 using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers

@@ -1,5 +1,4 @@
-﻿using MoviesApp.DTOs;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MoviesApp.Models
 {
@@ -31,19 +30,5 @@ namespace MoviesApp.Models
         public string? PictUrl { get; set; } = "";
 
         public List<Playlist>? Playlists { get; set; }
-
-        public MovieDto ToMovieDto()
-        {
-            return new MovieDto
-            {
-                Id = this.Id,
-                Title = this.Title,
-                Description = this.Description,
-                Genre = this.Genre,
-                Age = this.Age,
-                Active = this.Active,
-                PictUrl = this.PictUrl
-            };
-        }
     }
 }
