@@ -1,5 +1,11 @@
 <h1>Movie Web Application</h1> 
 
+<h2>Versions - Github Repository</h2>
+<ul>
+  <li><b>master</b>      - Original version using MVC and Deployed to https://movies.pgmp.se</li>
+  <li><b>API-Version</b> - Added API, Scalar</li>
+</ul>
+
 <h2>Introduction </h2>
   <p>Movie listing application that supports creating, editing, searching, and listing movies from a database.</p>
   <p>The application lets you add, edit, and delete movies, playlists and Users , as well as see details about individual ones.</p>  
@@ -13,9 +19,11 @@
     
 <h2>Movies</h2>
   <p>Create, Read, Update and Delete</p> 
+  <p>Add Movie to a Playlist</p>
 
 <h2>Users Playlists</h2>
   <p>Create, Read, Update and Delete their playlists</p>
+  <p>View Movies in playlist, delete Movies from the playlist</p>
 
 <h2>User Profile</h2>
   <p>Change information for location using IP Address for the user</p>
