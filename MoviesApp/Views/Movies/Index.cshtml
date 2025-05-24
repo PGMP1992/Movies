@@ -14,7 +14,7 @@
     {
         <div class="col">
             <div class="card h-100 border-0">
-                <div class="row">
+                <div class="card-header border-0 p-0">
                     @if (item.PictUrl != null)
                     {
                         // if image not found put default.png instead
@@ -33,10 +33,10 @@
                             loading="lazy" decoding="async" />
                     }
                 </div>
-                <div class="px-2">
+
+                <div class="card-body">
                     <p class="h5"><b>@item.Title</b></p>
                     <p class="h6">@item.Genre</p>
-                    @* <p class="text-body-secondary">Age: <b>@item.Age Years</b></p> *@
                     @if (User.IsInRole("admin"))
                     {
                         <p class="h6">Active: <input type="checkbox" id="myCheck" checked="@item.Active" disabled /></p>
