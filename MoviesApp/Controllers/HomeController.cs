@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using MoviesApp.Models;
-using MoviesApp.Repos.Interfaces;
-using MoviesApp.ViewModels;
+using Movies.Business.Repos.Interfaces;
+using Movies.DataAccess.Models;
+using Movies.DataAccess.ViewModels;
 using System.Diagnostics;
 
 namespace MoviesApp.Controllers

@@ -1,0 +1,13 @@
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\obj\Debug\net9.0\Movies.Models.csproj.AssemblyReference.cache
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\obj\Debug\net9.0\Movies.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\obj\Debug\net9.0\Movies.Models.AssemblyInfoInputs.cache
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\obj\Debug\net9.0\Movies.Models.AssemblyInfo.cs
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\obj\Debug\net9.0\Movies.Models.csproj.CoreCompileInputs.cache
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\obj\Debug\net9.0\Movies.Models.sourcelink.json
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\bin\Debug\net9.0\Movies.Models.deps.json
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\bin\Debug\net9.0\Movies.Models.dll
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\bin\Debug\net9.0\Movies.Models.pdb
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\obj\Debug\net9.0\Movies.Models.dll
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\obj\Debug\net9.0\refint\Movies.Models.dll
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\obj\Debug\net9.0\Movies.Models.pdb
+C:\Users\pedro\source\PGMP1992\Movies\Movies.Models\obj\Debug\net9.0\ref\Movies.Models.dll

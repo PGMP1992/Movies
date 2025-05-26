@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MoviesApp.Models;
+using Movies.DataAccess.Models;
 
 namespace MoviesApp.Areas.Identity.Pages.Account.Manage
 {

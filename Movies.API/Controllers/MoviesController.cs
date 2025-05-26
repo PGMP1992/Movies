@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MoviesApp.DTOs;
-using MoviesApp.Models;
-using MoviesApp.Repos.Interfaces;
+using Movies.DataAccess.Models;
+using Movies.Models;
+using Movies.Business.Repos.Interfaces;
 
 namespace Movies.API.Controllers
 {
@@ -23,6 +23,7 @@ namespace Movies.API.Controllers
                     StatusCode = StatusCodes.Status404NotFound
                 });
             }
+                
             return Ok(movies);
         }
 
@@ -66,6 +67,7 @@ namespace Movies.API.Controllers
                     StatusCode = StatusCodes.Status404NotFound
                 });
             }
+            
             return Ok(movie.ToDto());
         }
 

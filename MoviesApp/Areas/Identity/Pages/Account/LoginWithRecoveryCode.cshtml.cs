@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using MoviesApp.Models;
+using Movies.DataAccess.Models;
 namespace MoviesApp.Areas.Identity.Pages.Account
 {
     public class LoginWithRecoveryCodeModel : PageModel

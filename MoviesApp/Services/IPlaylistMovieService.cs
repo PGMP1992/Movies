@@ -1,5 +1,4 @@
-﻿using MoviesApp.DTOs;
-using MoviesApp.Models;
+﻿using Movies.Models;
 
 namespace MoviesApp.Services
 {

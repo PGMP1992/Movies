@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MoviesApp.DTOs;
-using MoviesApp.Models;
-using MoviesApp.Repos.Interfaces;
+using Movies.Business.Repos.Interfaces;
+using Movies.DataAccess.Models;
+using Movies.Models;
 
 namespace Movies.API.Controllers
 {
@@ -73,6 +73,7 @@ namespace Movies.API.Controllers
                     StatusCode = StatusCodes.Status404NotFound
                 });
             }
+            
             return Ok(playlist.ToDto());
         }
 
@@ -118,7 +119,7 @@ namespace Movies.API.Controllers
                 });
             }
             _repos.Update(playlist);
-            return Ok(playlist.ToDto());
+             return Ok(playlist.ToDto());
         }
 
         // DELETE: playlistsController/Delete/5

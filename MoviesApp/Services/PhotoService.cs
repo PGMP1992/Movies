@@ -1,8 +1,8 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Options;
+using Movies.Business.Repos.Interfaces;
 using MoviesApp.Helpers;
-using MoviesApp.Repos.Interfaces;
 
 namespace MoviesApp.Services
 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MoviesApp.Models;
-using MoviesApp.Repos.Interfaces;
+using Movies.Business.Repos.Interfaces;
+using Movies.DataAccess.Models;
+using Movies.Models;
 
 namespace Movies.API.Controllers
 {
@@ -44,12 +45,13 @@ namespace Movies.API.Controllers
         [HttpGet("{playlistId}/{movieId}")]
         public async Task<IActionResult> GetByContent(int playlistId, int movieId)
         {
-            var list = await _repos.GetByContent(playlistId, movieId);
-            if (list == null)
+            var obj = await _repos.GetByContent(playlistId, movieId);
+            if (obj == null)
             {
                 return NotFound("No Movie found in this Playlist");
             }
-            return Ok(list);
+            
+            return Ok(obj.ToDto());
         }
 
         [HttpGet("{playlistId}/{movieId}")]
@@ -58,7 +60,7 @@ namespace Movies.API.Controllers
             var obj = _repos.MovieInPlaylist(playlistId, movieId);
             if (obj == false)
             {
-                return NotFound("No playlist available");
+                return NotFound("Movie is not in playlist.");
             }
             return Ok(obj);
         }
@@ -67,23 +69,25 @@ namespace Movies.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var list = await _repos.GetById(id);
-            if (list == null)
+            var obj = await _repos.GetById(id);
+            if (obj == null)
             {
                 return NotFound("playlist doesn't exist!");
             }
-            return Ok(list.ToDto());
+            
+            return Ok(obj.ToDto());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdNoTracking(int id)
         {
-            var playlist = await _repos.GetByIdNoTracking(id);
-            if (playlist == null)
+            var obj = await _repos.GetByIdNoTracking(id);
+            if (obj == null)
             {
                 return NotFound("playlist doesn't exist!");
             }
-            return Ok(playlist.ToDto());
+            
+            return Ok(obj.ToDto());
         }
 
         // POST: playlistsController/Create

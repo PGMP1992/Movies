@@ -24,7 +24,7 @@
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h6 class="card-text">User Name: @Model.UserName</h6>
+                <div class="h6"> <b>User Name: </b>@Model.UserName</div>
                 <form method="post" asp-action="Edit" enctype="multipart/form-data">
                     <input type="hidden" id="Id" name="Id" asp-for="Id" />
                     <input type="hidden" id="UserName" name="UserName" asp-for="UserName" />

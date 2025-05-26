@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MoviesApp.Data;
-using MoviesApp.DTOs;
+using Movies.DataAccess.Data;
+using Movies.DataAccess.ViewModels;
+using Movies.Models;
 using MoviesApp.Services;
-using MoviesApp.ViewModels;
 
 namespace MoviesApp.Controllers
 {

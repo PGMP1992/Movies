@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using MoviesApp.Data;
-using MoviesApp.Repos;
-using MoviesApp.Repos.Interfaces;
+using Movies.Business.Repos;
+using Movies.Business.Repos.Interfaces;
+using Movies.DataAccess.Data;
 using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
 
