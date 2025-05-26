@@ -19,29 +19,20 @@
             <div class="row">
                 @foreach (var item in Model.Users)
                 {
-                    <div class="col-md-3">
-                        <div class="card mb-4 box-shadow">
-                            @if (@item.ProfileImageryUrl != null)
-                            {
-                                <img class="card-img-top"
-                                     src="@item.ProfileImageryUrl"
-                                     alt="Photo"
-                                     loading="lazy" decoding="async"
-                                     onerror="this.onerror=null; this.src='/images/default.png';" />
-                            }
-                            else
-                            {
-                                <img class="card-img-top"
-                                     src="/images/default.png"
-                                     alt="Photo"
-                                     loading="lazy" decoding="async" />
-                            }
-                            <div class="card-body">
+                    <div class="col-6 col-sm-3 col-md-3 g-3">
+                        <div class="card box-shadow h-100">
+                            
+                            <img src="@(item.ProfileImageryUrl ?? "/images/default.png")"
+                                 class="card-img-top object-fit-cover rounded-top-4"
+                                 alt="@(string.IsNullOrWhiteSpace(item.UserName) ? "Movie image" : item.UserName + " image")"
+                                 style="height: 220px; object-fit: cover;"
+                                 loading="lazy" decoding="async"
+                                 onerror="this.onerror=null; this.src='/images/default.png';" />
+                            
+                            <div class=" py-2 px-3">
                                 <h5>@item.UserName</h5>
-                                <h6 class="card-text">
-                                    <small class="text-body-secondary">@item.City</small>
-                                    <p class="card-text"><small class="text-body-secondary">@item.State</small></p>
-                                </h6>
+                                <div class="h6 mb-2">@item.City</div>
+                                <div class="h6 text-secondary mb-0">@item.State</div>
                             </div>
                         </div>
                     </div>

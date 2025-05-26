@@ -4,41 +4,38 @@
 
 <div class="album">
     <div class="row">
+        
         @foreach (var item in Model)
         {
-            <div class="col-md-3">
-                <div class="card mb-4 box-shadow">
-                    @if(@item.ProfileImageUrl != null ) {
-                        <img class="card-img-top" 
-                        src="@item.ProfileImageUrl"
-                        alt="Photo" 
-                        loading="lazy" decoding="async"
-                        onerror="this.onerror=null; this.src='/images/default.png';" />
-                    }
-                    else
-                    {
-                        <img class="card-img-top"
-                             src="/images/default.png"
-                             alt="Photo"
-                             loading="lazy" decoding="async" />
-                    }
+            <div class="col-6 col-sm-3 col-md-3 g-3">
+                <div class="card box-shadow h-100">
+                    <img src="@(item.ProfileImageUrl ?? "/images/default.png")"
+                            class="card-img-top object-fit-cover rounded-top-4"
+                            alt="@(string.IsNullOrWhiteSpace(item.UserName) ? "Movie image" : item.UserName + " image")"
+                            style="height: 220px; object-fit: cover;"
+                            loading="lazy" decoding="async"
+                            onerror="this.onerror=null; this.src='/images/default.png';" />
+
                     <div class="card-body">
                         <h5>@item.UserName</h5>
-                        <h6 class="text-secondary">@item.City</h6>
-                        <p class="h6">@item.State</p>
-                        
-                            @if (User.IsInRole("admin"))
-                            {
-                            <div class="btn-group mt-2">
+                        <div class="h6 mb-2">@item.City</div>
+                        <div class="h6 text-secondary mb-0">@item.State</div>
+                    </div>
+                    <div class="card-footer border-0 bg-white">
+                        @if (User.IsInRole("admin"))
+                        {
+                            <div class="btn-group">
                                 <a asp-controller="Users" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">View</a>
                                 <a asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary mx-1">Edit</a>
                                 <a asp-controller="Users" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
                             </div>
-
                         }
                     </div>
                 </div>
+                
             </div>
+        
+        
         }
     </div>
 </div>

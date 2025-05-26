@@ -5,14 +5,14 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <p><a asp-action="Create" class="btn btn-sm btn-outline-primary">Create</a></p>
+    <p><a asp-action="Create" class="btn btn-sm btn-primary">Create</a></p>
 }
 
 <div class="container">
     <div class="row g-0">
         @foreach (var item in Model)
         {
-            <div class="card mb-2 mx-1" style="max-width: 500px;">
+            <div class="card mb-2 mx-1" style="max-width: 250px;">
                 <div class="row g-0">
                     <div class="col-md-8">
                         <div class="card-body">
