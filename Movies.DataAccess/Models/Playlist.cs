@@ -29,7 +29,7 @@ namespace Movies.DataAccess.Models
                 Id = this.Id,
                 Name = this.Name,
                 AppUserId = this.AppUserId,
-                AppUser = this.AppUser.ToDto(),
+                //AppUser = this.AppUser.ToDto(),
             };
         }
     }
