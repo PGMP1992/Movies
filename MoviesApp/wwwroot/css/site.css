@@ -4,7 +4,7 @@
     --font: #1f1f1f;
     --a: #007AFF;
     --tablinks: var(--blur-bg);
-    --h: #1c1c1e;
+    --h: cornflowerblue;
     --card-shadow: rgba(0, 0, 0, 0.1);
 }
 
@@ -46,10 +46,11 @@ body {
 }
 
 h1,h2,h3,h4,h5,h6 {
-    color :cornflowerblue;
+    color :var(--h);
 }
+
 #card-title {
-    color: cornflowerblue;
+    color: black;
 }
 
 

@@ -74,13 +74,11 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var play = await _playlistService.GetById(id);
-
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
                 Playlist = await _playlistService.GetById(id),
                 //Playlists = await _playlistMovieRepos.GetByPlaylist(id)
-                Playlists = await _playlistMovieService.GetByPlaylist(id)
+                Playlists = await _playlistMovieService.GetByPlaylist(id),
             };
 
             return View(newVm);

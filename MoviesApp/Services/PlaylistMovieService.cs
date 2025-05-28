@@ -56,7 +56,7 @@ namespace MoviesApp.Services
             }
             else
             {
-                var errorModel = JsonConvert.DeserializeObject<ErrorModel>(content) ?? new ErrorModel();
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content) ?? new ErrorModelDto();
                 throw new Exception(errorModel.ErrorMessage);
             }
         }
@@ -72,7 +72,7 @@ namespace MoviesApp.Services
             }
             else
             {
-                var errorModel = JsonConvert.DeserializeObject<ErrorModel>(content) ?? new ErrorModel();
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content) ?? new ErrorModelDto();
                 throw new Exception(errorModel.ErrorMessage);
             }
         }
@@ -89,7 +89,7 @@ namespace MoviesApp.Services
             }
             else
             {
-                var errorModel = JsonConvert.DeserializeObject<ErrorModel>(content) ?? new ErrorModel();
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content) ?? new ErrorModelDto();
                 throw new Exception(errorModel.ErrorMessage);
             }
         }
@@ -105,7 +105,7 @@ namespace MoviesApp.Services
             }
             else
             {
-                var errorModel = JsonConvert.DeserializeObject<ErrorModel>(content) ?? new ErrorModel();
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content) ?? new ErrorModelDto();
                 throw new Exception(errorModel.ErrorMessage);
             }
         }
@@ -120,7 +120,7 @@ namespace MoviesApp.Services
             }
             else
             {
-                var errorModel = JsonConvert.DeserializeObject<ErrorModel>(content) ?? new ErrorModel();
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content) ?? new ErrorModelDto();
                 throw new Exception(errorModel.ErrorMessage);
             }
         }
@@ -151,7 +151,7 @@ namespace MoviesApp.Services
             }
             else
             {
-                var errorModel = JsonConvert.DeserializeObject<ErrorModel>(content);
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content);
                 return null;
                 //throw new Exception(errorModel.ErrorMessage);
             }

@@ -9,6 +9,7 @@ namespace Movies.DataAccess.Models
         public string? City { get; set; }
         public string? State { get; set; }
 
+
         //public List<Playlist>? Playlists { get; set; }
 
         public AppUserDto ToDto()
@@ -19,8 +20,7 @@ namespace Movies.DataAccess.Models
                 City = this.City,
                 State = this.State,
                 ProfileImageryUrl = this.ProfileImageryUrl,
-                UserName = this.UserName,
-                //Email = this.Email,
+                //UserName = this.UserName,
             };
         }
     }
