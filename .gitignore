@@ -7,3 +7,4 @@
 /obj
 /Movies.API/bin/Debug/net9.0
 /Movies.API/obj
+/Movies.API/appsettings.Development.json
