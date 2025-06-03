@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Movies.DataAccess.Data;
 using Movies.DataAccess.ViewModels;
 using Movies.Models;
-using MoviesApp.Services;
+using MoviesApp.Services.Interfaces;
 
 namespace MoviesApp.Controllers
 {

@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace Movies.Models
+﻿namespace Movies.Models
 {
-    public class AppUserDto : IdentityUser
+    public class AppUserDto
     {
-        public string? ProfileImageryUrl { get; set; }
-        public string? City { get; set; }
-        public string? State { get; set; }
-        //public string? UserName { get; set; }
-        //public List<PlaylistDto>? Playlists { get; set; }
+        public string Id { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string State { get; set; } = string.Empty;
+        public string? ProfileImageryUrl { get; set; } = string.Empty;
     }
 }

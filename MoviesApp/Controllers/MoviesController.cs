@@ -5,7 +5,7 @@ using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Data;
 using Movies.DataAccess.ViewModels;
 using Movies.Models;
-using MoviesApp.Services;
+using MoviesApp.Services.Interfaces;
 
 namespace MoviesApp.Controllers
 {

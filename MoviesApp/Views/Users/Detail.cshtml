@@ -6,21 +6,13 @@
 <div class="card">
     <div class="row g-0">
         <div class="col-md-4">
-            @if (Model.ProfileImageUrl != null)
-            {
-                <img class="card-img-top"
-                     src="@Model.ProfileImageUrl"
-                     alt="Photo"
-                     loading="lazy" decoding="async"
-                     onerror="this.onerror=null; this.src='/images/default.png';" />
-            }
-            else
-            {
-                <img class="card-img-top"
-                     src="/images/default.png"
-                     alt="Photo"
-                     loading="lazy" decoding="async" />
-            }
+            
+            <img src="@(Model.ProfileImageUrl ?? "/images/default.png")"
+                 class="card-img-top object-fit-cover rounded-top-4"
+                 alt="@(string.IsNullOrWhiteSpace(Model.UserName) ? "Movie image" : Model.UserName + " image")"
+                 style="object-fit: cover;"
+                 loading="lazy" decoding="async"
+                 onerror="this.onerror=null; this.src='/images/default.png';" />
         </div>
         <div class="col-md-8">
             <div class="card-body">
@@ -30,26 +22,23 @@
                     <div class="album">
                         <div class="container">
                             <h5>Playlists</h5>
-                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
 
                                 @foreach (var item in Model.Playlists)
                                 {
-                                    <div class="col-md-12">
-                                        <div class="card box-shadow">
-                                            <div class="card-body">
-                                                <div class="h6">@item.Name</div>
-                                                @* <p>@item.Movies.Count Movies</p> *@
+                                    <div class="card p-2 m-2">
+                                            
+                                        <div class="h6">@item.Name</div>
+                                        @* <p>@item.Movies.Count Movies</p> *@
 
-                                                <div class="btn-group">
-                                                    <a asp-controller="Playlists" asp-action="Details" asp-route-id="@item.Id"
-                                                       class="btn btn-sm btn-outline-primary">View</a>
-                                                    @if (User.Identity.IsAuthenticated)
-                                                    {
-                                                        <a asp-controller="Playlists" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary mx-1">Edit</a>
-                                                        <a asp-controller="Playlists" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
-                                                    }
-                                                </div>
-                                            </div>
+                                        <div class="btn-group">
+                                            <a asp-controller="Playlists" asp-action="Details" asp-route-id="@item.Id"
+                                                class="btn btn-sm btn-outline-primary">View</a>
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                <a asp-controller="Playlists" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary mx-1">Edit</a>
+                                                <a asp-controller="Playlists" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                                            }
                                         </div>
                                     </div>
                                 }

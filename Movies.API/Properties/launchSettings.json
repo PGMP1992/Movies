@@ -1,4 +1,4 @@
-﻿// Movies.API Settings ---------------------------------- 
+﻿// Movies.API Settings ----------------------------------
 {
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
@@ -20,6 +20,14 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    }
+  },
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:7211",
+      "sslPort": 44309
     }
   }
   //"iisSettings": {

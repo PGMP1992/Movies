@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Data;
 using Movies.DataAccess.Models;
@@ -9,13 +8,10 @@ namespace Movies.Business.Repos
     public class UsersRepos : IUsersRepos
     {
         private readonly ApplicationDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UsersRepos(ApplicationDbContext context,
-            IHttpContextAccessor httpContextAccessor)
+        public UsersRepos(ApplicationDbContext context)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<List<AppUser>> GetAll()
@@ -33,11 +29,9 @@ namespace Movies.Business.Repos
 
         public async Task<List<Playlist>> GetAllPlaylists(string id)
         {
-            //var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
             var userPlaylists = _context.Playlists
                 .AsNoTracking()
                 .Where(r => r.AppUser.Id == id);
-                //.Include(r => r.Movies);
 
             return userPlaylists.ToList();
         }

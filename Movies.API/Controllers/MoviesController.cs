@@ -2,9 +2,11 @@
 using Movies.DataAccess.Models;
 using Movies.Models;
 using Movies.Business.Repos.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Movies.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class MoviesController(IMovieRepos _repos) : ControllerBase

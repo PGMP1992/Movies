@@ -6,6 +6,7 @@ using MoviesApp.Services;
 using Movies.Business.Repos;
 using Movies.DataAccess.Data;
 using Movies.Business.Repos.Interfaces;
+using MoviesApp.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

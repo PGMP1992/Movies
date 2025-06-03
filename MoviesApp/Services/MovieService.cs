@@ -1,4 +1,5 @@
 ﻿using Movies.Models;
+using MoviesApp.Services.Interfaces;
 using Newtonsoft.Json;
 
 namespace MoviesApp.Services
