@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Movies.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class MoviesController(IMovieRepos _repos) : ControllerBase

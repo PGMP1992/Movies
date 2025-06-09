@@ -5,6 +5,7 @@ using Movies.Models;
 
 namespace Movies.API.Controllers
 {
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class PlaylistsController(IPlaylistRepos _repos) : ControllerBase
