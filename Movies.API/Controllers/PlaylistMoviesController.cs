@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Models;
-using Movies.Models;
 
 namespace Movies.API.Controllers
 {

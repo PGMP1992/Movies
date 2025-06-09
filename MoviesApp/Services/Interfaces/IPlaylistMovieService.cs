@@ -1,6 +1,6 @@
 ﻿using Movies.Models;
 
-namespace MoviesApp.Services
+namespace MoviesApp.Services.Interfaces
 {
     public interface IPlaylistMovieService
     {
