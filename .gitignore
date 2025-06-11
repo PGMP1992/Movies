@@ -62,3 +62,4 @@
 /Movies.Models/obj/Debug/net9.0/refint/Movies.Models.dll
 /Movies.Models/obj/Debug/net9.0/Movies.Models.AssemblyInfo.cs
 /Movies.Business/obj/Debug/net9.0/Movies.Business.csproj.CoreCompileInputs.cache
+/Movies.API/appsettings.Development.json
