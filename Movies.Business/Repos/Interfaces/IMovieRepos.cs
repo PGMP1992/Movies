@@ -14,6 +14,5 @@ namespace Movies.Business.Repos.Interfaces
         bool Update(Movie obj);
         bool Delete(Movie obj);
         bool Save();
-        bool Exists(int id);
     }
 }

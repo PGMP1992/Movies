@@ -4,11 +4,13 @@
     "Projects": [
       {
         "Path": "Movies.API\\Movies.API.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "https"
       },
       {
         "Path": "MoviesApp\\MoviesApp.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "https"
       }
     ]
   }

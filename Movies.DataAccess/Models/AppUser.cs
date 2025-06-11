@@ -9,9 +9,6 @@ namespace Movies.DataAccess.Models
         public string? City { get; set; }
         public string? State { get; set; }
 
-
-        //public List<Playlist>? Playlists { get; set; }
-
         public AppUserDto ToDto()
         {
             return new AppUserDto
@@ -20,7 +17,21 @@ namespace Movies.DataAccess.Models
                 City = this.City,
                 State = this.State,
                 ProfileImageryUrl = this.ProfileImageryUrl,
-                //UserName = this.UserName,
+
+                UserName = this.UserName,
+                NormalizedUserName = this.NormalizedUserName,
+                Email = this.Email,
+                NormalizedEmail = this.NormalizedEmail,
+                EmailConfirmed = this.EmailConfirmed,
+                PasswordHash = this.PasswordHash,
+                SecurityStamp = this.SecurityStamp,
+                ConcurrencyStamp = this.ConcurrencyStamp,
+                PhoneNumber = this.PhoneNumber,
+                PhoneNumberConfirmed = this.PhoneNumberConfirmed,
+                TwoFactorEnabled = this.TwoFactorEnabled,
+                LockoutEnd = this.LockoutEnd,
+                LockoutEnabled = this.LockoutEnabled,
+                AccessFailedCount = this.AccessFailedCount
             };
         }
     }

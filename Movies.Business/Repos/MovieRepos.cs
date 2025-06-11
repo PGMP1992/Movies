@@ -75,13 +75,6 @@ namespace Movies.Business.Repos
             _context.Update(obj);
             return Save();
         }
-
-        public bool Exists(int id)
-        {
-            return _context.Movies
-                .AsNoTracking()
-                .Any(e => e.Id == id);
-        }
                
     }
 }

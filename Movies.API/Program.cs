@@ -24,6 +24,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 //Controllers
+builder.Services.AddTransient<IUserRepos, UserRepos>();
 builder.Services.AddTransient<IMovieRepos, MovieRepos>();
 builder.Services.AddTransient<IPlaylistRepos, PlaylistRepos>();
 builder.Services.AddTransient<IPlaylistMovieRepos, PlaylistMovieRepos>();

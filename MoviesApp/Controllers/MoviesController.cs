@@ -11,10 +11,17 @@ namespace MoviesApp.Controllers
 {
     public class MoviesController : Controller
     {
+        //Using WebAPIExecutor ===========================================
+        //private readonly IWebApiExecutor _webApiExecutor;
+
+        // Using Services ===========================================
         private readonly IMovieService _movieService;
         private readonly IPlaylistService _playlistService;
         private readonly IPlaylistMovieService _playlistMovieService;
 
+        // Using Repositories ===========================================
+        //private readonly IMovieRepos _movieRepos;
+        //private readonly IPlaylistRepos _playlistRepos;
         //private readonly IPlaylistMovieRepos _playlistMovieRepos;
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -23,7 +30,9 @@ namespace MoviesApp.Controllers
              IMovieService movieService
             , IPlaylistService playlistService
             , IPlaylistMovieService playlistMovieService
-            //, IPlaylistMovieRepos playlistMovieRepos
+            
+            //, IWebApiExecutor webApiExecutor
+            
             , IPhotoService photoService
             , IHttpContextAccessor httpContextAccessor
             )
@@ -32,7 +41,8 @@ namespace MoviesApp.Controllers
             _playlistService = playlistService;
             _playlistMovieService = playlistMovieService;
             
-            //_playlistMovieRepos = playlistMovieRepos;
+        //    _webApiExecutor = webApiExecutor;
+
             _photoService = photoService;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -50,15 +60,18 @@ namespace MoviesApp.Controllers
 
                 if (movieList.Count() == 0)
                 {
-                    movieList = await _movieService.GetAll();
                     //movieList = await _movieRepos.GetAll();
+                    movieList = await _movieService.GetAll();
+                    //movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies");
+
                     ViewBag.Message = "There are no movies with that Name!";
                 }
             }
             else
             {
-                movieList = await _movieService.GetAll();
                 //movieList = await _movieRepos.GetAll();
+                movieList = await _movieService.GetAll();
+                //movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies/GetAll");
             }
 
             return View("Index", movieList);
@@ -267,7 +280,7 @@ namespace MoviesApp.Controllers
                 editMovie.Active = true;
             }
 
-            await _movieService.Update(editMovie);
+            await _movieService.Update(id, editMovie);
             TempData["success"] = "Movie details updated";
 
             return RedirectToAction(nameof(Index));

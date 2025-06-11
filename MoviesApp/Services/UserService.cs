@@ -4,13 +4,14 @@ using Newtonsoft.Json;
 
 namespace MoviesApp.Services
 {
-    public class PlaylistService : IPlaylistService
+    public class UserService : IUserService
     {
+        //Uri baseAddress = new Uri("https://localhost:7231/api");
         private readonly HttpClient _httpClient;
         private IConfiguration _configuration;
         private readonly string BaseServerUrl;
 
-        public PlaylistService(HttpClient httpClient, IConfiguration configuration)
+        public UserService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _configuration = configuration;
@@ -18,42 +19,76 @@ namespace MoviesApp.Services
             _httpClient.BaseAddress = new Uri(BaseServerUrl);
         }
 
-        public async Task<IEnumerable<PlaylistDto>> GetAll()
+        public async Task<IEnumerable<AppUserDto>> GetAll()
         {
-            var response = await _httpClient.GetAsync("/api/playlists/GetAll");
+            var response = await _httpClient.GetAsync("/api/users/GetAll");
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var Playlists = JsonConvert.DeserializeObject<IEnumerable<PlaylistDto>>(content);
-                return Playlists ?? new List<PlaylistDto>();
+                var users = JsonConvert.DeserializeObject<IEnumerable<AppUserDto>>(content);
+                return users ?? new List<AppUserDto>();
             }
 
-            return new List<PlaylistDto>();
+            return new List<AppUserDto>();
         }
 
-        public async Task<IEnumerable<PlaylistDto>> GetAllByUser(string user)
+        public async Task<AppUserDto> GetById(string id)
         {
-            var response = await _httpClient.GetAsync($"/api/playlists/GetAllByUser/{user}");
-
+            var response = await _httpClient.GetAsync($"/api/users/GetById/{id}");
+            var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
+                var user = JsonConvert.DeserializeObject<AppUserDto>(content);
+                return user ?? new AppUserDto();
+            }
+            else
+            {
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content) ?? new ErrorModelDto();
+                throw new Exception(errorModel.ErrorMessage);
+            }
+        }
+
+        public async Task<AppUserDto> GetByIdNoTracking(string id)
+        {
+            var response = await _httpClient.GetAsync($"/api/users/GetByIdNoTracking/{id}");
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var user = JsonConvert.DeserializeObject<AppUserDto>(content);
+                return user ?? new AppUserDto();
+            }
+            else
+            {
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content) ?? new ErrorModelDto();
+                throw new Exception(errorModel.ErrorMessage);
+            }
+        }
+
+        public async Task<IEnumerable<PlaylistDto>> GetAllPlaylists(string id)
+        {
+            var response = await _httpClient.GetAsync($"/api/users/GetAllPlaylists/{id}");
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
                 var playlists = JsonConvert.DeserializeObject<IEnumerable<PlaylistDto>>(content);
                 return playlists ?? new List<PlaylistDto>();
             }
-
-            return new List<PlaylistDto>();
+            else
+            {
+                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content) ?? new ErrorModelDto();
+                throw new Exception(errorModel.ErrorMessage);
+            }
         }
 
-        public async Task<PlaylistDto> GetById(int id)
+        public async Task<AppUserDto> Update(string id, AppUserDto user)
         {
-            var response = await _httpClient.GetAsync($"/api/playlists/GetById/{id}");
+            var response = await _httpClient.PutAsJsonAsync($"/api/users/put/{id}", user);
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                var playlist = JsonConvert.DeserializeObject<PlaylistDto>(content);
-                return playlist ?? new PlaylistDto();
+                var userResponse = JsonConvert.DeserializeObject<AppUserDto>(content);
+                return userResponse;
             }
             else
             {
@@ -62,58 +97,9 @@ namespace MoviesApp.Services
             }
         }
 
-        public async Task<PlaylistDto> GetByIdNoTracking(int id)
+        public async Task<bool> Delete(string id)
         {
-            var response = await _httpClient.GetAsync($"/api/playlists/GetByIdNoTracking/{id}");
-            var content = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                var playlist = JsonConvert.DeserializeObject<PlaylistDto>(content);
-                return playlist ?? new PlaylistDto();
-            }
-            else
-            {
-                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content) ?? new ErrorModelDto();
-                throw new Exception(errorModel.ErrorMessage);
-            }
-        }
-
-        public async Task<PlaylistDto> Add(PlaylistDto obj)
-        {
-            var response = await _httpClient.PostAsJsonAsync("/api/playlists/post", obj);
-
-            var content = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                var playlistResponse = JsonConvert.DeserializeObject<PlaylistDto>(content);
-                return playlistResponse;
-            }
-            else
-            {
-                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content) ?? new ErrorModelDto();
-                throw new Exception(errorModel.ErrorMessage);
-            }
-        }
-
-        public async Task<PlaylistDto> Update(int id, PlaylistDto obj)
-        {
-            var response = await _httpClient.PutAsJsonAsync($"/api/playlists/put/{id}", obj);
-            var content = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                var playlistResponse = JsonConvert.DeserializeObject<PlaylistDto>(content);
-                return playlistResponse;
-            }
-            else
-            {
-                var errorModel = JsonConvert.DeserializeObject<ErrorModelDto>(content) ?? new ErrorModelDto();
-                throw new Exception(errorModel.ErrorMessage);
-            }
-        }
-
-        public async Task<bool> Delete(int id)
-        {
-            var response = await _httpClient.DeleteAsync($"/api/playlists/delete/{id}");
+            var response = await _httpClient.DeleteAsync($"/api/users/Delete/{id}");
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {

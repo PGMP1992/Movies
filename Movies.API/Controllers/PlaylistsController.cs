@@ -95,9 +95,18 @@ namespace Movies.API.Controllers
         }
 
         // PUT: playlistsController/Edit/5
-        [HttpPut]
-        public async Task<IActionResult> Put(Playlist playlist)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, Playlist playlist)
         {
+            if( id != playlist.Id)
+            {
+                return BadRequest(new ErrorModel()
+                {
+                    ErrorMessage = "Invalid playlist",
+                    StatusCode = StatusCodes.Status400BadRequest
+                });
+            }
+
             if (playlist is null)
             {
                 //return NotFound("Playlist doesn't exist!");

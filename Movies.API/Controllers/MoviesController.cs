@@ -23,7 +23,7 @@ namespace Movies.API.Controllers
                     StatusCode = StatusCodes.Status404NotFound
                 });
             }
-                
+
             return Ok(movies);
         }
 
@@ -48,7 +48,7 @@ namespace Movies.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int? id)
         {
-            if (id == null || id == 0)
+            if (id == null || id <= 0)
             {
                 return BadRequest(new ErrorModel()
                 {
@@ -67,7 +67,7 @@ namespace Movies.API.Controllers
                     StatusCode = StatusCodes.Status404NotFound
                 });
             }
-            
+
             return Ok(movie.ToDto());
         }
 
@@ -75,7 +75,7 @@ namespace Movies.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdNoTracking(int? id)
         {
-            if (id == null || id == 0)
+            if (id == null || id <= 0)
             {
                 return BadRequest(new ErrorModel()
                 {
@@ -104,7 +104,7 @@ namespace Movies.API.Controllers
             {
                 return BadRequest(new ErrorModel()
                 {
-                    ErrorMessage = "Invalid Search",
+                    ErrorMessage = "Invalid name",
                     StatusCode = StatusCodes.Status400BadRequest
                 });
             }
@@ -115,7 +115,7 @@ namespace Movies.API.Controllers
                 //return NotFound("There are no Movies within that search!");
                 return NotFound(new ErrorModel()
                 {
-                    ErrorMessage = "There are no Movies within that search!",
+                    ErrorMessage = "There are no Movies with that name!",
                     StatusCode = StatusCodes.Status404NotFound
                 });
             }
@@ -129,7 +129,7 @@ namespace Movies.API.Controllers
             {
                 return BadRequest(new ErrorModel()
                 {
-                    ErrorMessage = "Invalid Movie entry!",
+                    ErrorMessage = "Invalid Movie!",
                     StatusCode = StatusCodes.Status400BadRequest
                 });
             }
@@ -140,7 +140,7 @@ namespace Movies.API.Controllers
                 //return BadRequest("Could not create Movie");
                 return BadRequest(new ErrorModel()
                 {
-                    ErrorMessage = "There was a problem creating Movie",
+                    ErrorMessage = "Could not create Movie",
                     StatusCode = StatusCodes.Status400BadRequest
                 });
             }
@@ -148,15 +148,14 @@ namespace Movies.API.Controllers
         }
 
         // PUT: MoviesController/Edit/5
-        [HttpPut]
-        public async Task<IActionResult> Put(Movie movie)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, Movie movie)
         {
-            if (movie is null)
+            if( id != movie.Id || movie is null)
             {
-                //return NotFound("Movie doesn't exist!");
                 return BadRequest(new ErrorModel()
                 {
-                    ErrorMessage = "Invalid Movie entry!",
+                    ErrorMessage = "Id mismatch!",
                     StatusCode = StatusCodes.Status400BadRequest
                 });
             }
@@ -164,7 +163,6 @@ namespace Movies.API.Controllers
             var dbMovie = await _repos.GetByIdNoTracking(movie.Id);
             if (dbMovie is null)
             {
-                //return NotFound("Movie doesn't exist!");
                 return NotFound(new ErrorModel()
                 {
                     ErrorMessage = "Movie doesn't exist!",
@@ -180,12 +178,12 @@ namespace Movies.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || id == 0)
+            if (id == null || id <= 0)
             {
                 //return NotFound("Movie doesn't exist!");
                 return BadRequest(new ErrorModel()
                 {
-                    ErrorMessage = "Invalid Movie Id!",
+                    ErrorMessage = "Invalid Movie!",
                     StatusCode = StatusCodes.Status400BadRequest
                 });
             }

@@ -1,4 +1,5 @@
 ﻿using Movies.DataAccess.Models;
+using Movies.Models;
 
 namespace Movies.DataAccess.ViewModels
 {
@@ -9,6 +10,6 @@ namespace Movies.DataAccess.ViewModels
         public string? City {  get; set; }
         public string? State { get; set; }
         public string? ProfileImageUrl { get; set; }
-        public List<Playlist>? Playlists { get; set; }
+        public IEnumerable<PlaylistDto>? Playlists { get; set; }
     }
 }

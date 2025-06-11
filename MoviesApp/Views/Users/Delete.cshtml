@@ -5,21 +5,12 @@
 <div class="card mb-3">
     <div class=" row g-0">
         <div class="col-md-4">
-            @if (Model.ProfileImageUrl != null)
-            {
-                <img class="card-img-top"
-                     src="@Model.ProfileImageUrl"
-                     alt="Photo"
-                     loading="lazy" decoding="async"
-                     onerror="this.onerror=null; this.src='/images/default.png';" />
-            }
-            else
-            {
-                <img class="card-img-top"
-                     src="/images/default.png"
-                     alt="Photo"
-                     loading="lazy" decoding="async" />
-            }
+            <img src="@(Model.ProfileImageUrl ?? "/images/default.png")"
+                 class="card-img-top object-fit-cover rounded-top-4"
+                 alt="@(string.IsNullOrWhiteSpace(Model.UserName) ? "Movie image" : Model.UserName + " image")"
+                 style="object-fit: cover;"
+                 loading="lazy" decoding="async"
+                 onerror="this.onerror=null; this.src='/images/default.png';" />
         </div>
         <div class="col-md-8">
             <div class="card-body">

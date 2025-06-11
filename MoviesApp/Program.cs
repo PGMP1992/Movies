@@ -1,37 +1,40 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MoviesApp.Helpers;
-using Movies.DataAccess.Models;
-using MoviesApp.Services;
-using Movies.Business.Repos;
-using Movies.DataAccess.Data;
 using Movies.Business.Repos.Interfaces;
+using Movies.DataAccess.Data;
+using Movies.DataAccess.Models;
+using MoviesApp.Helpers;
+using MoviesApp.Services;
 using MoviesApp.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddScoped<IMovieRepos, MovieRepos>();
-builder.Services.AddScoped<IPlaylistRepos, PlaylistRepos>();
-builder.Services.AddScoped<IPlaylistMovieRepos, PlaylistMovieRepos>();
-builder.Services.AddScoped<IUsersRepos, UsersRepos>();
-
+// Using External Services ================================================
 builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interface
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
-//API Services
+//API Services using WebExecuter
+//builder.Services.AddHttpClient("API", client =>
+//{
+//    client.BaseAddress = new Uri(builder.Configuration["BaseServerUrl"]); // API URL
+//    client.DefaultRequestHeaders.Add("Accept", "application/json");
+//});
+//builder.Services.AddTransient<IWebApiExecutor, WebApiExecutor>();
+
+// API Using Service Interfaces
 builder.Services.AddHttpClient<IMovieService, MovieService>();
 builder.Services.AddHttpClient<IPlaylistService, PlaylistService>();
 builder.Services.AddHttpClient<IPlaylistMovieService, PlaylistMovieService>();
+builder.Services.AddHttpClient<IUserService, UserService>();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+// DB & Identity =========================================================
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
         ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -79,7 +82,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-//// creating Roles with the same password
+// creating Roles with the same password
 using (var scope = app.Services.CreateScope())
 {
     var userManager =

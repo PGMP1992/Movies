@@ -162,7 +162,7 @@ namespace MoviesApp.Controllers
             {
                 //playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
                 //_playlistRepos.Update(playlist);
-                await _playlistService.Update(playlist);
+                await _playlistService.Update(id, playlist);
                 TempData["success"] = "Playlist updated";
                 return RedirectToAction(nameof(Index));
             }

@@ -1,4 +1,5 @@
 ﻿using Movies.Models;
+using MoviesApp.Services.Interfaces;
 
 namespace MoviesApp.Services.Interfaces
 {
@@ -11,7 +12,7 @@ namespace MoviesApp.Services.Interfaces
         Task<IEnumerable<MovieDto>> GetByName(string name);
 
         Task<MovieDto> Add(MovieDto movie);
-        Task<MovieDto> Update(MovieDto movie);
+        Task<MovieDto> Update(int id,  MovieDto movie);
         Task<bool> Delete(int id);
     }
 }

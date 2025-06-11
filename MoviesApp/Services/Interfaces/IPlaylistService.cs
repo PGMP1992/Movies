@@ -10,7 +10,7 @@ namespace MoviesApp.Services.Interfaces
         Task<IEnumerable<PlaylistDto>> GetAllByUser(string user);
 
         Task<PlaylistDto> Add(PlaylistDto obj);
-        Task<PlaylistDto> Update(PlaylistDto obj);
+        Task<PlaylistDto> Update(int id,PlaylistDto obj);
         Task<bool> Delete(int id);
     }
 }

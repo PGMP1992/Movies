@@ -110,9 +110,9 @@ namespace MoviesApp.Services
             }
         }
 
-        public async Task<MovieDto> Update(MovieDto movie)
+        public async Task<MovieDto> Update(int id, MovieDto movie)
         {
-            var response = await _httpClient.PutAsJsonAsync("/api/movies/put/", movie);
+            var response = await _httpClient.PutAsJsonAsync($"/api/movies/put/{id}", movie);
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {

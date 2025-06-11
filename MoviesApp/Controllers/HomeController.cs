@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Models;
 using Movies.DataAccess.ViewModels;
+using MoviesApp.Services.Interfaces;
 using System.Diagnostics;
 
 namespace MoviesApp.Controllers
@@ -9,12 +9,13 @@ namespace MoviesApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IUsersRepos _usersRepos;
+        //private readonly IUserRepos _usersRepos;
+        private readonly IUserService _userService;
 
-        public HomeController(ILogger<HomeController> logger, IUsersRepos usersRepos)
+        public HomeController(ILogger<HomeController> logger, IUserService userService)
         {
             _logger = logger;
-            _usersRepos = usersRepos;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index() // Using IPInfo to get locations IP 
@@ -37,7 +38,8 @@ namespace MoviesApp.Controllers
 
                 //if (homeVM.State != null)
                 //{
-                homeVM.Users = await _usersRepos.GetAll();
+                //homeVM.Users = await _usersRepos.GetAll();
+                homeVM.Users = await _userService.GetAll();
                 //}
                 return View(homeVM);
             }
