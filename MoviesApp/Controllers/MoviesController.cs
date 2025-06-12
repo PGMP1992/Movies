@@ -5,49 +5,28 @@ using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Data;
 using Movies.DataAccess.ViewModels;
 using Movies.Models;
+using MoviesApp.Services;
 using MoviesApp.Services.Interfaces;
 
 namespace MoviesApp.Controllers
 {
-    public class MoviesController : Controller
+    public class MoviesController : ControllerBase
     {
-        //Using WebAPIExecutor ===========================================
-        //private readonly IWebApiExecutor _webApiExecutor;
-
-        // Using Services ===========================================
-        private readonly IMovieService _movieService;
-        private readonly IPlaylistService _playlistService;
-        private readonly IPlaylistMovieService _playlistMovieService;
-
-        // Using Repositories ===========================================
-        //private readonly IMovieRepos _movieRepos;
-        //private readonly IPlaylistRepos _playlistRepos;
-        //private readonly IPlaylistMovieRepos _playlistMovieRepos;
+        private readonly IWebApiExecutor _webApiExecutor;
         private readonly IPhotoService _photoService; //Cloudnary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MoviesController(
-             IMovieService movieService
-            , IPlaylistService playlistService
-            , IPlaylistMovieService playlistMovieService
-            
-            //, IWebApiExecutor webApiExecutor
-            
-            , IPhotoService photoService
-            , IHttpContextAccessor httpContextAccessor
-            )
+            IWebApiExecutor webApiExecutor
+            ,IPhotoService photoService
+            ,IHttpContextAccessor httpContextAccessor
+            ) 
         {
-            _movieService = movieService;
-            _playlistService = playlistService;
-            _playlistMovieService = playlistMovieService;
-            
-        //    _webApiExecutor = webApiExecutor;
-
+            _webApiExecutor = webApiExecutor;
             _photoService = photoService;
             _httpContextAccessor = httpContextAccessor;
         }
 
-        // GET: Movies
         public async Task<IActionResult> Index(string search)
         {
             ViewBag.Message = "";
@@ -55,23 +34,18 @@ namespace MoviesApp.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                //movieList = await _movieRepos.GetByName(search).ConfigureAwait(false);
-                movieList = await _movieService.GetByName(search);
+                var result = await _webApiExecutor.InvokeGet<List<MovieDto>>($"Movies/GetByName/{search}");
+                movieList = result ?? new List<MovieDto>(); 
 
-                if (movieList.Count() == 0)
+                if (!movieList.Any())
                 {
-                    //movieList = await _movieRepos.GetAll();
-                    movieList = await _movieService.GetAll();
-                    //movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies");
-
+                    movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies/GetAll") ?? new List<MovieDto>();
                     ViewBag.Message = "There are no movies with that Name!";
                 }
             }
             else
             {
-                //movieList = await _movieRepos.GetAll();
-                movieList = await _movieService.GetAll();
-                //movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies/GetAll");
+                movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies/GetAll") ?? new List<MovieDto>();
             }
 
             return View("Index", movieList);
@@ -89,12 +63,15 @@ namespace MoviesApp.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var user = _httpContextAccessor.HttpContext.User.GetUserId();
-                var playlists = await _playlistService.GetAllByUser(user).ConfigureAwait(false);
+                //var playlists = await _playlistService.GetAllByUser(user).ConfigureAwait(false);
+                var playlists = await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{user}");
 
                 if (playlists.Any())
                 {
                     ViewData["playlistName"] = new SelectList(
-                    await _playlistService.GetAllByUser(user).ConfigureAwait(false), "Id", "Name");
+                        //await _playlistService.GetAllByUser(user).ConfigureAwait(false), "Id", "Name");
+                        await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{user}")
+                            , "Id", "Name");
                 }
                 else
                 {
@@ -103,7 +80,8 @@ namespace MoviesApp.Controllers
                 }
             }
 
-            var movie = await _movieService.GetByIdNoTracking(id);
+            //var movie = await _movieService.GetByIdNoTracking(id);
+            var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
             if (movie == null)
             {
                 return NotFound();
@@ -128,43 +106,38 @@ namespace MoviesApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Details(AddMovieVM movieVM)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    ModelState.AddModelError("", "Failed to Add Movie");
-            //    return View("Details", movieVM);
-            //}
-
-            //var movie = await _movieService.GetById(movieVM.Id);
-            //if (movie == null)
-            //{
-            //    ModelState.AddModelError("", "Movie not found");
-            //    return View("Details", movieVM);
-            //}
-
             var newMovie = new PlaylistMovieDto
             {
                 MovieId = movieVM.Id,
                 PlaylistId = movieVM.PlaylistId
             };
 
-            //var movieExist = _playlistMovieRepos.MovieInPlaylist(newMovie);
-            
-            var movieExist = await _playlistMovieService.MovieInPlaylist(movieVM.PlaylistId, movieVM.Id);
-            if ( movieExist )
+            //var movieExist = await _playlistMovieService.MovieInPlaylist(movieVM.PlaylistId, movieVM.Id);
+            var movieExist = await _webApiExecutor.InvokeGet<bool>($"PlaylistMovies/MovieInPlaylist/{movieVM.PlaylistId}/{movieVM.Id}");
+
+            if (movieExist)
             {
                 TempData["error"] = "Movie is already in Playlist!";
             }
             else
             {
                 //_playlistMovieRepos.Add(newMovie);
-                await _playlistMovieService.Add(newMovie);
-                TempData["success"] = "Movie added to Playlist";
+                //await _playlistMovieService.Add(newMovie);
+                try
+                {
+                    await _webApiExecutor.InvokePost("PlaylistMovies/Post", newMovie);
+                    TempData["success"] = "Movie added to Playlist";
+                }
+                catch (WebApiException ex)
+                {
+                    HandleApiException(ex);
+                    TempData["error"] = "Movie could not be added to Playlist!";
+                }
             }
             return RedirectToAction(nameof(Details));
         }
 
         [Authorize]
-        // GET: Movies/Create ------------------------------------------------------
         public IActionResult Create()
         {
             var movieVM = new CreateMovieVM();
@@ -195,10 +168,22 @@ namespace MoviesApp.Controllers
                     Active = true
                 };
 
-                await _movieService.Add(movie);
-                TempData["success"] = "Movie created";
-
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    //await _movieService.Add(movie);
+                    var response = await _webApiExecutor.InvokePost("Movies/Post", movie);
+                    if (response != null)
+                    {
+                        TempData["success"] = "Movie created!";
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                catch (WebApiException ex)
+                {
+                    HandleApiException(ex);
+                    TempData["error"] = "Movie could not be created!";
+                    return View(movieVM);
+                }
             }
             else
             {
@@ -211,7 +196,8 @@ namespace MoviesApp.Controllers
         // GET: Movies/Edit/5 ------------------------------------------------------
         public async Task<IActionResult> Edit(int id)
         {
-            MovieDto movie = await _movieService.GetById(id);
+            //MovieDto movie = await _movieService.GetById(id);
+            var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetById/{id}");
 
             if (movie == null)
             {
@@ -232,7 +218,6 @@ namespace MoviesApp.Controllers
         }
 
         [Authorize]
-        // POST: Movies/Edit/5
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditMovieVM movieVM)
         {
@@ -242,7 +227,8 @@ namespace MoviesApp.Controllers
                 return View("Edit", movieVM);
             }
 
-            var movie = await _movieService.GetByIdNoTracking(id);
+            //var movie = await _movieService.GetByIdNoTracking(id);
+            var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
 
             if (movieVM.Image != null)
             {
@@ -280,9 +266,18 @@ namespace MoviesApp.Controllers
                 editMovie.Active = true;
             }
 
-            await _movieService.Update(id, editMovie);
-            TempData["success"] = "Movie details updated";
-
+            try
+            {
+                //await _movieService.Update(id, editMovie);
+                await _webApiExecutor.InvokePut($"Movies/Put/{id}", editMovie);
+                TempData["success"] = "Movie details updated";
+            }
+            catch (WebApiException ex)
+            {
+                HandleApiException(ex);
+                TempData["error"] = "Movie could not be updated!";
+                return View("Edit", movieVM);
+            }
             return RedirectToAction(nameof(Index));
         }
 
@@ -295,7 +290,8 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            var movie = await _movieService.GetById(id);
+            //var movie = await _movieService.GetById(id);
+            var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
             if (movie == null)
             {
                 return NotFound();
@@ -308,14 +304,34 @@ namespace MoviesApp.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _movieService.GetById(id);
-            if (movie != null)
+            try
             {
-                //_movieRepos.Delete(movie);
-                await _movieService.Delete(id);
-                TempData["success"] = "Movie deleted";
+                //var movie = await _movieService.GetById(id);
+                var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetById/{id}");
+                if (movie != null)
+                {
+                    var photoResult = await _photoService.DeletePhotoAsync(movie.PictUrl);
+                    if (photoResult.Error != null)
+                    {
+                        ModelState.AddModelError("Image", "Failed to Delete image for Movie");
+                        return View("Delete");
+                    }
+
+                    //_movieRepos.Delete(movie);
+                    //await _movieService.Delete(id);
+                    await _webApiExecutor.InvokeDelete($"Movies/Delete/{id}");
+                    TempData["success"] = "Movie deleted";
+                }
+            }
+            catch (WebApiException ex)
+            {
+                HandleApiException(ex);
+                TempData["error"] = "Movie could not be deleted!";
+                return View("Delete");
             }
             return RedirectToAction(nameof(Index));
         }
+
+
     }
 }

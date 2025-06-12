@@ -2,6 +2,7 @@
 
 <h3>Profile</h3>
 <h5 class="text-secondary">@Model.UserName</h5>
+<div class="h6 mb-2">@Model.City - @Model.State</div>
 
 <div class="card">
     <div class="row g-0">
@@ -12,6 +13,7 @@
                  style="object-fit: cover;"
                  loading="lazy" decoding="async"
                  onerror="this.onerror=null; this.src='/images/default.png';" />
+
             <div class="button-group p-2">
                 <a type="button" class="btn btn-sm btn-primary" asp-area="" asp-controller="Users" asp-action="Edit" asp-route-id="@Model.Id">Edit Profile</a>
                 <a type="button" class="btn btn-sm btn-outline-primary" asp-area="" asp-controller="Playlists" asp-action="Create">Create Playlist</a>

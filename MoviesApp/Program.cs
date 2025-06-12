@@ -16,12 +16,12 @@ builder.Services.AddScoped<IPhotoService, PhotoService>(); // Cloudinary Interfa
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 //API Services using WebExecuter
-//builder.Services.AddHttpClient("API", client =>
-//{
-//    client.BaseAddress = new Uri(builder.Configuration["BaseServerUrl"]); // API URL
-//    client.DefaultRequestHeaders.Add("Accept", "application/json");
-//});
-//builder.Services.AddTransient<IWebApiExecutor, WebApiExecutor>();
+builder.Services.AddHttpClient("MoviesApi", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["BaseServerUrl"]); // API URL
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+builder.Services.AddTransient<IWebApiExecutor, WebApiExecutor>();
 
 // API Using Service Interfaces
 builder.Services.AddHttpClient<IMovieService, MovieService>();

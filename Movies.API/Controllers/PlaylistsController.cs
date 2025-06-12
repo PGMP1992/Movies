@@ -29,6 +29,15 @@ namespace Movies.API.Controllers
         [HttpGet("{user}")]
         public async Task<IActionResult> GetAllByUser(string user)
         {
+            if(string.IsNullOrEmpty(user))
+            {
+                return BadRequest(new ErrorModel()
+                {
+                    ErrorMessage = "User name cannot be null or empty",
+                    StatusCode = StatusCodes.Status400BadRequest
+                });
+            }
+
             var playlists = await _repos.GetAllByUser(user);
             if (playlists == null || !playlists.Any())
             {
@@ -43,10 +52,18 @@ namespace Movies.API.Controllers
             return Ok(playlists);
         }
 
-        // GET: playlistsController/Details/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
+            if (id == null || id <= 0)
+            {
+                return BadRequest(new ErrorModel()
+                {
+                    ErrorMessage = "Invalid playlist ID",
+                    StatusCode = StatusCodes.Status400BadRequest
+                });
+            }
+
             var playlist = await _repos.GetById(id);
             if (playlist == null)
             {
@@ -63,6 +80,15 @@ namespace Movies.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdNoTracking(int id)
         {
+            if (id == null || id <= 0)
+            {
+                return BadRequest(new ErrorModel()
+                {
+                    ErrorMessage = "Invalid playlist ID",
+                    StatusCode = StatusCodes.Status400BadRequest
+                });
+            }
+
             var playlist = await _repos.GetByIdNoTracking(id);
             if (playlist == null)
             {
@@ -81,6 +107,15 @@ namespace Movies.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Playlist playlist)
         {
+            if(playlist is null)
+            {
+                return BadRequest(new ErrorModel()
+                {
+                    ErrorMessage = "Invalid playlist",
+                    StatusCode = StatusCodes.Status400BadRequest
+                });
+            }
+
             var newplaylist = _repos.Add(playlist);
             if (newplaylist == false)
             {
@@ -98,18 +133,10 @@ namespace Movies.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Playlist playlist)
         {
-            if( id != playlist.Id)
+            if( id != playlist.Id 
+                || id <= 0
+                || playlist == null)
             {
-                return BadRequest(new ErrorModel()
-                {
-                    ErrorMessage = "Invalid playlist",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
-            }
-
-            if (playlist is null)
-            {
-                //return NotFound("Playlist doesn't exist!");
                 return BadRequest(new ErrorModel()
                 {
                     ErrorMessage = "Invalid playlist",
@@ -120,7 +147,6 @@ namespace Movies.API.Controllers
             var dbPlaylist = await _repos.GetByIdNoTracking(playlist.Id);
             if (dbPlaylist is null)
             {
-                //return NotFound("Playlist doesn't exist!");
                 return NotFound(new ErrorModel()
                 {
                     ErrorMessage = "Playlist doesn't exist!",
@@ -135,17 +161,23 @@ namespace Movies.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            if(id == null || id <= 0)
+            {
+                return BadRequest(new ErrorModel()
+                {
+                    ErrorMessage = "Invalid playlist ID",
+                    StatusCode = StatusCodes.Status400BadRequest
+                });
+            }
             var playlist = await _repos.GetById(id);
             if (playlist is null)
             {
-                //return NotFound("playlist doesn't exist!");
                 return NotFound(new ErrorModel()
                 {
                     ErrorMessage = "Playlist doesn't exist!",
                     StatusCode = StatusCodes.Status404NotFound
                 });
             }
-            //var deleted = _repos.Delete(playlist);
             return Ok( _repos.Delete(playlist));
         }
     }

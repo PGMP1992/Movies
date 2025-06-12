@@ -1,42 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Movies.DataAccess.Data;
+using Movies.DataAccess.Models;
 using Movies.DataAccess.ViewModels;
 using Movies.Models;
+using MoviesApp.Services;
 using MoviesApp.Services.Interfaces;
 
 namespace MoviesApp.Controllers
 {
     [Authorize]
-    public class PlaylistsController : Controller
+    public class PlaylistsController : ControllerBase
     {
-        private readonly IPlaylistService _playlistService;
-        private readonly IMovieService _movieService;
-        private readonly IPlaylistMovieService _playlistMovieService;
-
-        //private readonly IPlaylistRepos _playlistRepos;
-        //private readonly IMovieRepos _movieRepos;
-        //private readonly IPlaylistMovieRepos _playlistMovieRepos;
+        private readonly IWebApiExecutor _webApiExecutor;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public PlaylistsController(
-            IPlaylistService playlistService
-            , IMovieService movieService
-            , IPlaylistMovieService playlistMovieService
-
-            //,IPlaylistRepos playlistRepos
-            //, IMovieRepos movieRepos
-            //, IPlaylistMovieRepos playlistMovieRepos
-            , IHttpContextAccessor httpContextAccessor
+            IWebApiExecutor webApiExecutor
+            ,IHttpContextAccessor httpContextAccessor
         )
         {
-            _playlistService = playlistService;
-            _movieService = movieService;
-            _playlistMovieService = playlistMovieService;
-
-            //_playlistRepos = playlistRepos;
-            //_movieRepos = movieRepos;
-            //_playlistMovieRepos = playlistMovieRepos;
+            _webApiExecutor = webApiExecutor;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -47,16 +31,16 @@ namespace MoviesApp.Controllers
 
             if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
             {
-                //IEnumerable<Playlist> playlists = await _playlistRepos.GetAll();
-                IEnumerable<PlaylistDto> playlists = await _playlistService.GetAll();
+                //IEnumerable<PlaylistDto> playlists = await _playlistService.GetAll();
+                IEnumerable<PlaylistDto> playlists = await _webApiExecutor.InvokeGet<List<PlaylistDto>>("Playlists/GetAll");
                 list = playlists;
                 ViewBag.Message = "";
             }
             else
             {
                 var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-                //IEnumerable<Playlist> playlists = await _playlistRepos.GetAllByUser(curUserId);
-                IEnumerable<PlaylistDto> playlists = await _playlistService.GetAllByUser(curUserId);
+                //IEnumerable<PlaylistDto> playlists = await _playlistService.GetAllByUser(curUserId);
+                IEnumerable<PlaylistDto> playlists = await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{curUserId}");
                 list = playlists;
                 if (list.Count() == 0)
                 {
@@ -73,34 +57,34 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-
+            
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
-                Playlist = await _playlistService.GetById(id),
-                //Playlists = await _playlistMovieRepos.GetByPlaylist(id)
-                Playlists = await _playlistMovieService.GetByPlaylist(id),
+                //Playlist = await _playlistService.GetById(id),
+                //Playlists = await _playlistMovieService.GetByPlaylist(id),
+                Playlist = await _webApiExecutor.InvokeGet<PlaylistDto>($"Playlists/GetByIdNoTracking/{id}"),
+                Playlists = await _webApiExecutor.InvokeGet<List<PlaylistMovieDto>>($"PlaylistMovies/GetByPlaylist/{id}")
             };
-
             return View(newVm);
         }
 
         public async Task<IActionResult> RemoveMovie(int playlistId, int movieId)
         {
-            //var obj = await _playlistMovieRepos.GetByContent(playlistId, movieId);
-            var obj = await _playlistMovieService.GetByContent(playlistId, movieId);
+            //var obj = await _playlistMovieService.GetByContent(playlistId, movieId);
+            var obj = await _webApiExecutor.InvokeGet<PlaylistMovieDto>($"PlaylistMovies/GetByContent/{playlistId}/{movieId}");
 
             if (obj != null)
             {
-                //_playlistMovieRepos.Delete(obj);
-                await _playlistMovieService.Delete(obj.Id);
+                //await _playlistMovieService.Delete(obj.Id);
+                await _webApiExecutor.InvokeDelete($"PlaylistMovies/Delete/{obj.Id}");
                 TempData["success"] = "Movie deleted from Playlist";
             }
 
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
-                Playlist = await _playlistService.GetById(playlistId),
-                //Playlists = await _playlistMovieRepos.GetByPlaylist(playlistId)
-                Playlists = await _playlistMovieService.GetByPlaylist(playlistId)
+                Playlist = await _webApiExecutor.InvokeGet<PlaylistDto>($"Playlists/GetById/{playlistId}"),
+                //Playlists = await _playlistMovieService.GetByPlaylist(playlistId)
+                Playlists = await _webApiExecutor.InvokeGet<List<PlaylistMovieDto>>($"PlaylistMovies/GetByPlaylist/{playlistId}")
             };
 
             return View("Details", newVm);
@@ -122,9 +106,8 @@ namespace MoviesApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                //playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-                //_playlistRepos.Add(playlist);
-                await _playlistService.Add(playlist);
+                //await _playlistService.Add(playlist);
+                await _webApiExecutor.InvokePost("Playlists/Post", playlist);
                 TempData["success"] = "Playlist created";
                 return RedirectToAction(nameof(Index));
             }
@@ -139,8 +122,8 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            //var playlist = await _playlistRepos.GetByIdNoTracking(id);
-            var playlist = await _playlistService.GetByIdNoTracking(id);
+            //var playlist = await _playlistService.GetByIdNoTracking(id);
+            var playlist = await _webApiExecutor.InvokeGet<PlaylistDto>($"Playlists/GetByIdNoTracking/{id}");
             if (playlist == null)
             {
                 return NotFound();
@@ -160,9 +143,8 @@ namespace MoviesApp.Controllers
 
             if (ModelState.IsValid)
             {
-                //playlist.AppUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-                //_playlistRepos.Update(playlist);
-                await _playlistService.Update(id, playlist);
+                //await _playlistService.Update(id, playlist);
+                await _webApiExecutor.InvokePut($"Playlists/Put/{id}", playlist);
                 TempData["success"] = "Playlist updated";
                 return RedirectToAction(nameof(Index));
             }
@@ -177,8 +159,8 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            //var playlist = await _playlistRepos.GetByIdNoTracking(id);
-            var playlist = await _playlistService.GetByIdNoTracking(id);
+            //var playlist = await _playlistService.GetByIdNoTracking(id);
+            var playlist = await _webApiExecutor.InvokeGet<PlaylistDto>($"Playlists/GetByIdNoTracking/{id}");
             if (playlist == null)
             {
                 return NotFound();
@@ -191,23 +173,16 @@ namespace MoviesApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //var playlist = await _playlistRepos.GetByIdNoTracking(id);
-            var playlist = await _playlistService.GetByIdNoTracking(id);
+            //var playlist = await _playlistService.GetByIdNoTracking(id);
+            var playlist = await _webApiExecutor.InvokeGet<PlaylistDto>($"Playlists/GetByIdNoTracking/{id}");
             if (playlist != null)
             {
-                //_playlistRepos.Delete(playlist);
-                await _playlistService.Delete(playlist.Id);
+                //await _playlistService.Delete(playlist.Id);
+                await _webApiExecutor.InvokeDelete($"Playlists/Delete/{playlist.Id}");
                 TempData["success"] = "Playlist deleted";
             }
 
             return RedirectToAction(nameof(Index));
         }
-
-        // -------------------------------------------------------
-        //private bool PlaylistExists(int id)
-        //{
-        //    return _playlistRepos.PlaylistExists(id);
-        //    //return _playlistService.Exists(id);
-        //}
     }
 }

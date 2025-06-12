@@ -44,7 +44,6 @@ namespace Movies.API.Controllers
             return Ok(movies);
         }
 
-        // GET: MoviesController/Details/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int? id)
         {
@@ -71,7 +70,6 @@ namespace Movies.API.Controllers
             return Ok(movie.ToDto());
         }
 
-        // GET: MoviesController/Details/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdNoTracking(int? id)
         {
@@ -137,7 +135,6 @@ namespace Movies.API.Controllers
             var newMovie = _repos.Add(movie);
             if (newMovie == false)
             {
-                //return BadRequest("Could not create Movie");
                 return BadRequest(new ErrorModel()
                 {
                     ErrorMessage = "Could not create Movie",
@@ -151,7 +148,9 @@ namespace Movies.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Movie movie)
         {
-            if( id != movie.Id || movie is null)
+            if( id != movie.Id 
+                || id <= 0
+                || movie is null)
             {
                 return BadRequest(new ErrorModel()
                 {
@@ -190,7 +189,6 @@ namespace Movies.API.Controllers
             var movie = await _repos.GetById(id);
             if (movie is null)
             {
-                //return NotFound("Movie doesn't exist!");
                 return NotFound(new ErrorModel()
                 {
                     ErrorMessage = "Movie doesn't exist!",

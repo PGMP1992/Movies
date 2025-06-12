@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Data;
-using Movies.DataAccess.Models;
 using Movies.DataAccess.ViewModels;
 using MoviesApp.Services.Interfaces;
 
@@ -14,20 +12,16 @@ namespace MoviesApp.Controllers
         //private readonly IUserRepos _userRepos;
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
-        private readonly UserManager<AppUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAcessor;
 
         public UsersController(
-            //IUserRepos usersRepos
             IUserService userService
             , IPhotoService photoService
-            , UserManager<AppUser> userManager
             , IHttpContextAccessor httpContextAccessor)
         {
             //_userRepos = usersRepos;
             _userService = userService;
             _photoService = photoService;
-            _userManager = userManager;
             _httpContextAcessor = httpContextAccessor;
         }
 
