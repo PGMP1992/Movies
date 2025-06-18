@@ -64,3 +64,83 @@
 /Movies.Business/obj/Debug/net9.0/Movies.Business.csproj.CoreCompileInputs.cache
 /Movies.API/appsettings.Development.json
 /Movies.API/appsettings.Development.json
+*.dll
+/Movies.API/bin/Release/net9.0/appsettings.Development.json
+/Movies.API/bin/Release/net9.0/appsettings.json
+/Movies.API/bin/Release/net9.0/appsettings.Production.json
+/Movies.API/bin/Release/net9.0/Movies.API.deps.json
+/Movies.API/bin/Release/net9.0/Movies.API.exe
+/Movies.API/bin/Release/net9.0/Movies.API.pdb
+/Movies.API/bin/Release/net9.0/Movies.API.runtimeconfig.json
+/Movies.API/bin/Release/net9.0/Movies.API.staticwebassets.endpoints.json
+/Movies.API/bin/Release/net9.0/Movies.API.staticwebassets.runtime.json
+/Movies.API/bin/Release/net9.0/Movies.Business.pdb
+/Movies.API/bin/Release/net9.0/Movies.DataAccess.pdb
+/Movies.API/bin/Release/net9.0/Movies.Models.pdb
+/Movies.API/bin/Release/net9.0/MoviesApp.deps.json
+/Movies.API/bin/Release/net9.0/MoviesApp.exe
+/Movies.API/bin/Release/net9.0/MoviesApp.pdb
+/Movies.API/bin/Release/net9.0/MoviesApp.runtimeconfig.json
+/Movies.API/bin/Release/net9.0/MoviesApp.staticwebassets.endpoints.json
+/Movies.API/bin/Release/net9.0/MoviesApp.staticwebassets.runtime.json
+/Movies.Business/bin/Release/net9.0/Movies.Business.deps.json
+/Movies.Business/bin/Release/net9.0/Movies.Business.pdb
+/Movies.Business/bin/Release/net9.0/Movies.DataAccess.pdb
+/Movies.Business/bin/Release/net9.0/Movies.Models.pdb
+/Movies.Business/obj/project.assets.json
+/Movies.Business/obj/Release/net9.0/.NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+/Movies.Business/obj/Release/net9.0/Movies.B.0586C789.Up2Date
+/Movies.Business/obj/Release/net9.0/Movies.Business.AssemblyInfo.cs
+/Movies.Business/obj/Release/net9.0/Movies.Business.AssemblyInfoInputs.cache
+/Movies.Business/obj/Release/net9.0/Movies.Business.assets.cache
+/Movies.Business/obj/Release/net9.0/Movies.Business.csproj.AssemblyReference.cache
+/Movies.Business/obj/Release/net9.0/Movies.Business.csproj.CoreCompileInputs.cache
+/Movies.Business/obj/Release/net9.0/Movies.Business.csproj.FileListAbsolute.txt
+/Movies.Business/obj/Release/net9.0/Movies.Business.GeneratedMSBuildEditorConfig.editorconfig
+/Movies.Business/obj/Release/net9.0/Movies.Business.GlobalUsings.g.cs
+/Movies.Business/obj/Release/net9.0/Movies.Business.pdb
+/Movies.Business/obj/Release/net9.0/Movies.Business.sourcelink.json
+/Movies.DataAccess/bin/Release/net9.0/Movies.DataAccess.deps.json
+/Movies.DataAccess/bin/Release/net9.0/Movies.DataAccess.pdb
+/Movies.DataAccess/bin/Release/net9.0/Movies.DataAccess.runtimeconfig.json
+/Movies.DataAccess/bin/Release/net9.0/Movies.Models.pdb
+/Movies.DataAccess/obj/Release/net9.0/.NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+/Movies.DataAccess/obj/Release/net9.0/Movies.D.E55CCDEB.Up2Date
+/Movies.DataAccess/obj/Release/net9.0/Movies.DataAccess.AssemblyInfo.cs
+/Movies.DataAccess/obj/Release/net9.0/Movies.DataAccess.AssemblyInfoInputs.cache
+/Movies.DataAccess/obj/Release/net9.0/Movies.DataAccess.assets.cache
+/Movies.DataAccess/obj/Release/net9.0/Movies.DataAccess.csproj.AssemblyReference.cache
+/Movies.DataAccess/obj/Release/net9.0/Movies.DataAccess.csproj.CoreCompileInputs.cache
+/Movies.DataAccess/obj/Release/net9.0/Movies.DataAccess.csproj.FileListAbsolute.txt
+/Movies.DataAccess/obj/Release/net9.0/Movies.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+/Movies.DataAccess/obj/Release/net9.0/Movies.DataAccess.genruntimeconfig.cache
+/Movies.DataAccess/obj/Release/net9.0/Movies.DataAccess.GlobalUsings.g.cs
+/Movies.DataAccess/obj/Release/net9.0/Movies.DataAccess.pdb
+/Movies.DataAccess/obj/Release/net9.0/Movies.DataAccess.sourcelink.json
+/Movies.Models/obj/Movies.Models.csproj.nuget.dgspec.json
+/Movies.Models/obj/project.assets.json
+/Movies.Models/obj/project.nuget.cache
+/Movies.Models/obj/Release/net9.0/.NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+/Movies.Models/obj/Release/net9.0/Movies.Models.AssemblyInfo.cs
+/Movies.Models/obj/Release/net9.0/Movies.Models.AssemblyInfoInputs.cache
+/Movies.Models/obj/Release/net9.0/Movies.Models.assets.cache
+/Movies.Models/obj/Release/net9.0/Movies.Models.csproj.AssemblyReference.cache
+/Movies.Models/obj/Release/net9.0/Movies.Models.csproj.CoreCompileInputs.cache
+/Movies.Models/obj/Release/net9.0/Movies.Models.csproj.FileListAbsolute.txt
+/Movies.Models/obj/Release/net9.0/Movies.Models.GeneratedMSBuildEditorConfig.editorconfig
+/Movies.Models/obj/Release/net9.0/Movies.Models.GlobalUsings.g.cs
+/Movies.Models/obj/Release/net9.0/Movies.Models.pdb
+/Movies.Models/obj/Release/net9.0/Movies.Models.sourcelink.json
+/Movies.Models/bin/Release/net9.0/Movies.Models.deps.json
+/Movies.Models/bin/Release/net9.0/Movies.Models.pdb
+/MoviesApp/Properties/ServiceDependencies/moviesapp - FTP/profile.arm.json
+/MoviesApp/Properties/ServiceDependencies/moviesapp - FTP1/profile.arm.json
+/MoviesApp/Properties/ServiceDependencies/moviesapp - ReadOnly - FTP/profile.arm.json
+/MoviesApp/Properties/ServiceDependencies/moviesapp - ReadOnly - FTP1/profile.arm.json
+/MoviesApp/Properties/ServiceDependencies/moviesapp - Web Deploy/profile.arm.json
+/MoviesApp/Properties/ServiceDependencies/moviesapp - Zip Deploy/profile.arm.json
+/MoviesApp/Properties/ServiceDependencies/moviesapp - Zip Deploy1/profile.arm.json
+/Movies.API/Properties/serviceDependencies.json
+/Movies.API/Properties/serviceDependencies.local.json
+/Movies.API/Properties/serviceDependencies.local.json.user
+*.json

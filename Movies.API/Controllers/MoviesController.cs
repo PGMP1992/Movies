@@ -2,11 +2,14 @@
 using Movies.DataAccess.Models;
 using Movies.Models;
 using Movies.Business.Repos.Interfaces;
+using Movies.API.Filters;
 
 namespace Movies.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [JwtTokenAuth] // Custom filter for JWT authentication
+
     public class MoviesController(IMovieRepos _repos) : ControllerBase
     {
         // GET: MoviesController

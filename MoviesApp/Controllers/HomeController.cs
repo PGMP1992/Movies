@@ -1,6 +1,8 @@
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
 using Movies.DataAccess.Models;
 using Movies.DataAccess.ViewModels;
+using Movies.Models;
 using MoviesApp.Services.Interfaces;
 using System.Diagnostics;
 
@@ -10,12 +12,14 @@ namespace MoviesApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         //private readonly IUserRepos _usersRepos;
-        private readonly IUserService _userService;
+        //private readonly IUserService _userService;
+        private readonly IWebApiExecutor _webApiExecutor;
 
-        public HomeController(ILogger<HomeController> logger, IUserService userService)
+        public HomeController(ILogger<HomeController> logger, IWebApiExecutor webApiExecutor)
         {
             _logger = logger;
-            _userService = userService;
+            _webApiExecutor = webApiExecutor;
+
         }
 
         public async Task<IActionResult> Index() // Using IPInfo to get locations IP 
@@ -39,7 +43,7 @@ namespace MoviesApp.Controllers
                 //if (homeVM.State != null)
                 //{
                 //homeVM.Users = await _usersRepos.GetAll();
-                homeVM.Users = await _userService.GetAll();
+                homeVM.Users = await _webApiExecutor.InvokeGet<List<AppUserDto>>($"Users/GetAll");
                 //}
                 return View(homeVM);
             }

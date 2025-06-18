@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Movies.DataAccess.Data;
-using Movies.DataAccess.Models;
 using Movies.DataAccess.ViewModels;
 using Movies.Models;
-using MoviesApp.Services;
 using MoviesApp.Services.Interfaces;
 
 namespace MoviesApp.Controllers
@@ -17,7 +15,7 @@ namespace MoviesApp.Controllers
 
         public PlaylistsController(
             IWebApiExecutor webApiExecutor
-            ,IHttpContextAccessor httpContextAccessor
+            , IHttpContextAccessor httpContextAccessor
         )
         {
             _webApiExecutor = webApiExecutor;
@@ -57,7 +55,7 @@ namespace MoviesApp.Controllers
             {
                 return NotFound();
             }
-            
+
             PlaylistMoviesVM newVm = new PlaylistMoviesVM()
             {
                 //Playlist = await _playlistService.GetById(id),

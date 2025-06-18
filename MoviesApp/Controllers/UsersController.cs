@@ -3,24 +3,23 @@ using Microsoft.AspNetCore.Mvc;
 using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Data;
 using Movies.DataAccess.ViewModels;
+using Movies.Models;
 using MoviesApp.Services.Interfaces;
 
 namespace MoviesApp.Controllers
 {
     public class UsersController : Controller
     {
-        //private readonly IUserRepos _userRepos;
-        private readonly IUserService _userService;
+        private readonly IWebApiExecutor _webApiExecutor;
         private readonly IPhotoService _photoService;
         private readonly IHttpContextAccessor _httpContextAcessor;
 
         public UsersController(
-            IUserService userService
+            IWebApiExecutor webApiExecutor
             , IPhotoService photoService
             , IHttpContextAccessor httpContextAccessor)
         {
-            //_userRepos = usersRepos;
-            _userService = userService;
+            _webApiExecutor = webApiExecutor;
             _photoService = photoService;
             _httpContextAcessor = httpContextAccessor;
         }
@@ -28,8 +27,7 @@ namespace MoviesApp.Controllers
         [HttpGet("Users")]
         public async Task<IActionResult> Index()
         {
-            //var users = await _userRepos.GetAll();
-            var users = await _userService.GetAll();
+            var users = await _webApiExecutor.InvokeGet<List<AppUserDto>>("Users/GetAll");
             List<UsersVM> result = new List<UsersVM>();
 
             foreach (var user in users)
@@ -73,10 +71,10 @@ namespace MoviesApp.Controllers
                 userId = id;
             }
 
-            //var user = await _userRepos.GetById(userId);
-            //var userPlaylists = await _userRepos.GetAllPlaylists(userId);
-            var user = await _userService.GetById(userId);
-            var userPlaylists = await _userService.GetAllPlaylists(userId);
+            //var user = await _userService.GetById(userId);
+            var user = await _webApiExecutor.InvokeGet<AppUserDto>($"Users/GetById/{userId}");
+            //var userPlaylists = await _userService.GetAllPlaylists(userId);
+            var userPlaylists = await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Users/GetAllPlaylists/{userId}");
 
             var userDetailsVM = new UsersDetailsVM()
             {
@@ -91,15 +89,14 @@ namespace MoviesApp.Controllers
             return View(userDetailsVM);
         }
 
-
         // GET: Movies/EditProfile/5 -----------------------------------------------------------------
 
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            //var user = await _userRepos.GetById(id);
-            var user = await _userService.GetById(id);
+            //var user = await _userService.GetById(id);
+            var user = await _webApiExecutor.InvokeGet<AppUserDto>($"Users/GetById/{id}");
             if (user == null)
             {
                 return View("Error");
@@ -126,8 +123,8 @@ namespace MoviesApp.Controllers
                 return View("Edit", editVM);
             }
 
-            //var user = await _userRepos.GetById(id);
-            var userDto = await _userService.GetByIdNoTracking(id);
+            //var userDto = await _userService.GetByIdNoTracking(id);
+            var userDto = await _webApiExecutor.InvokeGet<AppUserDto>($"Users/GetByIdNoTracking/{id}");
 
             if (userDto == null)
             {
@@ -156,10 +153,19 @@ namespace MoviesApp.Controllers
             userDto.City = editVM.City;
             userDto.State = editVM.State;
 
+            //var editUser = new AppUserDto
+            //{
+            //    Id = id,
+            //    UserName = editVM.UserName,
+            //    City = editVM.City,
+            //    State = editVM.State,
+            //    ProfileImageryUrl = editVM.ProfileImageUrl
+            //};
+
             try
             {
-                //await _userManager.UpdateAsync(user);
-                await _userService.Update(id, userDto);
+                //await _userService.Update(id, userDto);
+                await _webApiExecutor.InvokePut($"Users/Put/{id}", userDto);
                 TempData["success"] = "User info updated";
             }
             catch (Exception ex)
@@ -174,8 +180,8 @@ namespace MoviesApp.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
-            //var user = await _userRepos.GetById(id);
-            var user = await _userService.GetById(id);
+            //var user = await _userService.GetById(id);
+            var user = await _webApiExecutor.InvokeGet<AppUserDto>($"Users/GetById/{id}");
             if (user == null)
             {
                 return View("Error");
@@ -196,14 +202,14 @@ namespace MoviesApp.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirm(string id)
         {
-            //var user = await _userRepos.GetById(id);
-            var user = await _userService.GetById(id);
+            //var user = await _userService.GetById(id);
+            var user = await _webApiExecutor.InvokeGet<AppUserDto>($"Users/GetById/{id}");
             if (user == null)
             {
                 return View("Error");
             }
-            //_userRepos.Delete(user);
-            await _userService.Delete(id);
+            //await _userService.Delete(id);
+            await _webApiExecutor.InvokeDelete($"Users/Delete/{id}");
             TempData["success"] = "User deleted";
             return RedirectToAction(nameof(Index));
         }

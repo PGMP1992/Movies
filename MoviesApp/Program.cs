@@ -21,13 +21,20 @@ builder.Services.AddHttpClient("MoviesApi", client =>
     client.BaseAddress = new Uri(builder.Configuration["BaseServerUrl"]); // API URL
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
+builder.Services.AddHttpClient("AuthApi", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["AuthoUrl"]); // API URL
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
 builder.Services.AddTransient<IWebApiExecutor, WebApiExecutor>();
 
-// API Using Service Interfaces
-builder.Services.AddHttpClient<IMovieService, MovieService>();
-builder.Services.AddHttpClient<IPlaylistService, PlaylistService>();
-builder.Services.AddHttpClient<IPlaylistMovieService, PlaylistMovieService>();
-builder.Services.AddHttpClient<IUserService, UserService>();
+builder.Services.AddSession( options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true; 
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddHttpContextAccessor();
 
 // DB & Identity =========================================================
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -62,6 +69,8 @@ app.UseRouting();
 
 app.UseAuthentication(); // Has to be before authorization. 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

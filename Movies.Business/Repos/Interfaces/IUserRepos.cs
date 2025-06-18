@@ -12,6 +12,5 @@ namespace Movies.Business.Repos.Interfaces
         bool Update(AppUser user);
         bool Delete(AppUser user);
         bool Save();
-        bool Exists(string id);
     }
 }

@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Movies.API.Filters;
+using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Models;
 using Movies.Models;
-using Movies.Business.Repos.Interfaces;
 
 namespace Movies.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [JwtTokenAuth] // Custom filter for JWT authentication
+
     public class UsersController(IUserRepos _repos) : ControllerBase
     {
         [HttpGet]
@@ -112,8 +115,8 @@ namespace Movies.API.Controllers
                 });
             }
 
-            var exist = _repos.Exists(id);
-            if (! exist)
+            var dbUser = await _repos.GetByIdNoTracking(id);
+            if (dbUser == null)
             {
                 return NotFound(new ErrorModel()
                 {

@@ -29,6 +29,14 @@ builder.Services.AddTransient<IMovieRepos, MovieRepos>();
 builder.Services.AddTransient<IPlaylistRepos, PlaylistRepos>();
 builder.Services.AddTransient<IPlaylistMovieRepos, PlaylistMovieRepos>();
 
+//builder.Services.AddAuthentication("Bearer")
+//    .AddJwtBearer("Bearer", options =>
+//    {
+//        //options.Authority = builder.Configuration["AuthorityUrl"] ?? throw new InvalidOperationException("Authority URL not configured.");
+//        options.Audience = "MoviesAPI";
+//        options.RequireHttpsMetadata = false; // Set to true in production
+//    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -46,6 +54,8 @@ await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<App
 }
 
 app.UseHttpsRedirection();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.MapControllers();
 

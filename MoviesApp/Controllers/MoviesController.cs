@@ -45,7 +45,7 @@ namespace MoviesApp.Controllers
             }
             else
             {
-                movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies/GetAll") ?? new List<MovieDto>();
+                movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies/GetAll"); //
             }
 
             return View("Index", movieList);

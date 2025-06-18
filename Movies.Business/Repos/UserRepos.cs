@@ -24,7 +24,8 @@ namespace Movies.Business.Repos
 
         public async Task<AppUser> GetById(string id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users
+                .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<AppUser> GetByIdNoTracking(string id)
@@ -52,31 +53,7 @@ namespace Movies.Business.Repos
 
         public bool Update(AppUser user)
         {
-            //var dbUser = _context.Users.Find(user.Id);
-            //if (dbUser != null)
-            //{
-            //    dbUser.Id = user.Id;
-            //    dbUser.UserName = user.UserName;
-            //    dbUser.NormalizedUserName = user.NormalizedUserName;
-            //    dbUser.Email = user.Email;
-            //    dbUser.NormalizedEmail = user.NormalizedEmail;
-
-            //    dbUser.City = user.City;
-            //    dbUser.State = user.State;
-            //    dbUser.ProfileImageryUrl = user.ProfileImageryUrl;
-
-            //    dbUser.EmailConfirmed = user.EmailConfirmed;
-            //    dbUser.PasswordHash = user.PasswordHash;
-            //    dbUser.SecurityStamp = user.SecurityStamp;
-            //    dbUser.ConcurrencyStamp = user.ConcurrencyStamp;
-            //    dbUser.PhoneNumber = user.PhoneNumber;
-            //    dbUser.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
-            //    dbUser.TwoFactorEnabled = user.TwoFactorEnabled;
-            //    dbUser.LockoutEnd = user.LockoutEnd;
-            //    dbUser.LockoutEnabled = user.LockoutEnabled;
-            //    dbUser.AccessFailedCount = user.AccessFailedCount;
-            //}
-            _context.Users.Update(user);
+            _context.Update(user);
             return Save();
         }
 
@@ -85,10 +62,6 @@ namespace Movies.Business.Repos
             _context.Remove(user);
             return Save();
         }
-
-        public bool Exists(string id)
-        {
-            return _context.Users.Any(x => x.Id == id);
-        }
+       
     }
 }

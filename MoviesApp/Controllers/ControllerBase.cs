@@ -14,9 +14,13 @@ namespace MoviesApp.Controllers
                     ModelState.AddModelError(error.Key, string.Join("; ", error.Value));
                 }
             }
+            else if(ex.ErrorResponse != null)
+            {
+                ModelState.AddModelError("Error", ex.ErrorResponse.Title);
+            }
             else
             {
-                ModelState.AddModelError("", "An unexpected error occurred. Please try again later.");
+                ModelState.AddModelError("Error", ex.Message);
             }
         }
     }
