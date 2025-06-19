@@ -21,12 +21,12 @@ namespace Movies.API.Controllers
                 return BadRequest("Invalid client credentials.");
             }
 
-            if (Authenticator.Authenticate(credential.ClientId, credential.Secret))
+            if (Authenticator.Authenticate(credential.ClientId, credential.Secret, _config))
             {
                 var expiresAt = DateTime.UtcNow.AddMinutes(10);
                 return Ok(new
                 {
-                    access_token = Authenticator.CreateToken(credential.ClientId, expiresAt, _config["SecurityKey"] ?? string.Empty),
+                    access_token = Authenticator.CreateToken(credential.ClientId, expiresAt, _config["SecurityKey"] ?? string.Empty, _config),
                     expires_At = expiresAt,
                 });
             }

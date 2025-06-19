@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Movies.Business.Repos;
 using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Data;
@@ -12,10 +13,36 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    }); 
+    });
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, context, cancelationToken) =>
+    {
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes.TryAdd("Bearer", new OpenApiSecurityScheme
+        {
+            Scheme = "Bearer",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+        });
+
+        document.SecurityRequirements.Add(new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            }] = new string[] { }
+        });
+        return Task.CompletedTask;
+    });
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -43,9 +70,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    //app.MapScalarApiReference(); // Scalar API reference endpoint
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "Movies API V1");
+        //options.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+    });
 }
-
 
 await using (var serviceScope = app.Services.CreateAsyncScope())
 await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
@@ -60,3 +91,4 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+

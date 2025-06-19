@@ -3,19 +3,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Movies.API.Authority
 {
-    public static class Authenticator
+    public class Authenticator
     {
-        public static bool Authenticate(string clientId, string secret)
+        public static bool Authenticate(string clientId, string secret, IConfiguration _config)
         {
-            var app = AppRepos.GetByClientId(clientId);
-            if (app == null)
-                return false;
-
-            return (app.ClientId == clientId && app.Secret == secret);
+            var configClientId = _config.GetValue<string>("ClientId") ?? throw new ArgumentNullException("ClientId is not configured.");
+            var configSecret = _config.GetValue<string>("Secret") ?? throw new ArgumentNullException("ClientId is not configured.");
+            return (configClientId == clientId && configSecret == secret);
         }
 
-
-        public static string CreateToken(string clientId, DateTime expiresAt, string strSecretKey)
+        public static string CreateToken(string clientId, DateTime expiresAt, string strSecretKey, IConfiguration _config)
         {
             // Algorithm to create a token
             //Signing the token with a secret key
@@ -27,12 +24,15 @@ namespace Movies.API.Authority
                 , SecurityAlgorithms.HmacSha256Signature);
 
             //Payload( claims, expiration, etc.)
-            var app = AppRepos.GetByClientId(clientId);
+            var configClientId = _config.GetValue<string>("ClientId") ?? throw new ArgumentNullException("ClientId is not configured.");
+            var configSecret = _config.GetValue<string>("Secret") ?? throw new ArgumentNullException("ClientId is not configured.");
+            var configScopes = _config.GetValue<string>("Scopes") ?? throw new ArgumentNullException("Scopes is not configured.");
+
             var claimsDictionary = new Dictionary<string, object>
             {
-                { "Name", app?.Name ?? string.Empty },
-                { "Read", (app?.Scopes ?? string.Empty ).Contains("read") ? "true" : "false"},
-                { "Write", (app?.Scopes ?? string.Empty).Contains("write") ? "true" : "false" }
+                { "Read", (configScopes ?? string.Empty ).Contains("read") ? "true" : "false"},
+                { "Write", (configScopes ?? string.Empty).Contains("write") ? "true" : "false" },
+                { "Delete", (configScopes ?? string.Empty).Contains("delete") ? "true" : "false" }
             };
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -40,9 +40,8 @@ namespace Movies.API.Authority
                 Claims = claimsDictionary,
                 Expires = expiresAt,
                 NotBefore = DateTime.UtcNow,
-
-
             };
+
             var tokenHandler = new JsonWebTokenHandler();
             return tokenHandler.CreateToken(tokenDescriptor);
         }
