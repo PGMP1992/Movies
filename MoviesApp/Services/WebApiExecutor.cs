@@ -1,7 +1,10 @@
-﻿using MoviesApp.Services.Interfaces;
+﻿using Movies.DataAccess.Models;
+using MoviesApp.Services.Interfaces;
 using Newtonsoft.Json;
+using System.Linq.Expressions;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace MoviesApp.Services
 {
@@ -31,10 +34,11 @@ namespace MoviesApp.Services
             await AddJwtToHeader(client);
             var request = new HttpRequestMessage(HttpMethod.Get, relativeUrl);
             var response = await client.SendAsync(request);
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return Activator.CreateInstance<T>();
-            }
+            // Have to Fix This ==================================================
+            //if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            //{
+            //    return Activator.CreateInstance<T>();
+            //}
             await HandlePottentiaError(response);
             return await response.Content.ReadFromJsonAsync<T>();
         }
@@ -53,6 +57,7 @@ namespace MoviesApp.Services
             var client = _httpClientFactory.CreateClient(apiName);
             await AddJwtToHeader(client);
             var response = await client.PutAsJsonAsync<T>(relativeUrl, obj);
+            var content = await response.Content.ReadAsStringAsync();
             await HandlePottentiaError(response);
         }
 
@@ -68,8 +73,8 @@ namespace MoviesApp.Services
         {
             if (! response.IsSuccessStatusCode)
             {
-                var errorJson = await response.Content.ReadAsStringAsync();
-                throw new WebApiException(errorJson);
+                    var errorJson = await response.Content.ReadAsStringAsync();
+                    throw new WebApiException(errorJson);
             }
         }
 

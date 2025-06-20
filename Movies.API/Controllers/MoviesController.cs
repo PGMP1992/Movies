@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Movies.DataAccess.Models;
-using Movies.Models;
-using Movies.Business.Repos.Interfaces;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Movies.API.Filters;
+using Movies.Business.Repos.Interfaces;
+using Movies.DataAccess.Models;
 
 namespace Movies.API.Controllers
 {
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     [Route("api/[controller]/[action]")]
     [JwtTokenAuth] // Custom filter for JWT authentication
@@ -20,7 +22,7 @@ namespace Movies.API.Controllers
 
             if (movies == null || !movies.Any())
             {
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "No Movies available",
                     StatusCode = StatusCodes.Status404NotFound
@@ -38,7 +40,7 @@ namespace Movies.API.Controllers
             if (movies == null || !movies.Any())
             {
                 //return NotFound("No Movies available");
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "No Movies available",
                     StatusCode = StatusCodes.Status404NotFound
@@ -52,7 +54,7 @@ namespace Movies.API.Controllers
         {
             if (id == null || id <= 0)
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid Id",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -63,7 +65,7 @@ namespace Movies.API.Controllers
             if (movie == null)
             {
                 //    return NotFound("Movie doesn't exist!");
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "Movie Not Found!",
                     StatusCode = StatusCodes.Status404NotFound
@@ -78,7 +80,7 @@ namespace Movies.API.Controllers
         {
             if (id == null || id <= 0)
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid Id",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -89,8 +91,8 @@ namespace Movies.API.Controllers
             if (movie == null)
             {
                 //return NotFound("Movie doesn't exist!");
-                return NotFound(new ErrorModel()
-                {
+                return NotFound(new ErrorModelDto()
+                {   
                     ErrorMessage = "Movie not Found!",
                     StatusCode = StatusCodes.Status404NotFound
                 });
@@ -103,7 +105,7 @@ namespace Movies.API.Controllers
         {
             if (string.IsNullOrEmpty(search))
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid name",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -114,7 +116,7 @@ namespace Movies.API.Controllers
             if (movies == null)
             {
                 //return NotFound("There are no Movies within that search!");
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "There are no Movies with that name!",
                     StatusCode = StatusCodes.Status404NotFound
@@ -128,7 +130,7 @@ namespace Movies.API.Controllers
         {
             if (movie is null)
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid Movie!",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -138,7 +140,7 @@ namespace Movies.API.Controllers
             var newMovie = _repos.Add(movie);
             if (newMovie == false)
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Could not create Movie",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -155,7 +157,7 @@ namespace Movies.API.Controllers
                 || id <= 0
                 || movie is null)
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Id mismatch!",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -165,7 +167,7 @@ namespace Movies.API.Controllers
             var dbMovie = await _repos.GetByIdNoTracking(movie.Id);
             if (dbMovie is null)
             {
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "Movie doesn't exist!",
                     StatusCode = StatusCodes.Status404NotFound
@@ -183,7 +185,7 @@ namespace Movies.API.Controllers
             if (id == null || id <= 0)
             {
                 //return NotFound("Movie doesn't exist!");
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid Movie!",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -192,7 +194,7 @@ namespace Movies.API.Controllers
             var movie = await _repos.GetById(id);
             if (movie is null)
             {
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "Movie doesn't exist!",
                     StatusCode = StatusCodes.Status404NotFound

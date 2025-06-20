@@ -24,8 +24,8 @@ namespace Movies.API.Authority
                 , SecurityAlgorithms.HmacSha256Signature);
 
             //Payload( claims, expiration, etc.)
-            var configClientId = _config.GetValue<string>("ClientId") ?? throw new ArgumentNullException("ClientId is not configured.");
-            var configSecret = _config.GetValue<string>("Secret") ?? throw new ArgumentNullException("ClientId is not configured.");
+            //var configClientId = _config.GetValue<string>("ClientId") ?? throw new ArgumentNullException("ClientId is not configured.");
+            //var configSecret = _config.GetValue<string>("Secret") ?? throw new ArgumentNullException("ClientId is not configured.");
             var configScopes = _config.GetValue<string>("Scopes") ?? throw new ArgumentNullException("Scopes is not configured.");
 
             var claimsDictionary = new Dictionary<string, object>

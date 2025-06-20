@@ -1,14 +1,22 @@
-﻿using System.Text.Json;
+﻿using Movies.DataAccess.Models;
+using System.Text.Json;
 
 namespace MoviesApp.Services
 {
     public class WebApiException : Exception
     {
-        public ErrorResponse? ErrorResponse { get; }
-        
-        public WebApiException(string errorJson) 
+        public ErrorModelDto? Response { get; }
+
+        public WebApiException(string errorJson)
         {
-            ErrorResponse = JsonSerializer.Deserialize<ErrorResponse>(errorJson);
-        }
+            try
+            {
+                Response = JsonSerializer.Deserialize<ErrorModelDto>(errorJson);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }    
     }
 }

@@ -18,13 +18,11 @@ namespace Movies.API.Controllers
             var playlists = await _repos.GetAll();
             if (playlists == null || !playlists.Any())
             {
-                //return NotFound("No playlists available");
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "No Playlists available",
                     StatusCode = StatusCodes.Status404NotFound
                 });
-                
             }
             return Ok(playlists);
         }
@@ -34,7 +32,7 @@ namespace Movies.API.Controllers
         {
             if(string.IsNullOrEmpty(user))
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "User name cannot be null or empty",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -44,13 +42,11 @@ namespace Movies.API.Controllers
             var playlists = await _repos.GetAllByUser(user);
             if (playlists == null || !playlists.Any())
             {
-                //return NotFound("No playlists available");
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "No Playlists available",
                     StatusCode = StatusCodes.Status404NotFound
                 });
-                
             }
             return Ok(playlists);
         }
@@ -60,7 +56,7 @@ namespace Movies.API.Controllers
         {
             if (id == null || id <= 0)
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid playlist ID",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -70,8 +66,7 @@ namespace Movies.API.Controllers
             var playlist = await _repos.GetById(id);
             if (playlist == null)
             {
-                //return NotFound("playlist doesn't exist!");
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "No Playlists available",
                     StatusCode = StatusCodes.Status404NotFound
@@ -85,7 +80,7 @@ namespace Movies.API.Controllers
         {
             if (id == null || id <= 0)
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid playlist ID",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -95,14 +90,12 @@ namespace Movies.API.Controllers
             var playlist = await _repos.GetByIdNoTracking(id);
             if (playlist == null)
             {
-                //return NotFound("playlist doesn't exist!");
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "No Playlists found",
                     StatusCode = StatusCodes.Status404NotFound
                 });
             }
-            
             return Ok(playlist.ToDto());
         }
 
@@ -112,7 +105,7 @@ namespace Movies.API.Controllers
         {
             if(playlist is null)
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid playlist",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -122,8 +115,7 @@ namespace Movies.API.Controllers
             var newplaylist = _repos.Add(playlist);
             if (newplaylist == false)
             {
-                //return BadRequest("Could not create playlist");
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Could not create playlist",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -140,7 +132,7 @@ namespace Movies.API.Controllers
                 || id <= 0
                 || playlist == null)
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid playlist",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -150,7 +142,7 @@ namespace Movies.API.Controllers
             var dbPlaylist = await _repos.GetByIdNoTracking(playlist.Id);
             if (dbPlaylist is null)
             {
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "Playlist doesn't exist!",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -166,7 +158,7 @@ namespace Movies.API.Controllers
         {
             if(id == null || id <= 0)
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid playlist ID",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -175,7 +167,7 @@ namespace Movies.API.Controllers
             var playlist = await _repos.GetById(id);
             if (playlist is null)
             {
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "Playlist doesn't exist!",
                     StatusCode = StatusCodes.Status404NotFound

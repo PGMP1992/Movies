@@ -19,7 +19,7 @@ namespace Movies.API.Controllers
 
             if (users == null || !users.Any())
             {
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "No Users available",
                     StatusCode = StatusCodes.Status404NotFound
@@ -33,7 +33,7 @@ namespace Movies.API.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid Id",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -43,7 +43,7 @@ namespace Movies.API.Controllers
             var user = await _repos.GetById(id);
             if (user == null)
             {
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "User Not Found!",
                     StatusCode = StatusCodes.Status404NotFound
@@ -58,7 +58,7 @@ namespace Movies.API.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid Id",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -68,7 +68,7 @@ namespace Movies.API.Controllers
             var user = await _repos.GetByIdNoTracking(id);
             if (user == null)
             {
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "User Not Found!",
                     StatusCode = StatusCodes.Status404NotFound
@@ -84,7 +84,7 @@ namespace Movies.API.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid Id",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -94,7 +94,7 @@ namespace Movies.API.Controllers
             var playlists = await _repos.GetAllPlaylists(id);
             if (playlists == null)
             {
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "There are no Playlists in your account!",
                     StatusCode = StatusCodes.Status404NotFound
@@ -108,7 +108,7 @@ namespace Movies.API.Controllers
         {
             if( id != user.Id || user is null)
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Id mismatch!",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -118,7 +118,7 @@ namespace Movies.API.Controllers
             var dbUser = await _repos.GetByIdNoTracking(id);
             if (dbUser == null)
             {
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "User doesn't exist!",
                     StatusCode = StatusCodes.Status404NotFound
@@ -134,7 +134,7 @@ namespace Movies.API.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return BadRequest(new ErrorModel()
+                return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid User!",
                     StatusCode = StatusCodes.Status400BadRequest
@@ -143,7 +143,7 @@ namespace Movies.API.Controllers
             var user = await _repos.GetById(id);
             if (user is null)
             {
-                return NotFound(new ErrorModel()
+                return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "User doesn't exist!",
                     StatusCode = StatusCodes.Status404NotFound

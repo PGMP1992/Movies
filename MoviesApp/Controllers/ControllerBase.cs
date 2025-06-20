@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Services;
+using Movies.DataAccess.Models;
 
 namespace MoviesApp.Controllers
 {
@@ -7,16 +8,19 @@ namespace MoviesApp.Controllers
     {
         public void HandleApiException(WebApiException ex)
         {
-            if (ex.ErrorResponse != null && ex.ErrorResponse.Errors != null && ex.ErrorResponse.Errors.Any())
+            //if (ex.ErrorResponse != null && 
+            //    ex.ErrorResponse.Errors != null && 
+            //    ex.ErrorResponse.Errors.Any())
+            //{
+            //    foreach (var error in ex.ErrorResponse.Errors)
+            //    {
+            //        ModelState.AddModelError(error.Key, string.Join("; ", error.Value));
+            //    }
+            //}
+            //else 
+            if(ex.Response != null)
             {
-                foreach (var error in ex.ErrorResponse.Errors)
-                {
-                    ModelState.AddModelError(error.Key, string.Join("; ", error.Value));
-                }
-            }
-            else if(ex.ErrorResponse != null)
-            {
-                ModelState.AddModelError("Error", ex.ErrorResponse.Title);
+                ModelState.AddModelError("Error", ex.Response.ErrorMessage);
             }
             else
             {
