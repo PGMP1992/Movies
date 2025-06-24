@@ -10,7 +10,7 @@ namespace Movies.API.Controllers
     [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     [Route("api/[controller]/[action]")]
-    //[JwtTokenAuth] // Custom filter for JWT authentication
+    [JwtTokenAuth] // Custom filter for JWT authentication
 
     public class MoviesController(IMovieRepos _repos) : ControllerBase
     {
