@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoviesApp.Services;
-using Movies.DataAccess.Models;
 
 namespace MoviesApp.Controllers
 {
@@ -18,7 +17,7 @@ namespace MoviesApp.Controllers
             //    }
             //}
             //else 
-            if(ex.Response != null)
+            if (ex.Response != null)
             {
                 ModelState.AddModelError("Error", ex.Response.ErrorMessage);
             }

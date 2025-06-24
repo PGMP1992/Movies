@@ -13,7 +13,7 @@ namespace MoviesApp.Controllers
     public class MoviesController : ControllerBase
     {
         private readonly IWebApiExecutor _webApiExecutor;
-        private readonly IPhotoService _photoService; //Cloudnary 
+        private readonly IPhotoService _photoService; //Cloudinary 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MoviesController(
@@ -32,73 +32,87 @@ namespace MoviesApp.Controllers
             ViewBag.Message = "";
             IEnumerable<MovieDto> movieList;
 
-            if (!string.IsNullOrEmpty(search))
+            try
             {
-                var result = await _webApiExecutor.InvokeGet<List<MovieDto>>($"Movies/GetByName/{search}");
-                movieList = result ?? new List<MovieDto>(); 
-
-                if (!movieList.Any())
+                if (!string.IsNullOrEmpty(search))
                 {
-                    movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies/GetAll") ?? new List<MovieDto>();
-                    ViewBag.Message = "There are no movies with that Name!";
-                }
-            }
-            else
-            {
-                movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies/GetAll"); //
-            }
+                    var result = await _webApiExecutor.InvokeGet<List<MovieDto>>($"Movies/GetByName/{search}");
+                    movieList = result ?? new List<MovieDto>();
 
-            return View("Index", movieList);
+                    if (!movieList.Any())
+                    {
+                        movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies/GetAll") ?? new List<MovieDto>();
+                        ViewBag.Message = "There are no movies with that Name!";
+                    }
+                }
+                else
+                {
+                    movieList = await _webApiExecutor.InvokeGet<List<MovieDto>>("Movies/GetAll"); //
+                }
+
+                return View("Index", movieList);
+            }
+            catch (WebApiException ex)
+            {
+                HandleApiException(ex);
+                TempData["error"] = "API exception. " + ex.Response.ErrorMessage;
+                return RedirectToAction("Index");
+            }
         }
 
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
             ViewBag.Message = "";
-
-            if (User.Identity.IsAuthenticated)
+            
+            try
             {
-                var user = _httpContextAccessor.HttpContext.User.GetUserId();
-                //var playlists = await _playlistService.GetAllByUser(user).ConfigureAwait(false);
-                var playlists = await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{user}");
-
-                if (playlists.Any())
+                if (User.Identity.IsAuthenticated)
                 {
-                    ViewData["playlistName"] = new SelectList(
-                        //await _playlistService.GetAllByUser(user).ConfigureAwait(false), "Id", "Name");
-                        await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{user}")
-                            , "Id", "Name");
+                    var user = _httpContextAccessor.HttpContext.User.GetUserId();
+                    var playlists = await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{user}");
+
+                    if (playlists.Any())
+                    {
+                        ViewData["playlistName"] = new SelectList(
+                            await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{user}")
+                                , "Id", "Name");
+                    }
+                    else
+                    {
+                        ViewBag.playlistName = null;
+                        ViewBag.Message = "You have no Playlists. Please create one.";
+                    }
                 }
-                else
+
+                var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
+                if (movie == null)
                 {
-                    ViewBag.playlistName = null;
-                    ViewBag.Message = "You have no Playlists. Please create one.";
+                    return NotFound();
                 }
+
+                AddMovieVM movieVM = new AddMovieVM
+                {
+                    Id = movie.Id,
+                    Title = movie.Title,
+                    Description = movie.Description,
+                    Genre = movie.Genre,
+                    Age = movie.Age,
+                    PictUrl = movie.PictUrl,
+                    Active = movie.Active
+                };
+                return View(movieVM);
             }
-
-            //var movie = await _movieService.GetByIdNoTracking(id);
-            var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
-            if (movie == null)
+            catch (WebApiException ex)
             {
-                return NotFound();
+                HandleApiException(ex);
+                TempData["error"] = "API exception. " + ex.Response.ErrorMessage;
+                return RedirectToAction("Index");
             }
-
-            AddMovieVM movieVM = new AddMovieVM
-            {
-                Id = movie.Id,
-                Title = movie.Title,
-                Description = movie.Description,
-                Genre = movie.Genre,
-                Age = movie.Age,
-                PictUrl = movie.PictUrl,
-                Active = movie.Active
-            };
-
-            return View(movieVM);
         }
 
         // POST: Movies/Details/5
@@ -106,13 +120,14 @@ namespace MoviesApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Details(AddMovieVM movieVM)
         {
-            var newMovie = new PlaylistMovieDto
+            try
+            {
+                var newMovie = new PlaylistMovieDto
             {
                 MovieId = movieVM.Id,
                 PlaylistId = movieVM.PlaylistId
             };
 
-            //var movieExist = await _playlistMovieService.MovieInPlaylist(movieVM.PlaylistId, movieVM.Id);
             var movieExist = await _webApiExecutor.InvokeGet<bool>($"PlaylistMovies/MovieInPlaylist/{movieVM.PlaylistId}/{movieVM.Id}");
 
             if (movieExist)
@@ -121,18 +136,15 @@ namespace MoviesApp.Controllers
             }
             else
             {
-                //_playlistMovieRepos.Add(newMovie);
-                //await _playlistMovieService.Add(newMovie);
-                try
-                {
+                
                     await _webApiExecutor.InvokePost("PlaylistMovies/Post", newMovie);
                     TempData["success"] = "Movie added to Playlist";
                 }
-                catch (WebApiException ex)
-                {
-                    HandleApiException(ex);
-                    TempData["error"] = "Movie could not be added to Playlist!";
-                }
+            }
+            catch (WebApiException ex)
+            {
+                HandleApiException(ex);
+                TempData["error"] = "Movie could not be added to Playlist!";
             }
             return RedirectToAction(nameof(Details));
         }
@@ -170,7 +182,6 @@ namespace MoviesApp.Controllers
 
                 try
                 {
-                    //await _movieService.Add(movie);
                     var response = await _webApiExecutor.InvokePost("Movies/Post", movie);
                     if (response != null)
                     {
@@ -182,7 +193,6 @@ namespace MoviesApp.Controllers
                 {
                     HandleApiException(ex);
                     TempData["error"] = "Movie could not be created!";
-                    return View(movieVM);
                 }
             }
             else
@@ -196,7 +206,6 @@ namespace MoviesApp.Controllers
         // GET: Movies/Edit/5 ------------------------------------------------------
         public async Task<IActionResult> Edit(int id)
         {
-            //MovieDto movie = await _movieService.GetById(id);
             var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetById/{id}");
 
             if (movie == null)
@@ -227,7 +236,6 @@ namespace MoviesApp.Controllers
                 return View("Edit", movieVM);
             }
 
-            //var movie = await _movieService.GetByIdNoTracking(id);
             var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
 
             if (movieVM.Image != null)
@@ -263,19 +271,18 @@ namespace MoviesApp.Controllers
             // Just change Active status if Admin user.
             if (!User.IsInRole("admin"))
             {
-                editMovie.Active = true;
+                editMovie.Active = movie.Active;
             }
 
             try
             {
-                //await _movieService.Update(id, editMovie);
                 await _webApiExecutor.InvokePut($"Movies/Put/{id}", editMovie);
                 TempData["success"] = "Movie details updated";
             }
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Movie could not be updated!";
+                TempData["error"] = "Api exception: " + ex.Response.ErrorMessage;
                 return View("Edit", movieVM);
             }
             return RedirectToAction(nameof(Index));
@@ -290,7 +297,6 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
 
-            //var movie = await _movieService.GetById(id);
             var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
             if (movie == null)
             {
@@ -306,7 +312,6 @@ namespace MoviesApp.Controllers
         {
             try
             {
-                //var movie = await _movieService.GetById(id);
                 var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetById/{id}");
                 if (movie != null)
                 {
@@ -317,8 +322,6 @@ namespace MoviesApp.Controllers
                         return View("Delete");
                     }
 
-                    //_movieRepos.Delete(movie);
-                    //await _movieService.Delete(id);
                     await _webApiExecutor.InvokeDelete($"Movies/Delete/{id}");
                     TempData["success"] = "Movie deleted";
                 }
@@ -326,12 +329,10 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Movie could not be deleted!";
+                TempData["error"] = "Api exception: " + ex.Response.ErrorMessage;
                 return View("Delete");
             }
             return RedirectToAction(nameof(Index));
         }
-
-
     }
 }

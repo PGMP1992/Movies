@@ -1,6 +1,7 @@
 ﻿@model MovieDto
 
 <h3 class="text-danger">Are you sure you want to delete this Movie?</h3>
+<div asp-validation-summary="All" class="text-danger"></div>
 <br />
 
 <h5>
@@ -10,23 +11,11 @@
 <div class="card mb-3">
     <div class=" row g-0">
         <div class="col-md-4">
-            @if (@Model.PictUrl != null)
-            {
-                // if image not found put default.png instead
-                <img src="@(Model.PictUrl ?? "/images/default.png")"
-                     class="card-img-top product-image"
-                     alt="@(string.IsNullOrWhiteSpace(Model.Title) ? "Product image" : Model.Title + " image")"
-                     loading="lazy"
-                     onerror="this.onerror=null; this.src='/images/default.png';" />
-            }
-            else
-            {
-                <img src="./images/default.png"
-                     class="card-img-top"
-                     alt="Default product image"
-                     style="max-height: 200px; object-fit: cover;" loading="lazy" />
-            }
-            @* <img src="@Model.PictUrl" class="img-fluid rounded-start w-100" alt="@Model.Title"> *@
+            <img src="@(Model.PictUrl ?? "/images/default.png")"
+                 class="card-img-top object-fit-cover rounded-top-4"
+                 alt="@(string.IsNullOrWhiteSpace(Model.Title) ? "Movie image" : Model.Title + " image")"
+                 loading="lazy" decoding="async"
+                 onerror="this.onerror=null; this.src='/images/default.png';" />
         </div>
 
         <div class="col-md-8">

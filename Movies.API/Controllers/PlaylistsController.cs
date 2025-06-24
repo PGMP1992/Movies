@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Movies.API.Filters;
 using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Models;
-using Movies.Models;
 
 namespace Movies.API.Controllers
 {
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     [Route("api/[controller]/[action]")]
-    [JwtTokenAuth]// Custom filter for JWT authentication
+    //[JwtTokenAuth]// Custom filter for JWT authentication
 
     public class PlaylistsController(IPlaylistRepos _repos) : ControllerBase
     {
@@ -30,7 +32,7 @@ namespace Movies.API.Controllers
         [HttpGet("{user}")]
         public async Task<IActionResult> GetAllByUser(string user)
         {
-            if(string.IsNullOrEmpty(user))
+            if (string.IsNullOrEmpty(user))
             {
                 return BadRequest(new ErrorModelDto()
                 {
@@ -103,7 +105,7 @@ namespace Movies.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Playlist playlist)
         {
-            if(playlist is null)
+            if (playlist is null)
             {
                 return BadRequest(new ErrorModelDto()
                 {
@@ -128,7 +130,7 @@ namespace Movies.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Playlist playlist)
         {
-            if( id != playlist.Id 
+            if (id != playlist.Id
                 || id <= 0
                 || playlist == null)
             {
@@ -149,14 +151,14 @@ namespace Movies.API.Controllers
                 });
             }
             _repos.Update(playlist);
-             return Ok(playlist.ToDto());
+            return Ok(playlist.ToDto());
         }
 
         // DELETE: playlistsController/Delete/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if(id == null || id <= 0)
+            if (id == null || id <= 0)
             {
                 return BadRequest(new ErrorModelDto()
                 {
@@ -173,7 +175,7 @@ namespace Movies.API.Controllers
                     StatusCode = StatusCodes.Status404NotFound
                 });
             }
-            return Ok( _repos.Delete(playlist));
+            return Ok(_repos.Delete(playlist));
         }
     }
 }

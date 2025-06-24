@@ -59,8 +59,6 @@ namespace MoviesApp.Controllers
             {
                 PlaylistMoviesVM newVm = new PlaylistMoviesVM()
                 {
-                    //Playlist = await _playlistService.GetById(id),
-                    //Playlists = await _playlistMovieService.GetByPlaylist(id),
                     Playlist = await _webApiExecutor.InvokeGet<PlaylistDto>($"Playlists/GetByIdNoTracking/{id}"),
                     Playlists = await _webApiExecutor.InvokeGet<List<PlaylistMovieDto>>($"PlaylistMovies/GetByPlaylist/{id}")
                 };
@@ -81,21 +79,30 @@ namespace MoviesApp.Controllers
 
         public async Task<IActionResult> RemoveMovie(int playlistId, int movieId)
         {
-            var obj = await _webApiExecutor.InvokeGet<PlaylistMovieDto>($"PlaylistMovies/GetByContent/{playlistId}/{movieId}");
-
-            if (obj != null)
+            try
             {
-                await _webApiExecutor.InvokeDelete($"PlaylistMovies/Delete/{obj.Id}");
-                TempData["success"] = "Movie deleted from Playlist";
+                var obj = await _webApiExecutor.InvokeGet<PlaylistMovieDto>($"PlaylistMovies/GetByContent/{playlistId}/{movieId}");
+
+                if (obj != null)
+                {
+                    await _webApiExecutor.InvokeDelete($"PlaylistMovies/Delete/{obj.Id}");
+                    TempData["success"] = "Movie deleted from Playlist";
+                }
+
+                PlaylistMoviesVM newVm = new PlaylistMoviesVM()
+                {
+                    Playlist = await _webApiExecutor.InvokeGet<PlaylistDto>($"Playlists/GetById/{playlistId}"),
+                    Playlists = await _webApiExecutor.InvokeGet<List<PlaylistMovieDto>>($"PlaylistMovies/GetByPlaylist/{playlistId}")
+                };
+                return View("Details", newVm);
+            
+            } 
+            catch (WebApiException ex)
+            {
+                HandleApiException(ex);
+                TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
+                return RedirectToAction(nameof(Details), new { id = playlistId });
             }
-
-            PlaylistMoviesVM newVm = new PlaylistMoviesVM()
-            {
-                Playlist = await _webApiExecutor.InvokeGet<PlaylistDto>($"Playlists/GetById/{playlistId}"),
-                Playlists = await _webApiExecutor.InvokeGet<List<PlaylistMovieDto>>($"PlaylistMovies/GetByPlaylist/{playlistId}")
-            };
-
-            return View("Details", newVm);
         }
 
         // GET: Playlists/Create -------------------------------------------
@@ -114,9 +121,16 @@ namespace MoviesApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                //await _playlistService.Add(playlist);
-                await _webApiExecutor.InvokePost("Playlists/Post", playlist);
-                TempData["success"] = "Playlist created";
+                try
+                {
+                    await _webApiExecutor.InvokePost("Playlists/Post", playlist);
+                    TempData["success"] = "Playlist created";
+                    
+                } catch (WebApiException ex) {
+                    HandleApiException(ex);
+                    TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
+                    return RedirectToAction(nameof(Create));
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(playlist);
@@ -167,6 +181,7 @@ namespace MoviesApp.Controllers
                 catch (WebApiException ex)
                 {
                     HandleApiException(ex);
+                    TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
                     return RedirectToAction(nameof(Edit), id);
                 }
             }
@@ -203,12 +218,8 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
+                TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
                 return RedirectToAction(nameof(Index), await _webApiExecutor.InvokeGet<List<PlaylistDto>>("Playlists/GetAll"));
-            }
-            catch (Exception)
-            {
-                TempData["error"] = "There was an error deleting the Playlist";
-                return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(Index));
         }

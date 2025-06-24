@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Movies.API.Filters;
 using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Models;
-using Movies.Models;
 
 namespace Movies.API.Controllers
 {
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     [Route("api/[controller]/[action]")]
-    [JwtTokenAuth] // Custom filter for JWT authentication
+    //[JwtTokenAuth] // Custom filter for JWT authentication
 
     public class UsersController(IUserRepos _repos) : ControllerBase
     {
@@ -106,7 +108,7 @@ namespace Movies.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, AppUser user)
         {
-            if( id != user.Id || user is null)
+            if (id != user.Id || user is null)
             {
                 return BadRequest(new ErrorModelDto()
                 {

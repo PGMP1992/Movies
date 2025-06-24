@@ -1,14 +1,16 @@
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Movies.DataAccess.Models;
 using Movies.DataAccess.ViewModels;
 using Movies.Models;
+using MoviesApp.Services;
 using MoviesApp.Services.Interfaces;
 using System.Diagnostics;
 
 namespace MoviesApp.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ControllerBase
     {
         private readonly ILogger<HomeController> _logger;
         //private readonly IUserRepos _usersRepos;
@@ -47,8 +49,10 @@ namespace MoviesApp.Controllers
                 //}
                 return View(homeVM);
             }
-            catch
+            catch (WebApiException ex)
             {
+                HandleApiException(ex);
+                TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
                 homeVM.Users = null;
             }
             return View(homeVM);

@@ -52,13 +52,13 @@ builder.Services.AddOpenApi(options =>
 
 builder.Services.AddApiVersioning(options =>
 {
-    options.ReportApiVersions = true; // Enable reporting of API versions in responses
-    options.AssumeDefaultVersionWhenUnspecified = true; // Use default version if not specified
-    options.DefaultApiVersion = new ApiVersion(1, 0); // Set default API version
-    options.ApiVersionReader = ApiVersionReader.Combine(
-        new UrlSegmentApiVersionReader(),
-        new HeaderApiVersionReader("x-api-version"),
-        new QueryStringApiVersionReader("api-version"));
+    options.ReportApiVersions = true; 
+    options.AssumeDefaultVersionWhenUnspecified = true; 
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    //options.ApiVersionReader = ApiVersionReader.Combine(
+    //    new UrlSegmentApiVersionReader(),
+    //    new HeaderApiVersionReader("x-api-version"),
+    //    new QueryStringApiVersionReader("api-version"));
 })
 .AddApiExplorer();
 
@@ -98,13 +98,13 @@ if(app.Environment.IsDevelopment())
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference(); // Scalar API reference endpoint
-    //app.UseSwaggerUI(options =>
-    //{
-    //    options.SwaggerEndpoint("/openapi/v1.json", "Movies API V1");
-    //    options.SwaggerEndpoint("/openapi/v2.json", "Movies API V2");
-    //    //options.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
-    //});
+    //app.MapScalarApiReference(); // Scalar API reference endpoint
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "Movies API V1");
+        options.SwaggerEndpoint("/openapi/v2.json", "Movies API V2");
+        //options.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+    });
 }
 
 await using (var serviceScope = app.Services.CreateAsyncScope())

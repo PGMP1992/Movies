@@ -31,7 +31,7 @@ namespace Movies.Business.Repos
                 .Where(a => a.Playlist.AppUserId == appUser)
                 .Include(p => p.Playlist)
                 .Include(p => p.Movie)
-                        .OrderBy(p => p.Movie.Title)
+                .OrderBy(p => p.Movie.Title)
                 .ToListAsync();
         }
 

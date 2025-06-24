@@ -4,11 +4,12 @@ using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Data;
 using Movies.DataAccess.ViewModels;
 using Movies.Models;
+using MoviesApp.Services;
 using MoviesApp.Services.Interfaces;
 
 namespace MoviesApp.Controllers
 {
-    public class UsersController : Controller
+    public class UsersController : ControllerBase
     {
         private readonly IWebApiExecutor _webApiExecutor;
         private readonly IPhotoService _photoService;
@@ -66,27 +67,34 @@ namespace MoviesApp.Controllers
                 }
                 userId = curUserId;
             }
+            
             else
             {
                 userId = id;
             }
-
-            //var user = await _userService.GetById(userId);
-            var user = await _webApiExecutor.InvokeGet<AppUserDto>($"Users/GetById/{userId}");
-            //var userPlaylists = await _userService.GetAllPlaylists(userId);
-            var userPlaylists = await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Users/GetAllPlaylists/{userId}");
-
-            var userDetailsVM = new UsersDetailsVM()
+            
+            try
             {
-                Playlists = userPlaylists,
-                Id = userId,
-                UserName = user.UserName,
-                City = user.City,
-                State = user.State,
-                ProfileImageUrl = user.ProfileImageryUrl
-            };
+                var user = await _webApiExecutor.InvokeGet<AppUserDto>($"Users/GetById/{userId}");
+                var userPlaylists = await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Users/GetAllPlaylists/{userId}");
 
-            return View(userDetailsVM);
+                var userDetailsVM = new UsersDetailsVM()
+                {
+                    Playlists = userPlaylists,
+                    Id = userId,
+                    UserName = user.UserName,
+                    City = user.City,
+                    State = user.State,
+                    ProfileImageUrl = user.ProfileImageryUrl
+                };
+                return View(userDetailsVM);
+            } 
+            catch (WebApiException ex)
+            {
+                HandleApiException(ex);
+                TempData["error"] = "API exception. " + ex.Response.ErrorMessage;
+            }
+            return RedirectToAction("Index");
         }
 
         // GET: Movies/EditProfile/5 -----------------------------------------------------------------
@@ -152,25 +160,16 @@ namespace MoviesApp.Controllers
 
             userDto.City = editVM.City;
             userDto.State = editVM.State;
-
-            //var editUser = new AppUserDto
-            //{
-            //    Id = id,
-            //    UserName = editVM.UserName,
-            //    City = editVM.City,
-            //    State = editVM.State,
-            //    ProfileImageryUrl = editVM.ProfileImageUrl
-            //};
-
+            
             try
             {
-                //await _userService.Update(id, userDto);
                 await _webApiExecutor.InvokePut($"Users/Put/{id}", userDto);
                 TempData["success"] = "User info updated";
             }
-            catch (Exception ex)
+            catch (WebApiException ex)
             {
-                TempData["error"] = $"Failed to update profile: {ex.Message}";
+                HandleApiException(ex);
+                TempData["error"] = "API exception: " + ex.Response.ErrorMessage;
                 return View("Edit", editVM);
             }
 
@@ -180,7 +179,6 @@ namespace MoviesApp.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
-            //var user = await _userService.GetById(id);
             var user = await _webApiExecutor.InvokeGet<AppUserDto>($"Users/GetById/{id}");
             if (user == null)
             {
@@ -202,15 +200,19 @@ namespace MoviesApp.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirm(string id)
         {
-            //var user = await _userService.GetById(id);
-            var user = await _webApiExecutor.InvokeGet<AppUserDto>($"Users/GetById/{id}");
-            if (user == null)
+            try { 
+                var user = await _webApiExecutor.InvokeGet<AppUserDto>($"Users/GetById/{id}");
+                if (user == null)
+                {
+                    return View("Error");
+                }
+                await _webApiExecutor.InvokeDelete($"Users/Delete/{id}");
+                TempData["success"] = "User deleted";
+            } catch (WebApiException ex)
             {
-                return View("Error");
+                HandleApiException(ex);
+                TempData["error"] = "API exception: " + ex.Response.ErrorMessage;
             }
-            //await _userService.Delete(id);
-            await _webApiExecutor.InvokeDelete($"Users/Delete/{id}");
-            TempData["success"] = "User deleted";
             return RedirectToAction(nameof(Index));
         }
     }

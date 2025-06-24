@@ -44,7 +44,7 @@
                         <div class="btn-group w-100" role="group" aria-label="Movie actions">
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm w-100" title="View details">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm w-100" title="Add to Playlist/View details">
                                     <i class="bi bi-eye"></i> Add
                                 </a>
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-secondary btn-sm w-100 mx-1" title="Edit movie">

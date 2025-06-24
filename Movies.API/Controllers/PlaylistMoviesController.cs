@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Movies.API.Filters;
 using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Models;
 
 namespace Movies.API.Controllers
 {
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     [Route("api/[controller]/[action]")]
-    [JwtTokenAuth] // Custom filter for JWT authentication
+    //[JwtTokenAuth] // Custom filter for JWT authentication
 
     public class PlaylistMoviesController(IPlaylistMovieRepos _repos) : ControllerBase
     {

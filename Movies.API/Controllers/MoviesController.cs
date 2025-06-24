@@ -10,7 +10,7 @@ namespace Movies.API.Controllers
     [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     [Route("api/[controller]/[action]")]
-    [JwtTokenAuth] // Custom filter for JWT authentication
+    //[JwtTokenAuth] // Custom filter for JWT authentication
 
     public class MoviesController(IMovieRepos _repos) : ControllerBase
     {
@@ -39,7 +39,6 @@ namespace Movies.API.Controllers
             var movies = await _repos.GetAllActive();
             if (movies == null || !movies.Any())
             {
-                //return NotFound("No Movies available");
                 return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "No Movies available",
@@ -64,7 +63,6 @@ namespace Movies.API.Controllers
             var movie = await _repos.GetById(id);
             if (movie == null)
             {
-                //    return NotFound("Movie doesn't exist!");
                 return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "Movie Not Found!",
@@ -90,7 +88,6 @@ namespace Movies.API.Controllers
             var movie = await _repos.GetByIdNoTracking(id);
             if (movie == null)
             {
-                //return NotFound("Movie doesn't exist!");
                 return NotFound(new ErrorModelDto()
                 {   
                     ErrorMessage = "Movie not Found!",
@@ -115,7 +112,6 @@ namespace Movies.API.Controllers
             var movies = await _repos.GetByName(search);
             if (movies == null)
             {
-                //return NotFound("There are no Movies within that search!");
                 return NotFound(new ErrorModelDto()
                 {
                     ErrorMessage = "There are no Movies with that name!",
@@ -184,7 +180,6 @@ namespace Movies.API.Controllers
         {
             if (id == null || id <= 0)
             {
-                //return NotFound("Movie doesn't exist!");
                 return BadRequest(new ErrorModelDto()
                 {
                     ErrorMessage = "Invalid Movie!",
@@ -200,7 +195,6 @@ namespace Movies.API.Controllers
                     StatusCode = StatusCodes.Status404NotFound
                 });
             }
-            //var deleted = _repos.Delete(movie);
             return Ok(_repos.Delete(movie));
         }
     }

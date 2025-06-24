@@ -1,10 +1,6 @@
-﻿using Movies.DataAccess.Models;
-using MoviesApp.Services.Interfaces;
+﻿using MoviesApp.Services.Interfaces;
 using Newtonsoft.Json;
-using System.Linq.Expressions;
 using System.Net.Http.Headers;
-using System.Text.Json;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace MoviesApp.Services
 {
@@ -16,29 +12,30 @@ namespace MoviesApp.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         private readonly IConfiguration _config;
-        private readonly string _baseServerUrl;
+        //private readonly string _baseServerUrl;
 
         public WebApiExecutor(IHttpClientFactory httpClientFactory
-            ,IConfiguration config
-            ,IHttpContextAccessor httpContextAccessor)
+            , IConfiguration config
+            , IHttpContextAccessor httpContextAccessor)
         {
             _httpClientFactory = httpClientFactory;
             _config = config;
             _httpContextAccessor = httpContextAccessor;
             //_baseServerUrl = _configuration.GetValue<string>("BaseServerUrl") ?? throw new ArgumentNullException("BaseServerUrl is not configured.");
         }
-        
+
         public async Task<T?> InvokeGet<T>(string relativeUrl)
         {
             var client = _httpClientFactory.CreateClient(apiName);
             await AddJwtToHeader(client);
+
             var request = new HttpRequestMessage(HttpMethod.Get, relativeUrl);
             var response = await client.SendAsync(request);
             // Have to Fix This ==================================================
-            //if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            //{
-            //    return Activator.CreateInstance<T>();
-            //}
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return Activator.CreateInstance<T>();
+            }
             await HandlePottentiaError(response);
             return await response.Content.ReadFromJsonAsync<T>();
         }
@@ -71,24 +68,24 @@ namespace MoviesApp.Services
 
         private async Task HandlePottentiaError(HttpResponseMessage response)
         {
-            if (! response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                    var errorJson = await response.Content.ReadAsStringAsync();
-                    throw new WebApiException(errorJson);
+                var errorJson = await response.Content.ReadAsStringAsync();
+                throw new WebApiException(errorJson);
             }
         }
 
-        private async Task AddJwtToHeader( HttpClient client)
+        private async Task AddJwtToHeader(HttpClient client)
         {
             JwtToken? token = null;
             string? strToken = _httpContextAccessor.HttpContext?.Session.GetString("access_token");
-            if (! string.IsNullOrWhiteSpace(strToken))
-            { 
+            if (!string.IsNullOrWhiteSpace(strToken))
+            {
                 token = JsonConvert.DeserializeObject<JwtToken>(strToken);
             }
-            
+
             // Create or Renew Token after 10 minutes 
-            if(token == null || token.ExpiresAt <= DateTime.UtcNow)
+            if (token == null || token.ExpiresAt <= DateTime.UtcNow)
             {
                 var clientId = _config.GetValue<string>("ClientId") ?? throw new ArgumentNullException("ClientId is not configured.");
                 var secret = _config.GetValue<string>("Secret") ?? throw new ArgumentNullException("Secret is not configured.");
