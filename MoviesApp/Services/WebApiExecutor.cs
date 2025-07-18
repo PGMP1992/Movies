@@ -10,13 +10,13 @@ namespace MoviesApp.Services
         private const string authApi = "AuthApi";
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
         private readonly IConfiguration _config;
         //private readonly string _baseServerUrl;
 
-        public WebApiExecutor(IHttpClientFactory httpClientFactory
-            , IConfiguration config
-            , IHttpContextAccessor httpContextAccessor)
+        public WebApiExecutor(
+            IHttpClientFactory httpClientFactory
+            ,IConfiguration config
+            ,IHttpContextAccessor httpContextAccessor)
         {
             _httpClientFactory = httpClientFactory;
             _config = config;
@@ -32,10 +32,10 @@ namespace MoviesApp.Services
             var request = new HttpRequestMessage(HttpMethod.Get, relativeUrl);
             var response = await client.SendAsync(request);
             // Have to Fix This ==================================================
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return Activator.CreateInstance<T>();
-            }
+            //if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            //{
+            //    return Activator.CreateInstance<T>();
+            //}
             await HandlePottentiaError(response);
             return await response.Content.ReadFromJsonAsync<T>();
         }

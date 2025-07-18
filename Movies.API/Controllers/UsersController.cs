@@ -21,11 +21,11 @@ namespace Movies.API.Controllers
 
             if (users == null || !users.Any())
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "No Users available",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "No Users available",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(users);
         }
@@ -35,21 +35,21 @@ namespace Movies.API.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Invalid Id",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Invalid Id",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
 
             var user = await _repos.GetById(id);
             if (user == null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "User Not Found!",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "User Not Found!",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
 
             return Ok(user.ToDto());
@@ -60,21 +60,21 @@ namespace Movies.API.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Invalid Id",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Invalid Id",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
 
             var user = await _repos.GetByIdNoTracking(id);
             if (user == null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "User Not Found!",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "User Not Found!",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
 
             return Ok(user.ToDto());
@@ -86,21 +86,21 @@ namespace Movies.API.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Invalid Id",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Invalid Id",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
 
             var playlists = await _repos.GetAllPlaylists(id);
             if (playlists == null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "There are no Playlists in your account!",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "There are no Playlists in your account!",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(playlists);
         }
@@ -110,21 +110,21 @@ namespace Movies.API.Controllers
         {
             if (id != user.Id || user is null)
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Id mismatch!",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Id mismatch!",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
 
             var dbUser = await _repos.GetByIdNoTracking(id);
             if (dbUser == null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "User doesn't exist!",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "User doesn't exist!",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
 
             _repos.Update(user);
@@ -136,20 +136,20 @@ namespace Movies.API.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Invalid User!",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Invalid User!",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
             var user = await _repos.GetById(id);
             if (user is null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "User doesn't exist!",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "User doesn't exist!",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(_repos.Delete(user));
         }

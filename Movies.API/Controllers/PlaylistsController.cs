@@ -20,11 +20,11 @@ namespace Movies.API.Controllers
             var playlists = await _repos.GetAll();
             if (playlists == null || !playlists.Any())
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "No Playlists available",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "No Playlists available",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(playlists);
         }
@@ -34,21 +34,21 @@ namespace Movies.API.Controllers
         {
             if (string.IsNullOrEmpty(user))
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "User name cannot be null or empty",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "User name cannot be null or empty",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
 
             var playlists = await _repos.GetAllByUser(user);
             if (playlists == null || !playlists.Any())
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "No Playlists available",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "No Playlists available",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(playlists);
         }
@@ -58,21 +58,21 @@ namespace Movies.API.Controllers
         {
             if (id == null || id <= 0)
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Invalid playlist ID",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Invalid playlist ID",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
 
             var playlist = await _repos.GetById(id);
             if (playlist == null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "No Playlists available",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "No Playlists available",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(playlist.ToDto());
         }
@@ -82,21 +82,21 @@ namespace Movies.API.Controllers
         {
             if (id == null || id <= 0)
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Invalid playlist ID",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Invalid playlist ID",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
 
             var playlist = await _repos.GetByIdNoTracking(id);
             if (playlist == null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "No Playlists found",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "No Playlists found",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(playlist.ToDto());
         }
@@ -107,21 +107,21 @@ namespace Movies.API.Controllers
         {
             if (playlist is null)
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Invalid playlist",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Invalid playlist",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
 
             var newplaylist = _repos.Add(playlist);
             if (newplaylist == false)
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Could not create playlist",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Could not create playlist",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
             return CreatedAtAction(nameof(GetById), new { id = playlist.Id }, playlist);
         }
@@ -134,21 +134,21 @@ namespace Movies.API.Controllers
                 || id <= 0
                 || playlist == null)
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Invalid playlist",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Invalid playlist",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
 
             var dbPlaylist = await _repos.GetByIdNoTracking(playlist.Id);
             if (dbPlaylist is null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "Playlist doesn't exist!",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Playlist doesn't exist!",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
             _repos.Update(playlist);
             return Ok(playlist.ToDto());
@@ -160,20 +160,20 @@ namespace Movies.API.Controllers
         {
             if (id == null || id <= 0)
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Invalid playlist ID",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Invalid playlist ID",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
             }
             var playlist = await _repos.GetById(id);
             if (playlist is null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "Playlist doesn't exist!",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Playlist doesn't exist!",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(_repos.Delete(playlist));
         }

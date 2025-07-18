@@ -52,7 +52,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
+                TempData["error"] = "Api Exception " + ex.ErrorResponse.Title;
                 homeVM.Users = null;
             }
             return View(homeVM);

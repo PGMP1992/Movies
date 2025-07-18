@@ -18,8 +18,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Movies.Business\Movies.Business.csproj" />
+    <ProjectReference Include="..\Movies.DataAccess\Movies.DataAccess.csproj" />
     <ProjectReference Include="..\Movies.Models\Movies.Models.csproj" />
     <ProjectReference Include="..\MoviesApp\MoviesApp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Filters\Playlist\" />
   </ItemGroup>
 
 </Project>

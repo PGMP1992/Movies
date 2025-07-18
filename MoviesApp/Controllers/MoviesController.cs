@@ -55,12 +55,12 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "API exception. " + ex.Response.ErrorMessage;
+                //TempData["error"] = "API exception. " + ex.Response.Title;
                 return RedirectToAction("Index");
             }
         }
 
-        // GET: Movies/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -106,16 +106,15 @@ namespace MoviesApp.Controllers
                     Active = movie.Active
                 };
                 return View(movieVM);
-            }
+            } 
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "API exception. " + ex.Response.ErrorMessage;
+                TempData["error"] = "API exception. " + ex.ErrorResponse.Title;
                 return RedirectToAction("Index");
             }
         }
 
-        // POST: Movies/Details/5
         // Add Movie to Playlists 
         [HttpPost]
         public async Task<IActionResult> Details(AddMovieVM movieVM)
@@ -156,7 +155,6 @@ namespace MoviesApp.Controllers
             return View(movieVM);
         }
 
-        // POST: Movies/Create
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateMovieVM movieVM)
@@ -203,86 +201,92 @@ namespace MoviesApp.Controllers
         }
 
         [Authorize]
-        // GET: Movies/Edit/5 ------------------------------------------------------
         public async Task<IActionResult> Edit(int id)
         {
-            var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetById/{id}");
-
-            if (movie == null)
+            try
             {
-                return NotFound();
+                var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetById/{id}");
+
+                if (movie == null)
+                {
+                    return NotFound();
+                }
+
+                var movieVM = new EditMovieVM
+                {
+                    Id = movie.Id,
+                    Title = movie.Title,
+                    Description = movie.Description,
+                    Genre = movie.Genre,
+                    Age = movie.Age,
+                    PictUrl = movie.PictUrl,
+                    Active = movie.Active
+                };
+                return View(movieVM);
             }
-
-            var movieVM = new EditMovieVM
+            catch (WebApiException ex)
             {
-                Id = movie.Id,
-                Title = movie.Title,
-                Description = movie.Description,
-                Genre = movie.Genre,
-                Age = movie.Age,
-                PictUrl = movie.PictUrl,
-                Active = movie.Active
-            };
-            return View(movieVM);
+                HandleApiException(ex);
+                return View(Index);
+            }
         }
 
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditMovieVM movieVM)
         {
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("", "Failed to Edit Movie");
-                return View("Edit", movieVM);
-            }
-
-            var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
-
-            if (movieVM.Image != null)
-            {
-                var photoResult = await _photoService.AddPhotoAsync(movieVM.Image);
-
-                if (photoResult.Error != null)
+            try { 
+                if (!ModelState.IsValid)
                 {
-                    ModelState.AddModelError("Image", "Failed to upload image");
+                    ModelState.AddModelError("", "Failed to Edit Movie");
                     return View("Edit", movieVM);
                 }
 
-                if (!string.IsNullOrEmpty(movie.PictUrl))
+                var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
+
+                if (movieVM.Image != null)
                 {
-                    _ = _photoService.DeletePhotoAsync(movie.PictUrl);
+                    var photoResult = await _photoService.AddPhotoAsync(movieVM.Image);
+
+                    if (photoResult.Error != null)
+                    {
+                        ModelState.AddModelError("Image", "Failed to upload image");
+                        return View("Edit", movieVM);
+                    }
+
+                    if (!string.IsNullOrEmpty(movie.PictUrl))
+                    {
+                        _ = _photoService.DeletePhotoAsync(movie.PictUrl);
+                    }
+
+                    movie.PictUrl = photoResult.Url.ToString();
+                    movieVM.PictUrl = movie.PictUrl;
                 }
 
-                movie.PictUrl = photoResult.Url.ToString();
-                movieVM.PictUrl = movie.PictUrl;
-            }
+                var editMovie = new MovieDto
+                {
+                    Id = id,
+                    Title = movieVM.Title,
+                    Description = movieVM.Description,
+                    Genre = movieVM.Genre,
+                    Age = movieVM.Age,
+                    PictUrl = movieVM.PictUrl,
+                    Active = movieVM.Active,
+                };
 
-            var editMovie = new MovieDto
-            {
-                Id = id,
-                Title = movieVM.Title,
-                Description = movieVM.Description,
-                Genre = movieVM.Genre,
-                Age = movieVM.Age,
-                PictUrl = movieVM.PictUrl,
-                Active = movieVM.Active,
-            };
+                // Just change Active status if Admin user.
+                if (!User.IsInRole("admin"))
+                {
+                    editMovie.Active = movie.Active;
+                }
 
-            // Just change Active status if Admin user.
-            if (!User.IsInRole("admin"))
-            {
-                editMovie.Active = movie.Active;
-            }
-
-            try
-            {
                 await _webApiExecutor.InvokePut($"Movies/Put/{id}", editMovie);
                 TempData["success"] = "Movie details updated";
             }
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Api exception: " + ex.Response.ErrorMessage;
+                TempData["error"] = "Api exception: " + ex.ErrorResponse.Title;
                 return View("Edit", movieVM);
             }
             return RedirectToAction(nameof(Index));
@@ -329,7 +333,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Api exception: " + ex.Response.ErrorMessage;
+                //TempData["error"] = "Api exception: " + ex.Response.ErrorMessage;
                 return View("Delete");
             }
             return RedirectToAction(nameof(Index));

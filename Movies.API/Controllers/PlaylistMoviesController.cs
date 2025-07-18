@@ -20,11 +20,11 @@ namespace Movies.API.Controllers
             var list = await _repos.GetAll();
             if (list == null || !list.Any())
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "No Playlists available",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "No Playlists available",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(list);
         }
@@ -35,11 +35,11 @@ namespace Movies.API.Controllers
             var list = await _repos.GetAllByUser(user);
             if (list == null || !list.Any())
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "No Playlists available",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "No Playlists available",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(list);
         }
@@ -50,11 +50,11 @@ namespace Movies.API.Controllers
             var list = await _repos.GetByPlaylist(id);
             if (list == null || !list.Any())
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "No Playlist available",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "No Playlist available",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(list);
         }
@@ -65,11 +65,11 @@ namespace Movies.API.Controllers
             var obj = await _repos.GetByContent(playlistId, movieId);
             if (obj == null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "No Movie found in this Playlist",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "No Movie found in this Playlist",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             
             return Ok(obj.ToDto());
@@ -81,11 +81,11 @@ namespace Movies.API.Controllers
             var obj = _repos.MovieInPlaylist(playlistId, movieId);
             if (obj == false)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "Movie not found in Playlist",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Movie not found in Playlist",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             return Ok(obj);
         }
@@ -97,11 +97,11 @@ namespace Movies.API.Controllers
             var obj = await _repos.GetById(id);
             if (obj == null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "playlist doesn't exist!",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "playlist doesn't exist!",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             
             return Ok(obj.ToDto());
@@ -113,11 +113,11 @@ namespace Movies.API.Controllers
             var obj = await _repos.GetByIdNoTracking(id);
             if (obj == null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "playlist doesn't exist!",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "playlist doesn't exist!",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             
             return Ok(obj.ToDto());
@@ -130,11 +130,11 @@ namespace Movies.API.Controllers
             var newplaylist = _repos.Add(obj);
             if (newplaylist == false)
             {
-                return BadRequest(new ErrorModelDto()
-                {
-                    ErrorMessage = "Could not create playlist!",
-                    StatusCode = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(new ErrorResponse());
+                //{
+                //    ErrorMessage = "Could not create playlist!",
+                //    StatusCode = StatusCodes.Status400BadRequest
+                //});
 
             }
             return CreatedAtAction(nameof(GetById), new { id = obj.Id }, obj);
@@ -146,21 +146,21 @@ namespace Movies.API.Controllers
         {
             if (obj is null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "playlist doesn't exist!",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "playlist doesn't exist!",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
 
             var dbplaylist = await _repos.GetByIdNoTracking(obj.Id);
             if (dbplaylist is null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "playlist doesn't exist!",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "playlist doesn't exist!",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
             }
             _repos.Update(obj);
             return Ok(obj.ToDto());
@@ -173,11 +173,11 @@ namespace Movies.API.Controllers
             var playlist = await _repos.GetById(id);
             if (playlist is null)
             {
-                return NotFound(new ErrorModelDto()
-                {
-                    ErrorMessage = "playlist doesn't exist!",
-                    StatusCode = StatusCodes.Status404NotFound
-                });
+                return NotFound(new ErrorResponse());
+                //{
+                //    ErrorMessage = "playlist doesn't exist!",
+                //    StatusCode = StatusCodes.Status404NotFound
+                //});
 
             }
             var deleted = _repos.Delete(playlist);

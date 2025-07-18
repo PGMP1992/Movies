@@ -92,7 +92,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "API exception. " + ex.Response.ErrorMessage;
+                //TempData["error"] = "API exception. " + ex.Response.ErrorMessage;
             }
             return RedirectToAction("Index");
         }
@@ -169,7 +169,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "API exception: " + ex.Response.ErrorMessage;
+                //TempData["error"] = "API exception: " + ex.Response.ErrorMessage;
                 return View("Edit", editVM);
             }
 
@@ -211,7 +211,7 @@ namespace MoviesApp.Controllers
             } catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "API exception: " + ex.Response.ErrorMessage;
+                //TempData["error"] = "API exception: " + ex.Response.ErrorMessage;
             }
             return RedirectToAction(nameof(Index));
         }

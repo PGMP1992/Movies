@@ -67,7 +67,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "API exception. " + ex.Response.ErrorMessage;
+                //TempData["error"] = "API exception. " + ex.Response.ErrorMessage;
                 return RedirectToAction("Index");
             }
             catch ( Exception ex)
@@ -100,7 +100,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
+                //TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
                 return RedirectToAction(nameof(Details), new { id = playlistId });
             }
         }
@@ -128,7 +128,7 @@ namespace MoviesApp.Controllers
                     
                 } catch (WebApiException ex) {
                     HandleApiException(ex);
-                    TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
+                    //TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
                     return RedirectToAction(nameof(Create));
                 }
                 return RedirectToAction(nameof(Index));
@@ -155,7 +155,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "API exception. " + ex.Response.ErrorMessage; 
+                //TempData["error"] = "API exception. " + ex.Response.ErrorMessage; 
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -181,7 +181,7 @@ namespace MoviesApp.Controllers
                 catch (WebApiException ex)
                 {
                     HandleApiException(ex);
-                    TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
+                    //TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
                     return RedirectToAction(nameof(Edit), id);
                 }
             }
@@ -218,7 +218,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
+                //TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
                 return RedirectToAction(nameof(Index), await _webApiExecutor.InvokeGet<List<PlaylistDto>>("Playlists/GetAll"));
             }
             return RedirectToAction(nameof(Index));
