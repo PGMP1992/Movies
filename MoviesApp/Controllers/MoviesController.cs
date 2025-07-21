@@ -55,7 +55,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                //TempData["error"] = "API exception. " + ex.Response.Title;
+                TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
                 return RedirectToAction("Index");
             }
         }
@@ -110,7 +110,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "API exception. " + ex.ErrorResponse.Title;
+                TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
                 return RedirectToAction("Index");
             }
         }
@@ -143,7 +143,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Movie could not be added to Playlist!";
+                TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
             }
             return RedirectToAction(nameof(Details));
         }
@@ -190,7 +190,7 @@ namespace MoviesApp.Controllers
                 catch (WebApiException ex)
                 {
                     HandleApiException(ex);
-                    TempData["error"] = "Movie could not be created!";
+                    //TempData["error"] = "Api exception: " + ex.ErrorResponse.Title;
                 }
             }
             else
@@ -227,6 +227,8 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
+                TempData["error"] = ex.ErrorResponse.Errors;
+
                 return View(Index);
             }
         }
@@ -286,7 +288,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Api exception: " + ex.ErrorResponse.Title;
+                TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
                 return View("Edit", movieVM);
             }
             return RedirectToAction(nameof(Index));
@@ -333,7 +335,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                //TempData["error"] = "Api exception: " + ex.Response.ErrorMessage;
+                TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
                 return View("Delete");
             }
             return RedirectToAction(nameof(Index));

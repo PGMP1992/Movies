@@ -23,8 +23,4 @@
     <ProjectReference Include="..\MoviesApp\MoviesApp.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Filters\Playlist\" />
-  </ItemGroup>
-
 </Project>

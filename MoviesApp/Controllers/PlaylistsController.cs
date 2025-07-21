@@ -119,21 +119,26 @@ namespace MoviesApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,AppUserId")] PlaylistDto playlist)
         {
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _webApiExecutor.InvokePost("Playlists/Post", playlist);
-                    TempData["success"] = "Playlist created";
-                    
-                } catch (WebApiException ex) {
-                    HandleApiException(ex);
-                    //TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
-                    return RedirectToAction(nameof(Create));
+                    var response = await _webApiExecutor.InvokePost("Playlists/Post", playlist);
+                    if (response != null)
+                    {
+                        TempData["success"] = "Playlist created";
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (WebApiException ex)
+                {
+                    HandleApiException(ex);
+                    //TempData["error"] = "Api Exception: " + ex.ErrorResponse.Title;
+                }
             }
-            return View(playlist);
+            return View();
+
         }
 
         // GET: Playlists/Edit/5 ------------------------------------------------
@@ -155,7 +160,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                //TempData["error"] = "API exception. " + ex.Response.ErrorMessage; 
+                TempData["error"] = "API exception. " + ex.ErrorResponse.Errors; 
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -181,7 +186,7 @@ namespace MoviesApp.Controllers
                 catch (WebApiException ex)
                 {
                     HandleApiException(ex);
-                    //TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
+                    TempData["error"] = "Api Exception " + ex.ErrorResponse.Errors;
                     return RedirectToAction(nameof(Edit), id);
                 }
             }

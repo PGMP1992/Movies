@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Movies.DataAccess.Data;
+using Movies.DataAccess.Models;
 
 namespace Movies.API.Filters.Movie
 {
-    public class ValidateIdFilterAttribute : ActionFilterAttribute
+    public class Movie_ValidateIdFilterAttribute : ActionFilterAttribute
     {
-        private ApplicationDbContext _repos;
+        private ApplicationDbContext _db;
 
-        public ValidateIdFilterAttribute(ApplicationDbContext repos)
+        public Movie_ValidateIdFilterAttribute(ApplicationDbContext db)
         {
-            _repos = repos;
+            _db = db;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -32,11 +33,11 @@ namespace Movies.API.Filters.Movie
                 }
                 else
                 {
-                    var movie = _repos.Movies.Find(Id.Value);
+                    var playlist = _db.Movies.Find(Id.Value);
 
-                    if (movie == null)
+                    if (playlist == null)
                     {
-                        context.ModelState.AddModelError("Id", "Movie doesn't exist.");
+                        context.ModelState.AddModelError("Id", "Playlist doesn't exist.");
                         var problemDetails = new ValidationProblemDetails(context.ModelState)
                         {
                             Status = StatusCodes.Status404NotFound
@@ -45,7 +46,7 @@ namespace Movies.API.Filters.Movie
                     }
                     else
                     {
-                        context.HttpContext.Items["movie"] = movie;
+                        context.HttpContext.Items["playlist"] = playlist;
                     }
                 }
             }

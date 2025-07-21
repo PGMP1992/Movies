@@ -1,12 +1,13 @@
 ﻿@model IEnumerable<MovieDto>
 
-<h3 class="mb-4">Movies</h3>
+<h1 class="mb-4">Movies</h1>
 
 @if (User.Identity.IsAuthenticated)
 {
     <p>
         <a asp-action="Create" class="btn btn-primary btn-sm mb-3">
-            <i class="bi bi-plus-circle"></i> Create
+            @* <i class="bi bi-plus-circle"> </i>*@ 
+            Create
         </a>
     </p>
 }
@@ -16,6 +17,7 @@
     <div class="alert alert-danger" role="alert">
        @ViewBag.Message
     </div>
+    <div asp-validation-summary="All" class="text-danger"></div>
 }
 
 <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
