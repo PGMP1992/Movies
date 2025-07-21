@@ -69,59 +69,56 @@ namespace MoviesApp.Controllers
             }
             ViewBag.Message = "";
             
-            try
+            
+            if (User.Identity.IsAuthenticated)
             {
-                if (User.Identity.IsAuthenticated)
-                {
-                    var user = _httpContextAccessor.HttpContext.User.GetUserId();
-                    var playlists = await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{user}");
+                var user = _httpContextAccessor.HttpContext.User.GetUserId();
+                var playlists = await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{user}");
 
-                    if (playlists.Any())
-                    {
-                        ViewData["playlistName"] = new SelectList(
-                            await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{user}")
-                                , "Id", "Name");
-                    }
-                    else
-                    {
-                        ViewBag.playlistName = null;
-                        ViewBag.Message = "You have no Playlists. Please create one.";
-                    }
+                if (playlists.Any())
+                {
+                    ViewData["playlistName"] = new SelectList(
+                        await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{user}")
+                            , "Id", "Name");
                 }
-
-                var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
-                if (movie == null)
+                else
                 {
-                    return NotFound();
+                    ViewBag.playlistName = null;
+                    ViewBag.Message = "You have no Playlists. Please create one.";
                 }
-
-                AddMovieVM movieVM = new AddMovieVM
-                {
-                    Id = movie.Id,
-                    Title = movie.Title,
-                    Description = movie.Description,
-                    Genre = movie.Genre,
-                    Age = movie.Age,
-                    PictUrl = movie.PictUrl,
-                    Active = movie.Active
-                };
-                return View(movieVM);
-            } 
-            catch (WebApiException ex)
-            {
-                HandleApiException(ex);
-                TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
-                return RedirectToAction("Index");
             }
-        }
+
+            var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            AddMovieVM movieVM = new AddMovieVM
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                Genre = movie.Genre,
+                Age = movie.Age,
+                PictUrl = movie.PictUrl,
+                Active = movie.Active
+            };
+            return View(movieVM);
+        } 
+            //catch (WebApiException ex)
+            //{
+            //    HandleApiException(ex);
+            //    TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
+            //    return RedirectToAction("Index");
+            //}
+        //}
 
         // Add Movie to Playlists 
         [HttpPost]
         public async Task<IActionResult> Details(AddMovieVM movieVM)
         {
-            try
-            {
-                var newMovie = new PlaylistMovieDto
+            var newMovie = new PlaylistMovieDto
             {
                 MovieId = movieVM.Id,
                 PlaylistId = movieVM.PlaylistId
@@ -135,15 +132,16 @@ namespace MoviesApp.Controllers
             }
             else
             {
-                
+                try
+                {
                     await _webApiExecutor.InvokePost("PlaylistMovies/Post", newMovie);
                     TempData["success"] = "Movie added to Playlist";
                 }
-            }
-            catch (WebApiException ex)
-            {
-                HandleApiException(ex);
-                TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
+                catch (WebApiException ex)
+                {
+                    HandleApiException(ex);
+                    TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
+                }
             }
             return RedirectToAction(nameof(Details));
         }

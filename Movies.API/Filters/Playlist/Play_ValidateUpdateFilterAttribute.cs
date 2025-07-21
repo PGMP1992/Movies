@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace MoviesAPI.Filters.Movie
+namespace Movies.API.Filters.Playlist
 {
     public class Play_ValidateUpdateFilterAttribute : ActionFilterAttribute
     {

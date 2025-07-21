@@ -67,12 +67,7 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                //TempData["error"] = "API exception. " + ex.Response.ErrorMessage;
-                return RedirectToAction("Index");
-            }
-            catch ( Exception ex)
-            {
-                TempData["error"] = "Exception. " + ex.Message;
+                TempData["error"] = "API exception: " + ex.Message;
                 return RedirectToAction("Index");
             }
         }
@@ -89,18 +84,20 @@ namespace MoviesApp.Controllers
                     TempData["success"] = "Movie deleted from Playlist";
                 }
 
+                // Check if no records
                 PlaylistMoviesVM newVm = new PlaylistMoviesVM()
                 {
                     Playlist = await _webApiExecutor.InvokeGet<PlaylistDto>($"Playlists/GetById/{playlistId}"),
                     Playlists = await _webApiExecutor.InvokeGet<List<PlaylistMovieDto>>($"PlaylistMovies/GetByPlaylist/{playlistId}")
                 };
+
                 return View("Details", newVm);
             
             } 
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                //TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
+                TempData["error"] = "Api Exception: " + ex.ErrorResponse.Errors;
                 return RedirectToAction(nameof(Details), new { id = playlistId });
             }
         }

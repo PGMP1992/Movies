@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Movies.DataAccess.Data;
 
-namespace Movies.API.Filters.Movie
+namespace Movies.API.Filters.Playlist
 {
     public class Play_ValidateIdFilterAttribute : ActionFilterAttribute
     {

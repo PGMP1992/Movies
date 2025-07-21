@@ -16,7 +16,7 @@ namespace Movies.API.Filters
             
             string token = authorizationHeader.ToString().Replace("Bearer ", string.Empty);
 
-            // Get the configuration and SecretKey from your configuration
+            // Get SecretKey from your configuration
             var securityKey = context.HttpContext.RequestServices.GetService<IConfiguration>()?.GetValue<string>("SecurityKey");
 
             if( await Authenticator.VerifyTokenAsync(token, securityKey))

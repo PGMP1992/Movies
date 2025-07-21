@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace MoviesAPI.Filters.Movie
+namespace Movies.API.Filters.Movie
 {
     public class Movie_ValidateUpdateFilterAttribute : ActionFilterAttribute
     {
@@ -10,7 +10,7 @@ namespace MoviesAPI.Filters.Movie
             base.OnActionExecuting(context);
 
             var id = context.ActionArguments["id"] as int?;
-            var playlist = context.ActionArguments["playlist"] as Movies.DataAccess.Models.Playlist;
+            var playlist = context.ActionArguments["movie"] as Movies.DataAccess.Models.Movie;
 
             if (id.HasValue && playlist != null && id != playlist.Id)
             {

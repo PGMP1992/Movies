@@ -1,10 +1,9 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Movies.API.Filters;
-using Movies.API.Filters.Movie;
+using Movies.API.Filters.Playlist;
 using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Models;
-using MoviesAPI.Filters.Movie;
 
 namespace Movies.API.Controllers
 {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Movies.DataAccess.Data;
-using Movies.DataAccess.Models;
 
 namespace Movies.API.Filters.Movie
 {
@@ -33,11 +32,11 @@ namespace Movies.API.Filters.Movie
                 }
                 else
                 {
-                    var playlist = _db.Movies.Find(Id.Value);
+                    var movie = _db.Movies.Find(Id.Value);
 
-                    if (playlist == null)
+                    if (movie == null)
                     {
-                        context.ModelState.AddModelError("Id", "Playlist doesn't exist.");
+                        context.ModelState.AddModelError("Id", "Movie doesn't exist.");
                         var problemDetails = new ValidationProblemDetails(context.ModelState)
                         {
                             Status = StatusCodes.Status404NotFound
@@ -46,7 +45,7 @@ namespace Movies.API.Filters.Movie
                     }
                     else
                     {
-                        context.HttpContext.Items["playlist"] = playlist;
+                        context.HttpContext.Items["movie"] = movie;
                     }
                 }
             }
