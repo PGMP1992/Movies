@@ -17,32 +17,38 @@ namespace Movies.Business.Repos
                 .OrderBy(p => p.Movie.Title)
                 .ToListAsync();
         }
+
         public async Task<PlaylistMovie> GetById(int? id)
         {
             return await _context.PlaylistMovies
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
+
         public bool MovieInPlaylist(int playlistId, int movieId)
         {
             var result = _context.PlaylistMovies
                 .Where(a => a.PlaylistId == playlistId && a.MovieId == movieId);
             return result.Any();
         }
+
         public async Task<PlaylistMovie> GetByContent(int playlistId, int movieId)
         {
             return await _context.PlaylistMovies
                 .FirstOrDefaultAsync(a => a.PlaylistId == playlistId && a.MovieId == movieId);
         }
+
         public bool Add(PlaylistMovie obj)
         {
             _context.Add(obj);
             return Save();
         }
+
         public bool Delete(PlaylistMovie obj)
         {
             _context.Remove(obj);
             return Save();
         }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();

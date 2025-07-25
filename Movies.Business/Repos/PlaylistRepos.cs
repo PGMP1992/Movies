@@ -5,21 +5,13 @@ using Movies.DataAccess.Models;
 
 namespace Movies.Business.Repos
 {
-    public class PlaylistRepos : IPlaylistRepos
+    public class PlaylistRepos(ApplicationDbContext _context) : IPlaylistRepos
     { 
-        private readonly ApplicationDbContext _context;
-
-        public PlaylistRepos(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<List<Playlist>> GetAll()
         {
             return await _context.Playlists
                 .AsNoTracking()
                 .Include(p => p.AppUser)
-                //.Include(p => p.Movie)
                 .ToListAsync();
         }
 
@@ -29,7 +21,6 @@ namespace Movies.Business.Repos
                 .AsNoTracking()
                 .Where(a => a.AppUserId == appUser)
                 .Include(p => p.AppUser)
-                //.Include(p => p.Movies)
                 .OrderBy(a => a.Name)
                 .ToListAsync();
         }
@@ -38,7 +29,6 @@ namespace Movies.Business.Repos
         {
             return await _context.Playlists
                 .Include(p => p.AppUser)
-                //.Include(p => p.Movies)
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 
@@ -47,7 +37,6 @@ namespace Movies.Business.Repos
             return _context.Playlists
                 .AsNoTracking()
                 .Include(p => p.AppUser)
-                //.Include(p => p.Movies)
                 .FirstOrDefault(m => m.Id == id);
         }
 
@@ -57,7 +46,6 @@ namespace Movies.Business.Repos
                 .AsNoTracking()
                 .Where(n => n.Name == name)
                 .Include(u => u.AppUser)
-                //.Include(p => p.Movies)
                 .OrderBy(n => n.Name)
                 .ToListAsync();
         }
@@ -84,13 +72,6 @@ namespace Movies.Business.Repos
         {
             _context.Update(obj);
             return Save();
-        }
-
-        public bool Exists(int id)
-        {
-            return _context.Playlists
-                .AsNoTracking()
-                .Any(e => e.Id == id);
         }
     }
 }

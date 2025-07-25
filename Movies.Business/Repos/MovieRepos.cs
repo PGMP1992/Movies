@@ -5,15 +5,8 @@ using Movies.DataAccess.Models;
 
 namespace Movies.Business.Repos
 {
-    public class MovieRepos : IMovieRepos
+    public class MovieRepos(ApplicationDbContext _context) : IMovieRepos
     {
-        private readonly ApplicationDbContext _context;
-
-        public MovieRepos(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IEnumerable<Movie>> GetAll()
         {
             return await _context.Movies

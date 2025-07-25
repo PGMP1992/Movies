@@ -5,15 +5,8 @@ using Movies.DataAccess.Models;
 
 namespace Movies.Business.Repos
 {
-    public class UserRepos : IUserRepos
+    public class UserRepos(ApplicationDbContext _context) : IUserRepos
     {
-        private readonly ApplicationDbContext _context;
-
-        public UserRepos(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<List<AppUser>> GetAll()
         {
             return await _context.Users

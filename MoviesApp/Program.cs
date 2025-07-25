@@ -103,10 +103,12 @@ using (var scope = app.Services.CreateScope())
 
     if (await userManager.FindByEmailAsync(email) == null)
     {
-        var user = new AppUser();
-        user.UserName = email;
-        user.Email = email;
-        user.EmailConfirmed = true;
+        var user = new AppUser()
+        {
+            UserName = email,
+            Email = email,
+            EmailConfirmed = true
+        };
 
         await userManager.CreateAsync(user, password);
         await userManager.AddToRoleAsync(user, "admin");
@@ -117,10 +119,12 @@ using (var scope = app.Services.CreateScope())
 
     if (await userManager.FindByEmailAsync(userAcc) == null)
     {
-        var user1 = new AppUser();
-        user1.UserName = userAcc;
-        user1.Email = userAcc;
-        user1.EmailConfirmed = true;
+        var user1 = new AppUser
+        {
+            UserName = userAcc,
+            Email = userAcc,
+            EmailConfirmed = true
+        };
 
         await userManager.CreateAsync(user1, password);
         await userManager.AddToRoleAsync(user1, "user");
