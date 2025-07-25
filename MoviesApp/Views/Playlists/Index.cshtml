@@ -35,7 +35,17 @@
                                                 class="btn btn-sm btn-outline-primary mx-1">Edit</a>
                                             <a asp-action="Delete" asp-route-id="@item.Id" type="button"
                                                 class="btn btn-sm btn-outline-danger">Delete</a>
+                                            
+                                            @if (User.IsInRole("admin"))
+                                            {
+                                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline w-100">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm w-100" title="Delete movie" id="deletebtn-@item.Id">
+                                                        <i class="bi bi-trash"></i> Delete
+                                                    </button>
+                                                </form>
+                                            }
                                         }
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -49,4 +59,31 @@
 else
 {
     <h6 class="text-danger mt-3">There are no playlists.</h6>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.btn-outline-danger[id^="deletebtn-"]').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const form = btn.closest('form');
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, delete it!"
+                    }).then((result) => {
+                        if (result.isConfirmed && form) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 }

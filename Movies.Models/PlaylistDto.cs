@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Movies.Models
 {
@@ -13,12 +11,7 @@ namespace Movies.Models
         public string Name { get; set; }
 
         public string AppUserId { get; set; }
-
-        //[ForeignKey("AppUserId")]
-        //[ValidateNever]
+        
         public AppUserDto? AppUser { get; set; }
-
-        //[ValidateNever]
-        //public List<Movie>? Movies { get; set; }
     }
 }
