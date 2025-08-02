@@ -29,6 +29,7 @@ namespace MoviesApp.Controllers
         public async Task<IActionResult> Index()
         {
             var users = await _webApiExecutor.InvokeGet<List<AppUserDto>>("Users/GetAll");
+
             List<UsersVM> result = new List<UsersVM>();
 
             foreach (var user in users)
@@ -50,7 +51,6 @@ namespace MoviesApp.Controllers
         public async Task<IActionResult> Detail(string? id)
         {
             var userId = string.Empty;
-            // Ensure HttpContext and User are not null before accessing them
             if (id == null)
             {
                 var httpContext = _httpContextAcessor.HttpContext;
@@ -93,6 +93,9 @@ namespace MoviesApp.Controllers
             {
                 HandleApiException(ex);
                 //TempData["error"] = "API exception. " + ex.Response.ErrorMessage;
+                TempData["error"] = "Api exception: " + (ex.ErrorResponse?.Errors != null
+                        ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                        : "Unknown error");
             }
             return RedirectToAction("Index");
         }
@@ -170,6 +173,9 @@ namespace MoviesApp.Controllers
             {
                 HandleApiException(ex);
                 //TempData["error"] = "API exception: " + ex.Response.ErrorMessage;
+                TempData["error"] = "Api exception: " + (ex.ErrorResponse?.Errors != null
+                        ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                        : "Unknown error");
                 return View("Edit", editVM);
             }
 
@@ -212,6 +218,9 @@ namespace MoviesApp.Controllers
             {
                 HandleApiException(ex);
                 //TempData["error"] = "API exception: " + ex.Response.ErrorMessage;
+                TempData["error"] = "Api exception: " + (ex.ErrorResponse?.Errors != null
+                        ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                        : "Unknown error");
             }
             return RedirectToAction(nameof(Index));
         }

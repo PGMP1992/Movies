@@ -1,13 +1,11 @@
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Movies.Business.Repos;
 using Movies.Business.Repos.Interfaces;
 using Movies.DataAccess.Data;
-using Scalar.AspNetCore;
+//using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,8 +50,8 @@ builder.Services.AddOpenApi(options =>
 
 builder.Services.AddApiVersioning(options =>
 {
-    options.ReportApiVersions = true; 
-    options.AssumeDefaultVersionWhenUnspecified = true; 
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
     options.DefaultApiVersion = new ApiVersion(1, 0);
     //options.ApiVersionReader = ApiVersionReader.Combine(
     //    new UrlSegmentApiVersionReader(),
@@ -62,7 +60,7 @@ builder.Services.AddApiVersioning(options =>
 })
 .AddApiExplorer();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -86,7 +84,7 @@ var app = builder.Build();
 
 // Versioning and API Explorer setup
 var apVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-if(app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     Console.WriteLine("Discovered API Versions.");
     foreach (var description in apVersionDescriptionProvider.ApiVersionDescriptions)

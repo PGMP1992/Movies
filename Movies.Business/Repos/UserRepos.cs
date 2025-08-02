@@ -15,27 +15,28 @@ namespace Movies.Business.Repos
                 .ToListAsync();
         }
 
-        public async Task<AppUser> GetById(string id)
+        public async Task<AppUser?> GetById(string id)
         {
             return await _context.Users
-                .FirstOrDefaultAsync(i => i.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<AppUser> GetByIdNoTracking(string id)
+
+        public async Task<AppUser?> GetByIdNoTracking(string id)
         {
             return await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<Playlist>> GetAllPlaylists(string id)
+        public async Task<List<Playlist?>> GetAllPlaylists(string id)
         {
-            var userPlaylists = _context.Playlists
+            return await _context.Playlists
                 .AsNoTracking()
-                .Where(x => x.AppUser.Id == id)
-                .OrderBy(x => x.Name);
-
-            return userPlaylists.ToList();
+                //.Where(x => x.AppUser.Id == id)
+                .Where(x => x.AppUser != null && x.AppUser.Id == id)
+                .OrderBy(x => x.Name)
+                .ToListAsync();
         }
 
         public bool Save()

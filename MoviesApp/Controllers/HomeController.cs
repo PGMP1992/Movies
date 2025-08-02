@@ -52,7 +52,8 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Api Exception " + ex.ErrorResponse.Title;
+                //TempData["error"] = "Api Exception " + ex.ErrorResponse.Title;
+                TempData["error"] = "Api Exception " + (ex.ErrorResponse?.Title ?? "Unknown error");
                 homeVM.Users = null;
             }
             return View(homeVM);

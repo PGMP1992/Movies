@@ -14,7 +14,8 @@ namespace Movies.Business.Repos
                 .Where(a => a.PlaylistId == id)
                 .Include(p => p.Playlist)
                 .Include(p => p.Movie)
-                .OrderBy(p => p.Movie.Title)
+                //.OrderBy(p => p.Movie.Title)
+                .OrderBy(p => p.Movie != null ? p.Movie.Title : string.Empty)
                 .ToListAsync();
         }
 

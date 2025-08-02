@@ -50,11 +50,6 @@ namespace MoviesApp.Controllers
         // GET: Playlists/Details/5 -------------------------------------------
         public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             try
             {
                 PlaylistMoviesVM newVm = new PlaylistMoviesVM()
@@ -67,7 +62,10 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "API exception: " + ex.Message;
+                //TempData["error"] = "API exception: " + ex.Message;
+                TempData["error"] = "Api exception: " + (ex.ErrorResponse?.Errors != null
+                        ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                        : "Unknown error");
                 return RedirectToAction("Index");
             }
         }
@@ -97,7 +95,9 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Api Exception: " + ex.ErrorResponse.Errors;
+                TempData["error"] = "Api Exception: " + (ex.ErrorResponse?.Errors != null 
+                    ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value)) 
+                    : "Unknown error");
                 return RedirectToAction(nameof(Details), new { id = playlistId });
             }
         }
@@ -132,6 +132,9 @@ namespace MoviesApp.Controllers
                 {
                     HandleApiException(ex);
                     //TempData["error"] = "Api Exception: " + ex.ErrorResponse.Title;
+                    TempData["error"] = "Api Exception: " + (ex.ErrorResponse?.Errors != null
+                    ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                    : "Unknown error");
                 }
             }
             return View();
@@ -141,10 +144,6 @@ namespace MoviesApp.Controllers
         // GET: Playlists/Edit/5 ------------------------------------------------
         public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
             try
             {
                 var playlist = await _webApiExecutor.InvokeGet<PlaylistDto>($"Playlists/GetByIdNoTracking/{id}");
@@ -157,7 +156,9 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "API exception. " + ex.ErrorResponse.Errors; 
+                TempData["error"] = "API exception. " + (ex.ErrorResponse?.Errors != null 
+                    ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value)) 
+                    : "Unknown error"); 
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -183,7 +184,9 @@ namespace MoviesApp.Controllers
                 catch (WebApiException ex)
                 {
                     HandleApiException(ex);
-                    TempData["error"] = "Api Exception " + ex.ErrorResponse.Errors;
+                    TempData["error"] = "Api Exception " + (ex.ErrorResponse?.Errors != null 
+                        ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value)) 
+                        : "Unknown error");
                     return RedirectToAction(nameof(Edit), id);
                 }
             }
@@ -193,8 +196,6 @@ namespace MoviesApp.Controllers
         // GET: Playlists/Delete/5 ------------------------------------------------
         public async Task<IActionResult> Delete(int id)
         {
-            if (id == null) { return NotFound(); }
-
             var playlist = await _webApiExecutor.InvokeGet<PlaylistDto>($"Playlists/GetByIdNoTracking/{id}");
             if (playlist == null)
             {
@@ -221,6 +222,9 @@ namespace MoviesApp.Controllers
             {
                 HandleApiException(ex);
                 //TempData["error"] = "Api Exception " + ex.Response.ErrorMessage;
+                TempData["error"] = "Api Exception: " + (ex.ErrorResponse?.Errors != null
+                    ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                    : "Unknown error");
                 return RedirectToAction(nameof(Index), await _webApiExecutor.InvokeGet<List<PlaylistDto>>("Playlists/GetAll"));
             }
             return RedirectToAction(nameof(Index));

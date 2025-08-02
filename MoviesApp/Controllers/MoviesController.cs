@@ -55,7 +55,10 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
+                //TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
+                TempData["error"] = "Api exception: " + (ex.ErrorResponse?.Errors != null
+                   ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                   : "Unknown error");
                 return RedirectToAction("Index");
             }
         }
@@ -68,9 +71,9 @@ namespace MoviesApp.Controllers
                 return NotFound();
             }
             ViewBag.Message = "";
-            
-            
-            if (User.Identity.IsAuthenticated)
+
+            //if (User.Identity.IsAuthenticated)
+            if (_httpContextAccessor?.HttpContext?.User?.Identity?.IsAuthenticated == true)
             {
                 var user = _httpContextAccessor.HttpContext.User.GetUserId();
                 var playlists = await _webApiExecutor.InvokeGet<List<PlaylistDto>>($"Playlists/GetAllByUser/{user}");
@@ -105,16 +108,10 @@ namespace MoviesApp.Controllers
                 Active = movie.Active
             };
             return View(movieVM);
-        } 
-            //catch (WebApiException ex)
-            //{
-            //    HandleApiException(ex);
-            //    TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
-            //    return RedirectToAction("Index");
-            //}
-        //}
+        }
 
-        // Add Movie to Playlists 
+        // Show Movie if not authenticated
+        // otherwise Show Movie and option to Add Movie to Playlists 
         [HttpPost]
         public async Task<IActionResult> Details(AddMovieVM movieVM)
         {
@@ -140,7 +137,10 @@ namespace MoviesApp.Controllers
                 catch (WebApiException ex)
                 {
                     HandleApiException(ex);
-                    TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
+                    //TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
+                    TempData["error"] = "Api exception: " + (ex.ErrorResponse?.Errors != null
+                        ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                        : "Unknown error");
                 }
             }
             return RedirectToAction(nameof(Details));
@@ -189,6 +189,9 @@ namespace MoviesApp.Controllers
                 {
                     HandleApiException(ex);
                     //TempData["error"] = "Api exception: " + ex.ErrorResponse.Title;
+                    TempData["error"] = "Api exception: " + (ex.ErrorResponse?.Errors != null
+                        ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                        : "Unknown error");
                 }
             }
             else
@@ -225,9 +228,12 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = ex.ErrorResponse.Errors;
+                //TempData["error"] = ex.ErrorResponse.Errors;
+                TempData["error"] = "Api exception: " + (ex.ErrorResponse?.Errors != null
+                        ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                        : "Unknown error");
 
-                return View(Index);
+                return View(nameof(Index));
             }
         }
 
@@ -243,6 +249,11 @@ namespace MoviesApp.Controllers
                 }
 
                 var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
+
+                if (movie == null)
+                {
+                    return NotFound();
+                }
 
                 if (movieVM.Image != null)
                 {
@@ -286,7 +297,10 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
+                //TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
+                TempData["error"] = "Api exception: " + (ex.ErrorResponse?.Errors != null
+                        ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                        : "Unknown error");
                 return View("Edit", movieVM);
             }
             return RedirectToAction(nameof(Index));
@@ -296,11 +310,6 @@ namespace MoviesApp.Controllers
         // GET: Movies/Delete/5 --------------------------------------------------------
         public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var movie = await _webApiExecutor.InvokeGet<MovieDto>($"Movies/GetByIdNoTracking/{id}");
             if (movie == null)
             {
@@ -333,7 +342,10 @@ namespace MoviesApp.Controllers
             catch (WebApiException ex)
             {
                 HandleApiException(ex);
-                TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
+                //TempData["error"] = "Api exception: " + ex.ErrorResponse.Errors;
+                TempData["error"] = "Api exception: " + (ex.ErrorResponse?.Errors != null
+                        ? string.Join("; ", ex.ErrorResponse.Errors.SelectMany(e => e.Value))
+                        : "Unknown error");
                 return View("Delete");
             }
             return RedirectToAction(nameof(Index));

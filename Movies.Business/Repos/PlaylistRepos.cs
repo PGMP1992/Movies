@@ -25,19 +25,19 @@ namespace Movies.Business.Repos
                 .ToListAsync();
         }
 
-        public async Task<Playlist> GetById(int? id)
+        public async Task<Playlist?> GetById(int? id)
         {
             return await _context.Playlists
                 .Include(p => p.AppUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<Playlist> GetByIdNoTracking(int? id)
+        public async Task<Playlist?> GetByIdNoTracking(int? id)
         {
-            return _context.Playlists
+            return await _context.Playlists
                 .AsNoTracking()
                 .Include(p => p.AppUser)
-                .FirstOrDefault(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<List<Playlist>> GetByName(string name)
