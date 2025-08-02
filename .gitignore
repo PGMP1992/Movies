@@ -144,3 +144,12 @@
 /Movies.API/Properties/serviceDependencies.local.json
 /Movies.API/Properties/serviceDependencies.local.json.user
 *.json
+/Movies.Business/bin/Debug/net9.0/Movies.Business.deps.json
+/Movies.Business/obj/Debug/net9.0/Movies.Business.assets.cache
+/Movies.Business/obj/Movies.Business.csproj.nuget.g.props
+/Movies.Business/obj/Movies.Business.csproj.nuget.g.targets
+/Movies.Models/obj/Debug/net9.0/Movies.Models.assets.cache
+/Movies.Models/obj/Debug/net9.0/Movies.Models.csproj.AssemblyReference.cache
+/Movies.Models/obj/Movies.Models.csproj.nuget.g.props
+/Movies.Models/obj/Movies.Models.csproj.nuget.g.targets
+/Movies.Models/bin/Debug/net9.0/Movies.Models.deps.json
