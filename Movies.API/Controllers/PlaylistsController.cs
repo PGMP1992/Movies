@@ -18,28 +18,13 @@ namespace Movies.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var playlists = await _repos.GetAll();
-            if (playlists == null || !playlists.Any())
-            {
-                return NotFound(new ErrorResponse());
-            }
-            return Ok(playlists);
+            return Ok(await _repos.GetAll());
         }
 
         [HttpGet("{user}")]
         public async Task<IActionResult> GetAllByUser(string user)
         {
-            if (string.IsNullOrEmpty(user))
-            {
-                return BadRequest(new ErrorResponse());
-            }
-
-            var playlists = await _repos.GetAllByUser(user);
-            if (playlists == null || !playlists.Any())
-            {
-                return NotFound(new ErrorResponse());
-            }
-            return Ok(playlists);
+            return Ok(await _repos.GetAllByUser(user));
         }
 
         [HttpGet("{id}")]

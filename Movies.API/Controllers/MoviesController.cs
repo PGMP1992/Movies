@@ -18,38 +18,22 @@ namespace Movies.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var movies = await _repos.GetAll();
-
-            if (movies == null || !movies.Any())
-            {
-                return NotFound(new ErrorResponse());
-            }
-            return Ok(movies);
+            return Ok(await _repos.GetAll());
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllActive()
         {
-            var movies = await _repos.GetAllActive();
-            if (movies == null || !movies.Any())
-            {
-                return NotFound(new ErrorResponse());
-            }
-            return Ok(movies);
+            return Ok(await _repos.GetAllActive());
         }
 
         [HttpGet("{search}")]
         public async Task<IActionResult> GetByName(string search)
         {
-            if (string.IsNullOrEmpty(search))
-            {
-                return BadRequest(new ErrorResponse());
-            }
-
             var movies = await _repos.GetByName(search);
             if (movies == null)
             {
-                return NotFound(new ErrorResponse());
+                return NotFound();
             }
             return Ok(movies);
         }
