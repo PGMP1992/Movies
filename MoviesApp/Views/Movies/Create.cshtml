@@ -1,4 +1,5 @@
-﻿@model CreateMovieVM
+﻿@using Movies.Models.Enum
+@model CreateMovieVM
 
 <h3>Movie</h3>
 
@@ -21,7 +22,8 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Genre" class="form-text"></label>
-                    <input asp-for="Genre" class="form-control" placeholder="Genre" />
+                    <select asp-for="Genre" asp-items="@Html.GetEnumSelectList<Genre>()" class="form-control">
+                    </select>
                     <span asp-validation-for="Genre" class="text-danger"></span>
                 </div>
                 <div class="form-group">

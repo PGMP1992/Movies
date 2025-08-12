@@ -21,7 +21,7 @@ namespace Movies.API.Filters.Movie
 
             if (movie == null)
             {
-                context.ModelState.AddModelError("Movie", "Movie object is null.");
+                context.ModelState.AddModelError("Movie", "Movie does not exist.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
                     Status = StatusCodes.Status400BadRequest

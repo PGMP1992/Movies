@@ -28,14 +28,10 @@ namespace Movies.API.Controllers
         }
 
         [HttpGet("{search}")]
+        //[TypeFilter(typeof(Movie_ValidateSearchFilterAttribute))]
         public async Task<IActionResult> GetByName(string search)
         {
-            var movies = await _repos.GetByName(search);
-            if (movies == null)
-            {
-                return NotFound();
-            }
-            return Ok(movies);
+            return Ok(await _repos.GetByName(search));
         }
 
         [HttpGet("{id}")]

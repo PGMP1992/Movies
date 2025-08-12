@@ -21,7 +21,6 @@ builder.Services.AddControllers()
 builder.Services.AddOpenApi(options =>
 {
     //options.ShouldInclude(new ApiDescription { GroupName = "v1"});
-
     options.AddDocumentTransformer((document, context, cancelationToken) =>
     {
         document.Components ??= new OpenApiComponents();
@@ -67,10 +66,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 //Controllers
-builder.Services.AddTransient<IUserRepos, UserRepos>();
-builder.Services.AddTransient<IMovieRepos, MovieRepos>();
-builder.Services.AddTransient<IPlaylistRepos, PlaylistRepos>();
-builder.Services.AddTransient<IPlaylistMovieRepos, PlaylistMovieRepos>();
+builder.Services.AddScoped<IUserRepos, UserRepos>();
+builder.Services.AddScoped<IMovieRepos, MovieRepos>();
+builder.Services.AddScoped<IPlaylistRepos, PlaylistRepos>();
+builder.Services.AddScoped<IPlaylistMovieRepos, PlaylistMovieRepos>();
 
 //builder.Services.AddAuthentication("Bearer")
 //    .AddJwtBearer("Bearer", options =>

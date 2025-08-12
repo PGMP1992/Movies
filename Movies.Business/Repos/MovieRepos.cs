@@ -7,11 +7,16 @@ namespace Movies.Business.Repos
 {
     public class MovieRepos(ApplicationDbContext _context) : IMovieRepos
     {
+        //private int pageNumber = 1;
+        //private int pageSize = 5;
+
         public async Task<IEnumerable<Movie>> GetAll()
         {
             return await _context.Movies
                 .AsNoTracking()
                 .OrderBy(m => m.Title)
+                //.Skip((pageNumber - 1) * pageSize)
+                //.Take(pageSize)
                 .ToListAsync();
         }
 
@@ -21,6 +26,8 @@ namespace Movies.Business.Repos
                 .AsNoTracking()
                 .OrderBy(m => m.Title)
                 .Where(m => m.Active == true)
+                //.Skip((pageNumber - 1) * pageSize)
+                //.Take(pageSize)
                 .ToListAsync();
         }
 
@@ -42,6 +49,8 @@ namespace Movies.Business.Repos
             return await _context.Movies
                 .AsNoTracking()
                 .Where(m => m.Title!.Contains(name) && m.Active == true)
+                //.Skip((pageNumber - 1) * pageSize)
+                //.Take(pageSize)
                 .ToListAsync();
         }
 
@@ -68,6 +77,5 @@ namespace Movies.Business.Repos
             _context.Update(obj);
             return Save();
         }
-               
     }
 }

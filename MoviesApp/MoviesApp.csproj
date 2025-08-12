@@ -26,7 +26,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Movies.Business\Movies.Business.csproj" />
     <ProjectReference Include="..\Movies.DataAccess\Movies.DataAccess.csproj" />
     <ProjectReference Include="..\Movies.Models\Movies.Models.csproj" />
   </ItemGroup>

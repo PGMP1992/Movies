@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Movies.Models.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace Movies.Models
 {
@@ -15,8 +16,7 @@ namespace Movies.Models
         public string Description { get; set; } = "";
 
         [Required]
-        [MaxLength(30)]
-        public string Genre { get; set; } = "";
+        public Genre Genre { get; set; }
 
         [Required]
         [Range(1, 18)]

@@ -36,7 +36,7 @@ namespace Movies.API.Filters.Movie
 
                     if (movie == null)
                     {
-                        context.ModelState.AddModelError("Id", "Movie doesn't exist.");
+                        context.ModelState.AddModelError("Id", "Movie does not exist.");
                         var problemDetails = new ValidationProblemDetails(context.ModelState)
                         {
                             Status = StatusCodes.Status404NotFound

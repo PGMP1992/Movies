@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Movies.Models.Enum;
 using System.ComponentModel.DataAnnotations;
 
 namespace Movies.DataAccess.ViewModels
@@ -19,8 +20,7 @@ namespace Movies.DataAccess.ViewModels
         public string Description { get; set; } = "";
 
         [Required]
-        [MaxLength(30)]
-        public string Genre { get; set; } = "";
+        public Genre Genre { get; set; }
 
         [Required]
         [Range(1, 18)]

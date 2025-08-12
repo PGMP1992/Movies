@@ -1,12 +1,13 @@
-using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Movies.DataAccess.Models;
 using Movies.DataAccess.ViewModels;
 using Movies.Models;
+using MoviesApp.Helpers;
 using MoviesApp.Services;
 using MoviesApp.Services.Interfaces;
+using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace MoviesApp.Controllers
 {
@@ -21,32 +22,31 @@ namespace MoviesApp.Controllers
         {
             _logger = logger;
             _webApiExecutor = webApiExecutor;
-
         }
 
         public async Task<IActionResult> Index() // Using IPInfo to get locations IP 
         {
-            //var ipInfo = new IPInfo();
+            var ipInfo = new IPInfo();
             var homeVM = new HomeVM();
             try
             {
-                //string url = "https://ipinfo.io?be339e669dc21b"; //IPInfo.IO My Private Token
-                //using (var httpClient = new HttpClient())
-                //{
-                //    var response = await httpClient.GetStringAsync(url);
-                //    ipInfo = JsonConvert.DeserializeObject<IPInfo>(response);
-                //}
+                string url = "https://ipinfo.io?be339e669dc21b"; //IPInfo.IO My Private Token
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.GetStringAsync(url);
+                    ipInfo = JsonConvert.DeserializeObject<IPInfo>(response);
+                }
 
-                //RegionInfo myRI1 = new RegionInfo(ipInfo.Country);
-                //ipInfo.Country = myRI1.EnglishName;
-                //homeVM.City = ipInfo.City;
-                //homeVM.State = ipInfo.Region;
+                RegionInfo myRI1 = new RegionInfo(ipInfo.Country);
+                ipInfo.Country = myRI1.EnglishName;
+                homeVM.City = ipInfo.City;
+                homeVM.State = ipInfo.Region;
 
-                //if (homeVM.State != null)
-                //{
-                //homeVM.Users = await _usersRepos.GetAll();
-                homeVM.Users = await _webApiExecutor.InvokeGet<List<AppUserDto>>($"Users/GetAll");
-                //}
+                if (homeVM.State != null)
+                {
+                    //homeVM.Users = await _usersRepos.GetAll();
+                    homeVM.Users = await _webApiExecutor.InvokeGet<List<AppUserDto>>($"Users/GetAll");
+                }
                 return View(homeVM);
             }
             catch (WebApiException ex)
