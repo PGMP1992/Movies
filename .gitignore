@@ -9,3 +9,7 @@
 /Movies.Business/obj
 /Movies.DataAccess/obj
 /Movies.Models/obj
+/Movies.Business/bin
+/Movies.DataAccess/bin
+/Movies.Models/bin
+/MoviesApp/Properties/ServiceDependencies
