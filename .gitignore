@@ -153,3 +153,4 @@
 /Movies.Models/obj/Movies.Models.csproj.nuget.g.props
 /Movies.Models/obj/Movies.Models.csproj.nuget.g.targets
 /Movies.Models/bin/Debug/net9.0/Movies.Models.deps.json
+/Movies.API/bin/Release/net9.0/win-x86
