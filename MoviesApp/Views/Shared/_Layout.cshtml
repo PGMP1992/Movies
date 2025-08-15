@@ -39,5 +39,55 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Movies App Functionality</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Following are the User Accounts that exist by default: </h6>
+                    <p>
+                        Admin User :      <b>admin@email.com</b> <br />
+                        Individual User : <b>user@email.com</b><br />
+                        Password : <b>Admin123*</b>
+                    </p>
+                    <h6>How to use the website:</h6>
+                    <p> This website is intended to serve as demo application.
+                        <ul>
+                            <li>Create an User Account.</li>
+                            <li>Create Movies and Playlists.</li>
+                            <li>Add Movies to Playlists.</li>
+                            <li>Login as the Admin account, <b>admin@email.com</b>, to view and edit all users accounts and playlists.</li>
+                        </ul>
+                    <p/>
+                    <p>I will add bulk load of Movies using API calls soon.</p>
+                    
+                </div>    
+                    <div class="modal-footer text-center justify-content-around">
+                        <a class="text-start" href="https://pgmp1992.github.io/Portfolio/" target="_blank" title="Go to Portfolio">
+                            &copy;2025 pgmp.se
+                        </a>
+                        <a href="mailto:pedro@dkltd.net" title="Send Email">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-arrow-down" viewBox="0 0 16 16">
+                              <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4.5a.5.5 0 0 1-1 0V5.383l-7 4.2-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h5.5a.5.5 0 0 1 0 1H2a2 2 0 0 1-2-1.99zm1 7.105 4.708-2.897L1 5.383zM1 4v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1"/>
+                              <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-1.646a.5.5 0 0 1-.722-.016l-1.149-1.25a.5.5 0 1 1 .737-.676l.28.305V11a.5.5 0 0 1 1 0v1.793l.396-.397a.5.5 0 0 1 .708.708z"/>
+                            </svg>
+                            Email
+                        </a>
+                        <a href="https://www.linkedin.com/in/pedro-martinez-70077691" target="_blank" title="Go to Linkedin profile">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+                              <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
+                            </svg>
+                            Linkedln
+                        </a>
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                    </div>
+               
+            </div>
+        </div>
+    </div>
 </body>
 </html>

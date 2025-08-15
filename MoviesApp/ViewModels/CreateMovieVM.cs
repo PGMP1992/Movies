@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using MoviesApp.Enum;
 using System.ComponentModel.DataAnnotations;
 
 //Created this for Saving Picture to Cloudinary
@@ -18,8 +19,7 @@ namespace MoviesApp.ViewModels
         public string Description { get; set; } = "";
 
         [Required]
-        [MaxLength(30)]
-        public string Genre { get; set; } = "";
+        public Genre Genre { get; set; }
 
         [Required]
         [Range(1, 18)]

@@ -1,18 +1,18 @@
-﻿@model CreateMovieVM
+﻿@using MoviesApp.Enum
+@model CreateMovieVM
 
 <h3>Movie</h3>
 
 <h5>Create</h5>
-<div class="card p-3 col-md-8">
+<div class="card px-3 col-md-8">
     <div class="row">
         <div class="col">
             <form asp-action="Create" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                @*<input type="hidden" id="AppUserId" name="AppUserId" asp-for="AppUserId" /> *@
-                <form method="post" asp-action="Create" enctype ="multipart/form-data"/> 
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <form method="post" asp-action="Create" enctype="multipart/form-data" />
                 <div class="form-group">
                     <label asp-for="Title" class="form-text"></label>
-                    <input asp-for="Title" class="form-control" placeholder="Title"/>
+                    <input asp-for="Title" class="form-control" placeholder="Title" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -22,7 +22,8 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Genre" class="form-text"></label>
-                    <input asp-for="Genre" class="form-control" placeholder="Genre" />
+                    <select asp-for="Genre" asp-items="@Html.GetEnumSelectList<Genre>()" class="form-control">
+                    </select>
                     <span asp-validation-for="Genre" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -30,14 +31,14 @@
                     <input asp-for="Age" class="form-control" placeholder="Age" />
                     <span asp-validation-for="Age" class="text-danger"></span>
                 </div>
-            
+
                 <div class="form-group">
                     <label asp-for="Image" class="form-text">Picture</label>
                     <input asp-for="Image" type="file" class="form-control" placeholder="Image" />
                     <span asp-validation-for="Image" class="text-danger"></span>
                 </div>
-                
-                <div class="form-group mt-3">
+
+                <div class="form-group mt-3 mb-3">
                     <input type="submit" value="Create" class="btn btn-sm btn-outline-primary" />
                     <a asp-action="Index" type="button" class="btn btn-sm btn-outline-dark mx-1">Cancel</a>
                 </div>
@@ -47,5 +48,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

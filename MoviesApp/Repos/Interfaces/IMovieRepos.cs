@@ -13,6 +13,6 @@ namespace MoviesApp.Repos.Interfaces
         bool Update(Movie movie);
         bool Delete(Movie movie);
         bool Save();
-        bool MovieExists(int id);
+        //bool MovieExists(int id);
     }
 }

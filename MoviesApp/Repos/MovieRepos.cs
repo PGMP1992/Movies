@@ -67,12 +67,12 @@ namespace MoviesApp.Repos
             return Save();
         }
 
-        public bool MovieExists(int id)
-        {
-            return _context.Movies
-                .AsNoTracking()
-                .Any(e => e.Id == id);
-        }
+        //public bool MovieExists(int id)
+        //{
+        //    return _context.Movies
+        //        .AsNoTracking()
+        //        .Any(e => e.Id == id);
+        //}
                
     }
 }

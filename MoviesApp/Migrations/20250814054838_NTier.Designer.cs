@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoviesApp.Data;
 
@@ -11,9 +12,11 @@ using MoviesApp.Data;
 namespace MoviesApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250814054838_NTier")]
+    partial class NTier
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,7 +174,7 @@ namespace MoviesApp.Migrations
 
                     b.HasIndex("PlaylistsId");
 
-                    b.ToTable("MoviePlaylist", (string)null);
+                    b.ToTable("MoviePlaylist");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.AppUser", b =>
@@ -281,7 +284,7 @@ namespace MoviesApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("MoviesApp.Models.Playlist", b =>
@@ -305,7 +308,7 @@ namespace MoviesApp.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Playlists", (string)null);
+                    b.ToTable("Playlists");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
