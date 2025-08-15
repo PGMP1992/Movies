@@ -20,6 +20,7 @@ namespace MoviesApp.Repos
                 .AsNoTracking()
                 .Include(p => p.AppUser)
                 .Include(p => p.Movies)
+                .OrderBy(p => p.AppUserId)
                 .ToListAsync();
         }
 

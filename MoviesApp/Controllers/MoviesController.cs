@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AspNetCoreGeneratedDocument;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MoviesApp.Data;
+using MoviesApp.Enum;
 using MoviesApp.Models;
+using MoviesApp.Repos;
 using MoviesApp.Repos.Interfaces;
 using MoviesApp.Services;
 using MoviesApp.ViewModels;
@@ -40,23 +43,33 @@ namespace MoviesApp.Controllers
             if (!string.IsNullOrEmpty(search))
             {
                 movieList = await _movieRepos.GetByName(search).ConfigureAwait(false);
-                //movieList = await _movieService.GetByName(search);
 
                 if (movieList.Count() == 0)
                 {
-                    //movieList = await _movieService.GetAll();
                     movieList = await _movieRepos.GetAll();
                     ViewBag.Message = "There are no movies with that Name!";
+                }
+                else
+                {
+                    ViewBag.Message = "Search: " + "'" +search + "' found " + movieList.Count().ToString() + " Movies";
                 }
             }
             else
             {
-                //movieList = await _movieService.GetAll();
                 movieList = await _movieRepos.GetAll();
+                ViewBag.Message = "Total: " + movieList.Count().ToString() + " Movies";
             }
 
             return View("Index", movieList);
         }
+
+        //GET: Movies
+        //public async Task<IActionResult> Index(string? genre)
+        //{
+        //    ViewBag.Message = "";
+        //    var movies = _movieRepos.GetByGenre(genre);
+        //    return View(movies);
+        //}
 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)

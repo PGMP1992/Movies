@@ -1,41 +1,31 @@
-﻿@model IEnumerable<Movie>
+﻿@using MoviesApp.Enum
+@model IEnumerable<Movie>
 
-<h1 class="mb-4">Movies</h1>
+<h1 class="mb-2">Movies</h1>
+@if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+{
+    <div class="h6 text-secondary mb-4">
+        @ViewBag.Message
+    </div>
+}
 
 @if (User.Identity.IsAuthenticated)
 {
-    <p>
         <a asp-action="Create" class="btn btn-primary btn-sm mb-3">
             @* <i class="bi bi-plus-circle"> </i>*@ 
                 Create
         </a>
-    </p>
 }
 
-@if (!string.IsNullOrWhiteSpace(ViewBag.Message))
-{
-    <div class="alert alert-danger" role="alert">
-        @ViewBag.Message
+@* <form method="get">
+    <div class="form-group mb-3 col-4">
+        <label class="form-text">Sort By Genre</label>
+        <select name="genre" asp-items="@Html.GetEnumSelectList<Genre>()" class="form-control" onchange="this.form.submit()">
+            <option value="">All Genres</option>
+        </select>
     </div>
-    <div asp-validation-summary="All" class="text-danger"></div>
-}
+</form> *@
 
-@* <ul class="nav nav-underline justify-content-center mb-2">
-    <li class="nav-item">
-        <span class="nav-link @GetActiveTabClass(0)" href="#" style="cursor: pointer" @onclick ="()=>FilterProducts(0)">All</span>
-    </li>
-    @foreach (var item in Genre)
-    {
-        <li class="nav-item">
-            <span class="nav-link @GetActiveTabClass(category.Id)" href="#" style="cursor: pointer"
-                  @onclick ="()=>FilterProducts(category.Id)">
-                @item.Name
-            </span>
-        </li>
-    }
-
-</ul>
- *@
 <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
     @foreach (var item in Model)
     {
