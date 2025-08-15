@@ -7,7 +7,7 @@ namespace MoviesApp.Repos.Interfaces
         Task<List<Playlist>> GetAll();
         Task<Playlist> GetById(int? id);
         Task<Playlist> GetByIdNoTracking(int? id);
-        Task<List<Playlist>> GetByName(string name);
+        //Task<List<Playlist>> GetByName(string name);
         Task<List<Playlist>> GetAllByUser(string userName);
 
         bool Add(Playlist playlist);

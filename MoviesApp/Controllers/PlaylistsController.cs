@@ -155,7 +155,7 @@ namespace MoviesApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PlaylistExists(playlist.Id))
+                    if (!_playlistRepos.PlaylistExists(playlist.Id))
                     {
                         return NotFound();
                     }
@@ -201,9 +201,9 @@ namespace MoviesApp.Controllers
         }
 
         // -------------------------------------------------------
-        private bool PlaylistExists(int id)
-        {
-            return _playlistRepos.PlaylistExists(id);
-        }
+        //private bool PlaylistExists(int id)
+        //{
+        //    return _playlistRepos.PlaylistExists(id);
+        //}
     }
 }
