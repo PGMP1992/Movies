@@ -48,10 +48,14 @@ body {
 h1,h2,h3,h4,h5,h6 {
     color :cornflowerblue;
 }
+
 #card-title {
     color: cornflowerblue;
 }
 
+.btn, .blazor-error-boundary, .form-control, .form-check-input, .nav-link, .card, .footer, .login-bg, * {
+    text-transform: none !important;
+}
 
 .navbar {
     background-color: var(--blur-bg);
@@ -64,7 +68,7 @@ h1,h2,h3,h4,h5,h6 {
 
 .nav-link {
     color: var(--font);
-    font-weight: 500;
+    /*font-weight: 500;*/
     /* transition: all 0.2s ease; */
 }
 
